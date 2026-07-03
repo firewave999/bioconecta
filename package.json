@@ -11,6 +11,11 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
+    "infra:down": "docker compose down",
+    "infra:logs": "docker compose logs -f",
+    "infra:ps": "docker compose ps",
+    "infra:reset": "docker compose down -v --remove-orphans",
+    "infra:up": "docker compose up -d",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml,mjs,cjs}\"",

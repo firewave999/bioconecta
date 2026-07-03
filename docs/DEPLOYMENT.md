@@ -44,3 +44,16 @@ GitHub Actions deve executar:
 ## Estrategia Inicial
 
 Durante o MVP, usar Docker Compose para padronizar desenvolvimento e facilitar deploy inicial. A arquitetura deve permitir evoluir para containers separados e orquestracao mais robusta no futuro.
+
+## Infra Local Criada
+
+O arquivo `docker-compose.yml` sobe PostgreSQL e Redis para desenvolvimento.
+
+Comandos:
+
+```bash
+pnpm infra:up
+pnpm infra:ps
+pnpm infra:logs
+pnpm infra:down
+```

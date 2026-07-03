@@ -50,6 +50,8 @@ docs/
 - [API](docs/API.md)
 - [Seguranca](docs/SECURITY.md)
 - [Deploy](docs/DEPLOYMENT.md)
+- [Infraestrutura local](docs/INFRASTRUCTURE.md)
+- [Monorepo](docs/MONOREPO.md)
 - [Roadmap](docs/ROADMAP.md)
 - [Relatorio do repositorio](docs/REPOSITORY_REPORT.md)
 
@@ -59,6 +61,8 @@ Com Node.js e pnpm disponiveis no PATH:
 
 ```bash
 pnpm install
+cp .env.example .env
+pnpm infra:up
 pnpm build
 pnpm lint
 pnpm typecheck
@@ -68,6 +72,6 @@ Nesta sessao do Codex, os comandos foram executados usando o runtime empacotado 
 
 ## Status Atual
 
-Etapa 1 concluida: monorepo com pnpm, Turborepo, TypeScript estrito, ESLint, Prettier, packages compartilhados e placeholders compilaveis de web/api.
+Etapa 2 concluida: infra local com Docker Compose, PostgreSQL, Redis, health checks, variaveis de ambiente e scripts de controle.
 
-Ainda nao ha aplicacao Next.js/NestJS real, banco, Docker Compose ou testes automatizados. Essas partes entram nas proximas etapas.
+Ainda nao ha aplicacao Next.js/NestJS real ou testes automatizados. Essas partes entram nas proximas etapas.

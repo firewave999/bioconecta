@@ -25,7 +25,7 @@ Status: concluida.
 
 ## Etapa 2: Infra Local
 
-Status: proxima.
+Status: concluida.
 
 - Criar Docker Compose.
 - Configurar PostgreSQL.
@@ -34,6 +34,8 @@ Status: proxima.
 - Criar health checks.
 
 ## Etapa 3: Backend Base
+
+Status: proxima.
 
 - Criar NestJS.
 - Configurar TypeORM.
@@ -116,4 +118,4 @@ Status: proxima.
 
 ## Marco Atual
 
-A proxima tarefa e configurar a infra local com Docker Compose, PostgreSQL, Redis e arquivos `.env.example`.
+A proxima tarefa e configurar o backend base com NestJS, TypeORM, migrations, Swagger e health endpoint.
