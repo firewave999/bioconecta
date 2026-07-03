@@ -20,6 +20,8 @@
     "infra:up": "docker compose up -d",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
+    "web:dev": "pnpm --filter @bioconecta/web dev",
+    "web:start": "pnpm --filter @bioconecta/web start",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml,mjs,cjs}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml,mjs,cjs}\""
   },

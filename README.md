@@ -51,6 +51,7 @@ docs/
 - [API](docs/API.md)
 - [Seguranca](docs/SECURITY.md)
 - [Deploy](docs/DEPLOYMENT.md)
+- [Frontend](docs/FRONTEND.md)
 - [Infraestrutura local](docs/INFRASTRUCTURE.md)
 - [Monorepo](docs/MONOREPO.md)
 - [Roadmap](docs/ROADMAP.md)
@@ -64,6 +65,7 @@ Com Node.js e pnpm disponiveis no PATH:
 pnpm install
 cp .env.example .env
 pnpm infra:up
+pnpm web:dev
 pnpm api:dev
 pnpm build
 pnpm lint
@@ -74,6 +76,6 @@ Nesta sessao do Codex, os comandos foram executados usando o runtime empacotado 
 
 ## Status Atual
 
-Etapa 3 concluida: backend base com NestJS, ConfigModule, TypeORM/PostgreSQL, Swagger/OpenAPI, CORS, Helmet, ValidationPipe e health endpoint.
+Etapa 4 concluida: frontend base com Next.js App Router, Tailwind CSS, estrutura shadcn/ui, design tokens, Home publica, SEO inicial, robots e sitemap.
 
-Ainda nao ha frontend Next.js real, entidades de negocio ou testes automatizados. Essas partes entram nas proximas etapas.
+Ainda nao ha entidades de negocio, autenticacao real no frontend ou testes automatizados. Essas partes entram nas proximas etapas.

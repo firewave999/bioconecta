@@ -46,7 +46,7 @@ Status: concluida.
 
 ## Etapa 4: Frontend Base
 
-Status: proxima.
+Status: concluida.
 
 - Criar Next.js.
 - Configurar Tailwind.
@@ -56,6 +56,8 @@ Status: proxima.
 - Criar Home inicial.
 
 ## Etapa 5: Autenticacao
+
+Status: proxima.
 
 - Cadastro.
 - Login.
@@ -120,4 +122,4 @@ Status: proxima.
 
 ## Marco Atual
 
-A proxima tarefa e configurar o frontend base com Next.js, Tailwind, shadcn/ui, design tokens, layout publico e Home inicial.
+A proxima tarefa e criar a autenticacao real com cadastro, login, refresh token, logout e verificacao de e-mail em desenvolvimento.

@@ -1,14 +1,12 @@
 {
-  "extends": "@bioconecta/typescript-config/base.json",
+  "extends": "@bioconecta/typescript-config/nextjs.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "outDir": "dist",
-    "rootDir": "../..",
+    "incremental": true,
     "paths": {
-      "@bioconecta/config": ["../../packages/config/src/index.ts"],
-      "@bioconecta/types": ["../../packages/types/src/index.ts"],
-      "@bioconecta/ui": ["../../packages/ui/src/index.ts"]
+      "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*.ts"]
+  "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
 }

@@ -39,6 +39,8 @@ pnpm typecheck
 
 Os apps `@bioconecta/web` e `@bioconecta/api` ainda sao placeholders compilaveis. O app web real em Next.js entra na Etapa 4. A API real em NestJS entra na Etapa 3.
 
+Atualizacao: `@bioconecta/api` ja possui backend NestJS base e `@bioconecta/web` ja possui frontend Next.js base.
+
 Os packages internos ja existem para permitir evolucao incremental sem quebrar contratos:
 
 - `@bioconecta/types`: enums e tipos compartilhados.
