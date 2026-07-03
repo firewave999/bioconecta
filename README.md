@@ -53,8 +53,21 @@ docs/
 - [Roadmap](docs/ROADMAP.md)
 - [Relatorio do repositorio](docs/REPOSITORY_REPORT.md)
 
+## Desenvolvimento
+
+Com Node.js e pnpm disponiveis no PATH:
+
+```bash
+pnpm install
+pnpm build
+pnpm lint
+pnpm typecheck
+```
+
+Nesta sessao do Codex, os comandos foram executados usando o runtime empacotado em `C:\Users\ACER\.cache\codex-runtimes\codex-primary-runtime\dependencies`.
+
 ## Status Atual
 
-Etapa 0 concluida: fundacao do projeto, arquitetura, modelo de dados inicial, roadmap e relatorio do repositorio.
+Etapa 1 concluida: monorepo com pnpm, Turborepo, TypeScript estrito, ESLint, Prettier, packages compartilhados e placeholders compilaveis de web/api.
 
-Ainda nao ha aplicacao executavel, dependencias instaladas, testes, lint ou typecheck configurados. Essas partes entram nas proximas etapas.
+Ainda nao ha aplicacao Next.js/NestJS real, banco, Docker Compose ou testes automatizados. Essas partes entram nas proximas etapas.

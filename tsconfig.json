@@ -1,0 +1,4 @@
+{
+  "extends": "@bioconecta/typescript-config/base.json",
+  "files": []
+}

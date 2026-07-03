@@ -13,6 +13,8 @@ Status: concluida.
 
 ## Etapa 1: Monorepo
 
+Status: concluida.
+
 - Configurar pnpm.
 - Configurar Turborepo.
 - Criar `apps/web`.
@@ -22,6 +24,8 @@ Status: concluida.
 - Configurar ESLint e Prettier.
 
 ## Etapa 2: Infra Local
+
+Status: proxima.
 
 - Criar Docker Compose.
 - Configurar PostgreSQL.
@@ -112,4 +116,4 @@ Status: concluida.
 
 ## Marco Atual
 
-A proxima tarefa e configurar o monorepo com pnpm e Turborepo.
+A proxima tarefa e configurar a infra local com Docker Compose, PostgreSQL, Redis e arquivos `.env.example`.

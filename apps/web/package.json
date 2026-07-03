@@ -1,0 +1,21 @@
+{
+  "name": "@bioconecta/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "node -e \"console.log('Web app sera configurado na Etapa 4')\"",
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@bioconecta/config": "workspace:*",
+    "@bioconecta/types": "workspace:*",
+    "@bioconecta/ui": "workspace:*"
+  },
+  "devDependencies": {
+    "@bioconecta/eslint-config": "workspace:*",
+    "@bioconecta/typescript-config": "workspace:*"
+  }
+}

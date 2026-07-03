@@ -51,6 +51,6 @@ Impacto:
 
 ## Proxima Etapa Recomendada
 
-Configurar o monorepo com pnpm e Turborepo.
+Configurar a infra local com Docker Compose, PostgreSQL, Redis e arquivos `.env.example`.
 
-Antes disso, e recomendado resolver a conexao com GitHub para versionar a fundacao do projeto.
+O monorepo ja foi configurado localmente com pnpm, Turborepo, TypeScript, ESLint e Prettier.

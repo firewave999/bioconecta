@@ -1,0 +1,20 @@
+{
+  "name": "@bioconecta/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "node -e \"console.log('API NestJS sera configurada na Etapa 3')\"",
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@bioconecta/config": "workspace:*",
+    "@bioconecta/types": "workspace:*"
+  },
+  "devDependencies": {
+    "@bioconecta/eslint-config": "workspace:*",
+    "@bioconecta/typescript-config": "workspace:*"
+  }
+}
