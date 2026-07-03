@@ -2,12 +2,10 @@
   "extends": "@bioconecta/typescript-config/node.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "outDir": "dist",
-    "rootDir": "../..",
-    "paths": {
-      "@bioconecta/config": ["../../packages/config/src/index.ts"],
-      "@bioconecta/types": ["../../packages/types/src/index.ts"]
-    },
+    "rootDir": "src",
     "types": ["node"]
   },
   "include": ["src/**/*.ts"]

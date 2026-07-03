@@ -35,7 +35,7 @@ Status: concluida.
 
 ## Etapa 3: Backend Base
 
-Status: proxima.
+Status: concluida.
 
 - Criar NestJS.
 - Configurar TypeORM.
@@ -45,6 +45,8 @@ Status: proxima.
 - Criar health endpoint.
 
 ## Etapa 4: Frontend Base
+
+Status: proxima.
 
 - Criar Next.js.
 - Configurar Tailwind.
@@ -118,4 +120,4 @@ Status: proxima.
 
 ## Marco Atual
 
-A proxima tarefa e configurar o backend base com NestJS, TypeORM, migrations, Swagger e health endpoint.
+A proxima tarefa e configurar o frontend base com Next.js, Tailwind, shadcn/ui, design tokens, layout publico e Home inicial.

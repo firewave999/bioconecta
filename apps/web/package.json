@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "node -e \"console.log('Web app sera configurado na Etapa 4')\"",
-    "lint": "eslint .",
+    "lint": "eslint src",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {

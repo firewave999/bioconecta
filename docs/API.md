@@ -4,6 +4,19 @@
 
 A API sera REST, documentada por Swagger/OpenAPI e versionada sob `/api/v1`.
 
+## Status da Implementacao
+
+Etapa 3 criou a base real da API em NestJS.
+
+Disponivel:
+
+- `GET /api/v1/health`
+- Swagger UI em `/api/docs`
+- OpenAPI JSON em `/api/docs-json`
+- Prefixo global `/api/v1`
+- Configuracao por variaveis de ambiente
+- TypeORM preparado para PostgreSQL
+
 ## Convencoes
 
 - DTOs para entrada e saida.

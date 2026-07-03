@@ -4,6 +4,15 @@
 
 PostgreSQL sera o banco relacional principal. Redis sera usado para cache, filas e controles temporarios.
 
+## Status da Implementacao
+
+Etapa 3 configurou TypeORM no backend com:
+
+- `synchronize: false`
+- migrations em `apps/api/src/database/migrations`
+- tabela de migrations `typeorm_migrations`
+- DataSource em `apps/api/src/database/data-source.ts`
+
 ## Entidades Minimas
 
 ### Identidade e Acesso

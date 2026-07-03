@@ -46,6 +46,7 @@ docs/
 ## Documentacao
 
 - [Arquitetura](docs/ARCHITECTURE.md)
+- [Backend](docs/BACKEND.md)
 - [Banco de dados](docs/DATABASE.md)
 - [API](docs/API.md)
 - [Seguranca](docs/SECURITY.md)
@@ -63,6 +64,7 @@ Com Node.js e pnpm disponiveis no PATH:
 pnpm install
 cp .env.example .env
 pnpm infra:up
+pnpm api:dev
 pnpm build
 pnpm lint
 pnpm typecheck
@@ -72,6 +74,6 @@ Nesta sessao do Codex, os comandos foram executados usando o runtime empacotado 
 
 ## Status Atual
 
-Etapa 2 concluida: infra local com Docker Compose, PostgreSQL, Redis, health checks, variaveis de ambiente e scripts de controle.
+Etapa 3 concluida: backend base com NestJS, ConfigModule, TypeORM/PostgreSQL, Swagger/OpenAPI, CORS, Helmet, ValidationPipe e health endpoint.
 
-Ainda nao ha aplicacao Next.js/NestJS real ou testes automatizados. Essas partes entram nas proximas etapas.
+Ainda nao ha frontend Next.js real, entidades de negocio ou testes automatizados. Essas partes entram nas proximas etapas.

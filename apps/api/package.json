@@ -5,13 +5,32 @@
   "type": "module",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "dev": "node -e \"console.log('API NestJS sera configurada na Etapa 3')\"",
-    "lint": "eslint .",
+    "dev": "pnpm build && node --watch dist/main.js",
+    "lint": "eslint src",
+    "migration:revert": "pnpm build && typeorm migration:revert -d dist/database/data-source.js",
+    "migration:run": "pnpm build && typeorm migration:run -d dist/database/data-source.js",
+    "schema:log": "pnpm build && typeorm schema:log -d dist/database/data-source.js",
+    "start": "node dist/main.js",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
     "@bioconecta/config": "workspace:*",
-    "@bioconecta/types": "workspace:*"
+    "@bioconecta/types": "workspace:*",
+    "@nestjs/common": "^11.1.27",
+    "@nestjs/config": "^4.0.4",
+    "@nestjs/core": "^11.1.27",
+    "@nestjs/platform-express": "^11.1.27",
+    "@nestjs/swagger": "^11.4.5",
+    "@nestjs/typeorm": "^11.0.3",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.15.1",
+    "dotenv": "^17.2.3",
+    "helmet": "^8.2.0",
+    "pg": "^8.22.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2",
+    "typeorm": "0.3.30",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@bioconecta/eslint-config": "workspace:*",

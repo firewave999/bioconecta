@@ -9,6 +9,8 @@
     "pnpm": ">=11.0.0"
   },
   "scripts": {
+    "api:dev": "pnpm --filter @bioconecta/api dev",
+    "api:start": "pnpm --filter @bioconecta/api start",
     "build": "turbo run build",
     "dev": "turbo run dev",
     "infra:down": "docker compose down",
