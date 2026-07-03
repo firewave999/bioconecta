@@ -1,0 +1,60 @@
+# BioConecta
+
+Conectando biologos as oportunidades certas.
+
+BioConecta e uma plataforma nacional para conectar biologos, estudantes de Ciencias Biologicas, empresas, vagas, campanhas de campo, prestacao de servicos e um banco profissional de disponibilidade no Brasil.
+
+Este repositorio esta sendo construido em etapas. A primeira entrega estabelece a fundacao tecnica e de produto antes da implementacao do monorepo, frontend, backend e fluxo completo de autenticacao/onboarding.
+
+## Objetivo do MVP
+
+O MVP deve resolver quatro problemas centrais:
+
+1. Permitir que biologos criem perfis profissionais especializados e verificaveis.
+2. Permitir que empresas publiquem vagas exclusivas para biologos.
+3. Fazer matching transparente entre profissional e oportunidade.
+4. Permitir que empresas encontrem biologos disponiveis.
+
+## Stack Planejada
+
+- Monorepo: pnpm e Turborepo.
+- Frontend: Next.js, TypeScript, App Router, Tailwind CSS, shadcn/ui, React Hook Form, Zod, TanStack Query e Lucide Icons.
+- Backend: NestJS, REST API, Swagger/OpenAPI, TypeORM, PostgreSQL, Redis e BullMQ.
+- Infra: Docker, Docker Compose, Nginx, HTTPS, GitHub Actions e deploy em Ubuntu 24.04.
+
+## Estrutura Planejada
+
+```txt
+apps/
+  web/
+  api/
+packages/
+  ui/
+  types/
+  config/
+  eslint-config/
+  typescript-config/
+docs/
+  ARCHITECTURE.md
+  DATABASE.md
+  API.md
+  SECURITY.md
+  DEPLOYMENT.md
+  ROADMAP.md
+```
+
+## Documentacao
+
+- [Arquitetura](docs/ARCHITECTURE.md)
+- [Banco de dados](docs/DATABASE.md)
+- [API](docs/API.md)
+- [Seguranca](docs/SECURITY.md)
+- [Deploy](docs/DEPLOYMENT.md)
+- [Roadmap](docs/ROADMAP.md)
+- [Relatorio do repositorio](docs/REPOSITORY_REPORT.md)
+
+## Status Atual
+
+Etapa 0 concluida: fundacao do projeto, arquitetura, modelo de dados inicial, roadmap e relatorio do repositorio.
+
+Ainda nao ha aplicacao executavel, dependencias instaladas, testes, lint ou typecheck configurados. Essas partes entram nas proximas etapas.
