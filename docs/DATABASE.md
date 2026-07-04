@@ -13,6 +13,12 @@ Etapa 3 configurou TypeORM no backend com:
 - tabela de migrations `typeorm_migrations`
 - DataSource em `apps/api/src/database/data-source.ts`
 
+Etapa 5 adicionou a primeira migration de autenticacao:
+
+- `users`
+- `sessions`
+- `email_verification_tokens`
+
 ## Entidades Minimas
 
 ### Identidade e Acesso

@@ -11,6 +11,13 @@ Etapa 3 criou a base real da API em NestJS.
 Disponivel:
 
 - `GET /api/v1/health`
+- `POST /api/v1/auth/register`
+- `POST /api/v1/auth/login`
+- `POST /api/v1/auth/refresh`
+- `POST /api/v1/auth/logout`
+- `POST /api/v1/auth/logout-all`
+- `POST /api/v1/auth/verify-email`
+- `GET /api/v1/auth/me`
 - Swagger UI em `/api/docs`
 - OpenAPI JSON em `/api/docs-json`
 - Prefixo global `/api/v1`
@@ -36,6 +43,7 @@ Disponivel:
 - `POST /api/v1/auth/logout`
 - `POST /api/v1/auth/logout-all`
 - `POST /api/v1/auth/verify-email`
+- `GET /api/v1/auth/me`
 - `POST /api/v1/auth/password/forgot`
 - `POST /api/v1/auth/password/reset`
 

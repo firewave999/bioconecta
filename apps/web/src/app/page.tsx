@@ -14,6 +14,7 @@ import {
   UsersRound,
   type LucideIcon,
 } from "lucide-react";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 
@@ -101,7 +102,7 @@ export default function HomePage() {
           </nav>
 
           <Button asChild size="sm" variant="outline">
-            <a href="#busca">Buscar</a>
+            <Link href="/login">Entrar</Link>
           </Button>
         </header>
 
@@ -126,13 +127,13 @@ export default function HomePage() {
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Button asChild>
-                <a href="#vagas-recentes">
+                <Link href="/cadastro">
                   Sou biologo
                   <ArrowRight size={18} />
-                </a>
+                </Link>
               </Button>
               <Button asChild variant="outline">
-                <a href="#empresas">Sou empresa</a>
+                <Link href="/cadastro">Sou empresa</Link>
               </Button>
             </div>
 

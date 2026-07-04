@@ -40,6 +40,8 @@ apps/web/
 ## Rotas Atuais
 
 - `/`
+- `/cadastro`
+- `/login`
 - `/robots.txt`
 - `/sitemap.xml`
 
@@ -60,4 +62,6 @@ pnpm web:dev
 
 ## Observacoes
 
-A Home atual e publica e funcional como primeira tela institucional do produto. Os CTAs navegam para secoes reais da propria pagina. Fluxos de cadastro, login, vagas indexaveis e dashboard entram nas proximas etapas.
+A Home atual e publica e funcional como primeira tela institucional do produto. Os CTAs principais navegam para cadastro e login. Vagas indexaveis, dashboard e onboarding entram nas proximas etapas.
+
+Atualizacao: `/cadastro` e `/login` ja chamam a API real de autenticacao. Em desenvolvimento, os tokens sao guardados no `localStorage` ate a etapa de dashboard/onboarding definir a estrategia final de sessao no frontend.

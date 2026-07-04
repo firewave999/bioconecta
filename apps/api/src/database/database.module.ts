@@ -11,8 +11,15 @@ function envFromConfig(configService: ConfigService<Env, true>): Env {
     APP_API_URL: configService.get("APP_API_URL", { infer: true }),
     APP_WEB_URL: configService.get("APP_WEB_URL", { infer: true }),
     DATABASE_URL: configService.get("DATABASE_URL", { infer: true }),
+    EMAIL_VERIFICATION_TOKEN_TTL_HOURS: configService.get("EMAIL_VERIFICATION_TOKEN_TTL_HOURS", {
+      infer: true,
+    }),
     JWT_ACCESS_SECRET: configService.get("JWT_ACCESS_SECRET", { infer: true }),
+    JWT_ACCESS_TOKEN_TTL_SECONDS: configService.get("JWT_ACCESS_TOKEN_TTL_SECONDS", {
+      infer: true,
+    }),
     JWT_REFRESH_SECRET: configService.get("JWT_REFRESH_SECRET", { infer: true }),
+    JWT_REFRESH_TOKEN_TTL_DAYS: configService.get("JWT_REFRESH_TOKEN_TTL_DAYS", { infer: true }),
     NODE_ENV: configService.get("NODE_ENV", { infer: true }),
     POSTGRES_DB: configService.get("POSTGRES_DB", { infer: true }),
     POSTGRES_HOST: configService.get("POSTGRES_HOST", { infer: true }),

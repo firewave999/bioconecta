@@ -12,6 +12,7 @@ Etapa 3 concluida.
 - Swagger/OpenAPI.
 - TypeORM.
 - PostgreSQL.
+- Autenticacao com access token e refresh token opaco rotacionavel.
 - Helmet.
 - ValidationPipe global.
 - Configuracao por variaveis de ambiente validada com Zod.
@@ -29,6 +30,14 @@ apps/api/src/
     database.module.ts
     typeorm.options.ts
     migrations/
+  auth/
+    auth.controller.ts
+    auth.guard.ts
+    auth.module.ts
+    auth.service.ts
+  users/
+    user.entity.ts
+    users.module.ts
   health/
     health.controller.ts
     health.module.ts
@@ -48,6 +57,13 @@ pnpm --filter @bioconecta/api schema:log
 ## Rotas Atuais
 
 - `GET /api/v1/health`
+- `POST /api/v1/auth/register`
+- `POST /api/v1/auth/login`
+- `POST /api/v1/auth/refresh`
+- `POST /api/v1/auth/logout`
+- `POST /api/v1/auth/logout-all`
+- `POST /api/v1/auth/verify-email`
+- `GET /api/v1/auth/me`
 - `/api/docs`
 - `/api/docs-json`
 

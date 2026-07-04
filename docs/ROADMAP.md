@@ -57,7 +57,7 @@ Status: concluida.
 
 ## Etapa 5: Autenticacao
 
-Status: proxima.
+Status: concluida.
 
 - Cadastro.
 - Login.
@@ -65,9 +65,11 @@ Status: proxima.
 - Logout.
 - Logout de todas as sessoes.
 - Verificacao de e-mail em dev.
-- Recuperacao de senha.
+- Recuperacao de senha. Pendente para refinamento posterior.
 
 ## Etapa 6: Primeiro Fluxo Completo do Biologo
+
+Status: proxima.
 
 - Home.
 - Criar conta.
@@ -122,4 +124,4 @@ Status: proxima.
 
 ## Marco Atual
 
-A proxima tarefa e criar a autenticacao real com cadastro, login, refresh token, logout e verificacao de e-mail em desenvolvimento.
+A proxima tarefa e criar o primeiro fluxo completo do biologo: cadastro, verificacao de e-mail, escolha "Sou biologo", onboarding, dashboard, edicao de perfil, logout e login novamente.

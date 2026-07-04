@@ -76,6 +76,6 @@ Nesta sessao do Codex, os comandos foram executados usando o runtime empacotado 
 
 ## Status Atual
 
-Etapa 4 concluida: frontend base com Next.js App Router, Tailwind CSS, estrutura shadcn/ui, design tokens, Home publica, SEO inicial, robots e sitemap.
+Etapa 5 concluida: autenticacao real com cadastro, login, refresh token rotacionavel, logout, logout-all, verificacao de e-mail em dev, migration inicial e telas `/cadastro` e `/login`.
 
-Ainda nao ha entidades de negocio, autenticacao real no frontend ou testes automatizados. Essas partes entram nas proximas etapas.
+Ainda nao ha onboarding de biologo, dashboard, recuperacao de senha ou testes automatizados. Essas partes entram nas proximas etapas.

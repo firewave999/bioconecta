@@ -15,6 +15,16 @@ Seguranca e requisito central do BioConecta, nao uma etapa final decorativa.
 - Recuperacao de senha com token temporario.
 - Estrutura preparada para 2FA futuro.
 
+Status atual:
+
+- Cadastro e login reais implementados.
+- Senhas usam `bcryptjs` com custo 12.
+- Refresh tokens sao opacos e armazenados apenas como hash.
+- Refresh token e rotacionado a cada renovacao.
+- Verificacao de e-mail usa token aleatorio armazenado como SHA-256.
+- Em `development`, o token de verificacao e retornado na resposta para facilitar testes locais sem SMTP.
+- Recuperacao de senha e 2FA ainda nao foram implementados.
+
 ## Autorizacao
 
 - RBAC para papeis globais.
