@@ -133,13 +133,13 @@ export default function HomePage() {
                 </Link>
               </Button>
               <Button asChild variant="outline">
-                <Link href="/cadastro">Sou empresa</Link>
+                <Link href="/empresa">Sou empresa</Link>
               </Button>
             </div>
 
             <form
               id="busca"
-              action="#vagas-recentes"
+              action="/vagas"
               className="mt-10 grid max-w-3xl gap-3 rounded-[8px] border border-white/20 bg-white/12 p-3 backdrop-blur-md md:grid-cols-[1fr_1fr_auto]"
             >
               <label className="sr-only" htmlFor="search-role">
@@ -199,7 +199,7 @@ export default function HomePage() {
             </h2>
           </div>
           <Button asChild variant="secondary">
-            <a href="#busca">Refinar busca</a>
+            <Link href="/vagas">Ver vagas publicadas</Link>
           </Button>
         </div>
 
@@ -310,11 +310,12 @@ export default function HomePage() {
               Agora a base visual esta pronta.
             </h2>
             <p className="mt-2 text-slate-600">
-              O proximo passo e evoluir para fluxos reais de autenticacao, onboarding e dashboard.
+              Agora empresas podem cadastrar perfil, publicar vagas e preparar requisitos para
+              matching.
             </p>
           </div>
           <Button asChild variant="secondary">
-            <a href="#top">Voltar ao topo</a>
+            <Link href="/empresa">Cadastrar empresa</Link>
           </Button>
         </div>
       </section>

@@ -160,6 +160,24 @@ export function DashboardClient() {
           </Button>
         </div>
       </section>
+
+      <section className="rounded-[8px] border border-slate-200 bg-white p-6">
+        <h2 className="text-xl font-semibold text-slate-950">Area da empresa</h2>
+        <p className="mt-2 text-slate-600">
+          Cadastre a empresa, publique vagas e defina requisitos profissionais para biologos.
+        </p>
+        <div className="mt-5 flex flex-wrap gap-3">
+          <Button asChild>
+            <Link href="/empresa">Cadastrar ou editar empresa</Link>
+          </Button>
+          <Button asChild variant="secondary">
+            <Link href="/empresa/vagas">Minhas vagas</Link>
+          </Button>
+          <Button asChild variant="secondary">
+            <Link href="/vagas">Vagas publicadas</Link>
+          </Button>
+        </div>
+      </section>
     </div>
   );
 }

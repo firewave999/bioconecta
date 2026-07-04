@@ -4,7 +4,7 @@ Conectando biologos as oportunidades certas.
 
 BioConecta e uma plataforma nacional para conectar biologos, estudantes de Ciencias Biologicas, empresas, vagas, campanhas de campo, prestacao de servicos e um banco profissional de disponibilidade no Brasil.
 
-Este repositorio esta sendo construido em etapas. A base tecnica, autenticacao, onboarding e perfil profissional do biologo ja estao implementados para desenvolvimento local.
+Este repositorio esta sendo construido em etapas. A base tecnica, autenticacao, perfil profissional do biologo, empresas e vagas ja estao implementados para desenvolvimento local.
 
 ## Objetivo do MVP
 
@@ -76,6 +76,6 @@ Nesta sessao do Codex, os comandos foram executados usando o runtime empacotado 
 
 ## Status Atual
 
-Etapa 7 concluida: autenticacao real, verificacao de e-mail em dev, onboarding inicial do biologo, dashboard, edicao de perfil e perfil profissional com areas, grupos taxonomicos, competencias, experiencias, certificacoes e documentos.
+Etapa 8 concluida: autenticacao real, onboarding do biologo, perfil profissional, cadastro empresarial, criacao de vagas, requisitos profissionais, logistica basica e remuneracao.
 
-Ainda faltam empresas, vagas, candidaturas, matching, recuperacao de senha e testes automatizados. Essas partes entram nas proximas etapas.
+Ainda faltam candidaturas, matching, pipeline da empresa, recuperacao de senha e testes automatizados. Essas partes entram nas proximas etapas.

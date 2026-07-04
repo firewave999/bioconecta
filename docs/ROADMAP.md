@@ -98,6 +98,8 @@ Status: concluida.
 
 ## Etapa 8: Empresas e Vagas
 
+Status: concluida.
+
 - Cadastro empresarial.
 - Equipe de empresa.
 - Criacao de vagas.
@@ -126,4 +128,4 @@ Status: concluida.
 
 ## Marco Atual
 
-A proxima tarefa e iniciar empresas e vagas: cadastro empresarial, equipe, criacao de vagas, requisitos profissionais, logistica e remuneracao.
+A proxima tarefa e candidaturas e matching: candidatura do biologo, pipeline da empresa, score transparente, elegibilidade de estudantes e favoritos.

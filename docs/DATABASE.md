@@ -35,6 +35,11 @@ Etapa 7 adicionou o perfil profissional expandido:
 - `biologist_certifications`
 - `biologist_documents`
 
+Etapa 8 adicionou empresas e vagas:
+
+- `companies`
+- `jobs`
+
 ## Entidades Minimas
 
 ### Identidade e Acesso

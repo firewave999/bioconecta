@@ -6,7 +6,7 @@ A API sera REST, documentada por Swagger/OpenAPI e versionada sob `/api/v1`.
 
 ## Status da Implementacao
 
-Etapa 7 ja cobre autenticacao, primeiro fluxo completo e perfil profissional expandido do biologo.
+Etapa 8 ja cobre autenticacao, perfil profissional do biologo, empresas e vagas.
 
 Disponivel:
 
@@ -22,6 +22,12 @@ Disponivel:
 - `PUT /api/v1/biologist-profile/me`
 - `GET /api/v1/biologist-profile/me/professional`
 - `PUT /api/v1/biologist-profile/me/professional`
+- `GET /api/v1/companies/me`
+- `PUT /api/v1/companies/me`
+- `GET /api/v1/jobs`
+- `GET /api/v1/jobs/mine`
+- `POST /api/v1/jobs`
+- `PUT /api/v1/jobs/:id`
 - Swagger UI em `/api/docs`
 - OpenAPI JSON em `/api/docs-json`
 - Prefixo global `/api/v1`
@@ -69,18 +75,26 @@ Implementado nesta etapa:
 
 ### Empresas
 
-- `POST /api/v1/companies`
-- `GET /api/v1/companies/:id`
-- `PUT /api/v1/companies/:id`
+- `GET /api/v1/companies/me`
+- `PUT /api/v1/companies/me`
 - `POST /api/v1/companies/:id/members/invite`
 
 ### Vagas
 
 - `POST /api/v1/jobs`
 - `GET /api/v1/jobs`
-- `GET /api/v1/jobs/:id`
+- `GET /api/v1/jobs/mine`
 - `PUT /api/v1/jobs/:id`
 - `POST /api/v1/jobs/:id/applications`
+
+Implementado nesta etapa:
+
+- `GET /api/v1/companies/me`: retorna empresa da conta autenticada.
+- `PUT /api/v1/companies/me`: cria ou atualiza empresa da conta autenticada.
+- `GET /api/v1/jobs`: lista vagas publicadas.
+- `GET /api/v1/jobs/mine`: lista vagas da empresa autenticada.
+- `POST /api/v1/jobs`: cria vaga para a empresa autenticada.
+- `PUT /api/v1/jobs/:id`: atualiza vaga da empresa autenticada.
 
 ### Matching
 
