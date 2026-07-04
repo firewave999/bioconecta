@@ -23,6 +23,18 @@ Etapa 6 adicionou o perfil profissional inicial:
 
 - `biologist_profiles`
 
+Etapa 7 adicionou o perfil profissional expandido:
+
+- `practice_areas`
+- `taxonomic_groups`
+- `skills`
+- `biologist_profile_practice_areas`
+- `biologist_profile_taxonomic_groups`
+- `biologist_profile_skills`
+- `biologist_experiences`
+- `biologist_certifications`
+- `biologist_documents`
+
 ## Entidades Minimas
 
 ### Identidade e Acesso

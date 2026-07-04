@@ -2,7 +2,7 @@
 
 ## Status
 
-Etapa 6 concluida.
+Etapa 7 concluida.
 
 ## Stack
 
@@ -41,6 +41,7 @@ apps/api/src/
     biologist-profile.module.ts
     biologist-profile.service.ts
     dto/
+    entities/
   users/
     user.entity.ts
     users.module.ts
@@ -72,6 +73,8 @@ pnpm --filter @bioconecta/api schema:log
 - `GET /api/v1/auth/me`
 - `GET /api/v1/biologist-profile/me`
 - `PUT /api/v1/biologist-profile/me`
+- `GET /api/v1/biologist-profile/me/professional`
+- `PUT /api/v1/biologist-profile/me/professional`
 - `/api/docs`
 - `/api/docs-json`
 

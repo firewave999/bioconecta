@@ -84,6 +84,8 @@ Status: concluida.
 
 ## Etapa 7: Perfil Profissional
 
+Status: concluida.
+
 - Identificacao profissional.
 - CRBio.
 - Documentos.
@@ -124,4 +126,4 @@ Status: concluida.
 
 ## Marco Atual
 
-A proxima tarefa e aprofundar o perfil profissional: documentos, areas de atuacao, grupos taxonomicos, competencias, experiencias e certificacoes.
+A proxima tarefa e iniciar empresas e vagas: cadastro empresarial, equipe, criacao de vagas, requisitos profissionais, logistica e remuneracao.

@@ -6,7 +6,7 @@ A API sera REST, documentada por Swagger/OpenAPI e versionada sob `/api/v1`.
 
 ## Status da Implementacao
 
-Etapa 6 ja cobre autenticacao e o primeiro fluxo completo do biologo.
+Etapa 7 ja cobre autenticacao, primeiro fluxo completo e perfil profissional expandido do biologo.
 
 Disponivel:
 
@@ -20,6 +20,8 @@ Disponivel:
 - `GET /api/v1/auth/me`
 - `GET /api/v1/biologist-profile/me`
 - `PUT /api/v1/biologist-profile/me`
+- `GET /api/v1/biologist-profile/me/professional`
+- `PUT /api/v1/biologist-profile/me/professional`
 - Swagger UI em `/api/docs`
 - OpenAPI JSON em `/api/docs-json`
 - Prefixo global `/api/v1`
@@ -53,6 +55,8 @@ Disponivel:
 
 - `GET /api/v1/biologist-profile/me`
 - `PUT /api/v1/biologist-profile/me`
+- `GET /api/v1/biologist-profile/me/professional`
+- `PUT /api/v1/biologist-profile/me/professional`
 - `POST /api/v1/biologist-profile/documents`
 - `POST /api/v1/biologist-profile/submit-verification`
 
@@ -60,6 +64,8 @@ Implementado nesta etapa:
 
 - `GET /api/v1/biologist-profile/me`: retorna o perfil do biologo autenticado e percentual de conclusao.
 - `PUT /api/v1/biologist-profile/me`: cria ou atualiza identificacao, CRBio, localizacao, disponibilidade e dados fiscais basicos.
+- `GET /api/v1/biologist-profile/me/professional`: retorna areas, grupos taxonomicos, competencias, experiencias, certificacoes e documentos.
+- `PUT /api/v1/biologist-profile/me/professional`: substitui o conjunto profissional expandido do biologo autenticado.
 
 ### Empresas
 

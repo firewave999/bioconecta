@@ -8,10 +8,14 @@ import { Button } from "@/components/ui/button";
 import { apiFetch, getStoredAccessToken } from "@/lib/api";
 
 type DashboardState = {
+  certificationsCount: number;
   completion: number;
+  documentsCount: number;
   email: string;
+  experiencesCount: number;
   firstName: string;
   profileExists: boolean;
+  professionalStarted: boolean;
   title: string;
 };
 
@@ -29,17 +33,37 @@ export function DashboardClient() {
 
     Promise.all([
       apiFetch<{ user: { email: string; firstName: string } }>("/auth/me", { token }),
-      apiFetch<{ completion: number; profile: { headline?: string | null } | null }>(
-        "/biologist-profile/me",
-        { token },
-      ),
+      apiFetch<{
+        completion: number;
+        professional: {
+          certifications: unknown[];
+          documents: unknown[];
+          experiences: unknown[];
+          practiceAreas: unknown[];
+          skills: unknown[];
+          taxonomicGroups: unknown[];
+        };
+        profile: { headline?: string | null } | null;
+      }>("/biologist-profile/me", { token }),
     ])
       .then(([me, profile]) => {
+        const professionalCount =
+          profile.professional.practiceAreas.length +
+          profile.professional.taxonomicGroups.length +
+          profile.professional.skills.length +
+          profile.professional.experiences.length +
+          profile.professional.certifications.length +
+          profile.professional.documents.length;
+
         setState({
+          certificationsCount: profile.professional.certifications.length,
           completion: profile.completion,
+          documentsCount: profile.professional.documents.length,
           email: me.user.email,
+          experiencesCount: profile.professional.experiences.length,
           firstName: me.user.firstName,
           profileExists: Boolean(profile.profile),
+          professionalStarted: professionalCount > 0,
           title: profile.profile?.headline || "Perfil profissional em construcao",
         });
       })
@@ -89,12 +113,36 @@ export function DashboardClient() {
         </div>
       </section>
 
+      {state.profileExists ? (
+        <section className="grid gap-4 md:grid-cols-3">
+          <div className="rounded-[8px] border border-slate-200 bg-white p-5">
+            <p className="text-sm text-slate-500">Experiencias</p>
+            <p className="mt-2 text-3xl font-semibold text-slate-950">{state.experiencesCount}</p>
+          </div>
+          <div className="rounded-[8px] border border-slate-200 bg-white p-5">
+            <p className="text-sm text-slate-500">Certificacoes</p>
+            <p className="mt-2 text-3xl font-semibold text-slate-950">
+              {state.certificationsCount}
+            </p>
+          </div>
+          <div className="rounded-[8px] border border-slate-200 bg-white p-5">
+            <p className="text-sm text-slate-500">Documentos</p>
+            <p className="mt-2 text-3xl font-semibold text-slate-950">{state.documentsCount}</p>
+          </div>
+        </section>
+      ) : null}
+
       <section className="rounded-[8px] border border-slate-200 bg-white p-6">
         <h2 className="text-xl font-semibold text-slate-950">
-          {state.profileExists ? "Seu perfil profissional esta salvo." : "Complete seu onboarding."}
+          {state.profileExists
+            ? state.professionalStarted
+              ? "Seu perfil profissional esta avancando."
+              : "Complete seu perfil profissional."
+            : "Complete seu onboarding."}
         </h2>
         <p className="mt-2 text-slate-600">
-          A proxima etapa adiciona documentos, areas de atuacao, grupos taxonomicos e competencias.
+          Adicione documentos, areas de atuacao, grupos taxonomicos, competencias, experiencias e
+          certificacoes.
         </p>
         <div className="mt-5 flex flex-wrap gap-3">
           <Button asChild>
@@ -102,6 +150,11 @@ export function DashboardClient() {
               {state.profileExists ? "Editar perfil" : "Completar onboarding"}
             </Link>
           </Button>
+          {state.profileExists ? (
+            <Button asChild variant="secondary">
+              <Link href="/perfil/profissional">Perfil profissional</Link>
+            </Button>
+          ) : null}
           <Button asChild variant="secondary">
             <Link href="/">Ver Home</Link>
           </Button>

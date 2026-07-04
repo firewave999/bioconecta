@@ -2,7 +2,7 @@
 
 ## Status
 
-Etapa 6 concluida.
+Etapa 7 concluida.
 
 ## Stack
 
@@ -48,6 +48,7 @@ apps/web/
 - `/onboarding/biologo`
 - `/dashboard`
 - `/perfil/editar`
+- `/perfil/profissional`
 - `/robots.txt`
 - `/sitemap.xml`
 
@@ -70,4 +71,4 @@ pnpm web:dev
 
 A Home atual e publica e funcional como primeira tela institucional do produto. Os CTAs principais navegam para cadastro e login.
 
-Atualizacao: `/cadastro`, `/login`, `/onboarding/biologo`, `/dashboard` e `/perfil/editar` ja chamam a API real. Em desenvolvimento, os tokens sao guardados no `localStorage` ate a etapa de sessao segura com cookies httpOnly.
+Atualizacao: `/cadastro`, `/login`, `/onboarding/biologo`, `/dashboard`, `/perfil/editar` e `/perfil/profissional` ja chamam a API real. Em desenvolvimento, os tokens sao guardados no `localStorage` ate a etapa de sessao segura com cookies httpOnly.
