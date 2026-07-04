@@ -140,7 +140,17 @@ export function RegisterForm() {
               >
                 {verified ? "E-mail verificado" : "Verificar e-mail em dev"}
               </Button>
+              {verified ? (
+                <Button asChild>
+                  <Link href="/onboarding/biologo">Continuar onboarding de biologo</Link>
+                </Button>
+              ) : null}
             </div>
+          ) : null}
+          {!result.devVerificationToken ? (
+            <Button asChild className="mt-4">
+              <Link href="/onboarding/biologo">Continuar onboarding de biologo</Link>
+            </Button>
           ) : null}
         </div>
       ) : null}

@@ -2,7 +2,7 @@
 
 ## Status
 
-Etapa 4 concluida.
+Etapa 6 concluida.
 
 ## Stack
 
@@ -28,6 +28,9 @@ apps/web/
       globals.css
       layout.tsx
       page.tsx
+      dashboard/
+      onboarding/
+      perfil/
       robots.ts
       sitemap.ts
     components/
@@ -42,6 +45,9 @@ apps/web/
 - `/`
 - `/cadastro`
 - `/login`
+- `/onboarding/biologo`
+- `/dashboard`
+- `/perfil/editar`
 - `/robots.txt`
 - `/sitemap.xml`
 
@@ -62,6 +68,6 @@ pnpm web:dev
 
 ## Observacoes
 
-A Home atual e publica e funcional como primeira tela institucional do produto. Os CTAs principais navegam para cadastro e login. Vagas indexaveis, dashboard e onboarding entram nas proximas etapas.
+A Home atual e publica e funcional como primeira tela institucional do produto. Os CTAs principais navegam para cadastro e login.
 
-Atualizacao: `/cadastro` e `/login` ja chamam a API real de autenticacao. Em desenvolvimento, os tokens sao guardados no `localStorage` ate a etapa de dashboard/onboarding definir a estrategia final de sessao no frontend.
+Atualizacao: `/cadastro`, `/login`, `/onboarding/biologo`, `/dashboard` e `/perfil/editar` ja chamam a API real. Em desenvolvimento, os tokens sao guardados no `localStorage` ate a etapa de sessao segura com cookies httpOnly.

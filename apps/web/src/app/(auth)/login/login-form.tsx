@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { apiRequest } from "@/lib/api";
@@ -18,6 +19,7 @@ type LoginResponse = {
 };
 
 export function LoginForm() {
+  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
@@ -39,6 +41,7 @@ export function LoginForm() {
       localStorage.setItem("bioconecta.accessToken", response.tokens.accessToken);
       localStorage.setItem("bioconecta.refreshToken", response.tokens.refreshToken);
       setSuccess(`Login realizado para ${response.user.email}.`);
+      router.push("/dashboard");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Nao foi possivel entrar.");
     } finally {
@@ -76,7 +79,12 @@ export function LoginForm() {
 
         {error ? <p className="rounded-[8px] bg-red-50 p-3 text-sm text-red-700">{error}</p> : null}
         {success ? (
-          <p className="rounded-[8px] bg-cyan-50 p-3 text-sm text-cyan-800">{success}</p>
+          <div className="grid gap-3 rounded-[8px] bg-cyan-50 p-3 text-sm text-cyan-800">
+            <p>{success}</p>
+            <Link className="font-semibold text-cyan-900" href="/dashboard">
+              Ir para dashboard
+            </Link>
+          </div>
         ) : null}
 
         <Button disabled={loading} type="submit">

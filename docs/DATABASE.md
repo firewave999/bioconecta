@@ -19,6 +19,10 @@ Etapa 5 adicionou a primeira migration de autenticacao:
 - `sessions`
 - `email_verification_tokens`
 
+Etapa 6 adicionou o perfil profissional inicial:
+
+- `biologist_profiles`
+
 ## Entidades Minimas
 
 ### Identidade e Acesso

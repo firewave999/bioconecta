@@ -6,7 +6,7 @@ A API sera REST, documentada por Swagger/OpenAPI e versionada sob `/api/v1`.
 
 ## Status da Implementacao
 
-Etapa 3 criou a base real da API em NestJS.
+Etapa 6 ja cobre autenticacao e o primeiro fluxo completo do biologo.
 
 Disponivel:
 
@@ -18,6 +18,8 @@ Disponivel:
 - `POST /api/v1/auth/logout-all`
 - `POST /api/v1/auth/verify-email`
 - `GET /api/v1/auth/me`
+- `GET /api/v1/biologist-profile/me`
+- `PUT /api/v1/biologist-profile/me`
 - Swagger UI em `/api/docs`
 - OpenAPI JSON em `/api/docs-json`
 - Prefixo global `/api/v1`
@@ -53,6 +55,11 @@ Disponivel:
 - `PUT /api/v1/biologist-profile/me`
 - `POST /api/v1/biologist-profile/documents`
 - `POST /api/v1/biologist-profile/submit-verification`
+
+Implementado nesta etapa:
+
+- `GET /api/v1/biologist-profile/me`: retorna o perfil do biologo autenticado e percentual de conclusao.
+- `PUT /api/v1/biologist-profile/me`: cria ou atualiza identificacao, CRBio, localizacao, disponibilidade e dados fiscais basicos.
 
 ### Empresas
 

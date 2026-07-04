@@ -13,16 +13,38 @@ export class ApiError extends Error {
   }
 }
 
+type ApiOptions<TBody> = {
+  body?: TBody;
+  method?: "GET" | "POST" | "PUT";
+  token?: string | null;
+};
+
 export async function apiRequest<TResponse, TBody extends Record<string, unknown>>(
   path: string,
   body: TBody,
 ): Promise<TResponse> {
-  const response = await fetch(`${apiUrl}${path}`, {
-    body: JSON.stringify(body),
-    headers: {
-      "Content-Type": "application/json",
-    },
+  return apiFetch<TResponse, TBody>(path, {
+    body,
     method: "POST",
+  });
+}
+
+export async function apiFetch<
+  TResponse,
+  TBody extends Record<string, unknown> = Record<string, never>,
+>(path: string, options: ApiOptions<TBody> = {}): Promise<TResponse> {
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+
+  if (options.token) {
+    headers.Authorization = `Bearer ${options.token}`;
+  }
+
+  const response = await fetch(`${apiUrl}${path}`, {
+    body: options.body ? JSON.stringify(options.body) : undefined,
+    headers,
+    method: options.method ?? "GET",
   });
 
   const payload = (await response.json().catch(() => ({}))) as unknown;
@@ -33,6 +55,23 @@ export async function apiRequest<TResponse, TBody extends Record<string, unknown
   }
 
   return payload as TResponse;
+}
+
+export function getStoredAccessToken() {
+  return typeof window === "undefined" ? null : localStorage.getItem("bioconecta.accessToken");
+}
+
+export function getStoredRefreshToken() {
+  return typeof window === "undefined" ? null : localStorage.getItem("bioconecta.refreshToken");
+}
+
+export function clearStoredTokens() {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  localStorage.removeItem("bioconecta.accessToken");
+  localStorage.removeItem("bioconecta.refreshToken");
 }
 
 function getErrorMessage(payload: unknown) {

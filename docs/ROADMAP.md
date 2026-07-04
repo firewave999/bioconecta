@@ -69,7 +69,7 @@ Status: concluida.
 
 ## Etapa 6: Primeiro Fluxo Completo do Biologo
 
-Status: proxima.
+Status: concluida.
 
 - Home.
 - Criar conta.
@@ -124,4 +124,4 @@ Status: proxima.
 
 ## Marco Atual
 
-A proxima tarefa e criar o primeiro fluxo completo do biologo: cadastro, verificacao de e-mail, escolha "Sou biologo", onboarding, dashboard, edicao de perfil, logout e login novamente.
+A proxima tarefa e aprofundar o perfil profissional: documentos, areas de atuacao, grupos taxonomicos, competencias, experiencias e certificacoes.
