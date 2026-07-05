@@ -6,7 +6,7 @@ A API sera REST, documentada por Swagger/OpenAPI e versionada sob `/api/v1`.
 
 ## Status da Implementacao
 
-Etapa 8 ja cobre autenticacao, perfil profissional do biologo, empresas e vagas.
+Etapa 9 ja cobre autenticacao, perfil profissional do biologo, empresas, vagas, candidaturas e matching inicial.
 
 Disponivel:
 
@@ -28,6 +28,11 @@ Disponivel:
 - `GET /api/v1/jobs/mine`
 - `POST /api/v1/jobs`
 - `PUT /api/v1/jobs/:id`
+- `GET /api/v1/applications/mine`
+- `GET /api/v1/applications/jobs/:jobId/me`
+- `POST /api/v1/applications/jobs/:jobId`
+- `GET /api/v1/applications/jobs/:jobId/candidates`
+- `PUT /api/v1/applications/:id/status`
 - Swagger UI em `/api/docs`
 - OpenAPI JSON em `/api/docs-json`
 - Prefixo global `/api/v1`
@@ -95,6 +100,22 @@ Implementado nesta etapa:
 - `GET /api/v1/jobs/mine`: lista vagas da empresa autenticada.
 - `POST /api/v1/jobs`: cria vaga para a empresa autenticada.
 - `PUT /api/v1/jobs/:id`: atualiza vaga da empresa autenticada.
+
+### Candidaturas
+
+- `GET /api/v1/applications/mine`
+- `GET /api/v1/applications/jobs/:jobId/me`
+- `POST /api/v1/applications/jobs/:jobId`
+- `GET /api/v1/applications/jobs/:jobId/candidates`
+- `PUT /api/v1/applications/:id/status`
+
+Implementado nesta etapa:
+
+- Biólogo autenticado pode se candidatar a vagas publicadas.
+- API bloqueia candidatura duplicada.
+- Empresa autenticada vê candidatos por vaga.
+- Empresa atualiza status do pipeline.
+- Candidatura recebe `matchScore` e `matchReasons` calculados a partir de áreas, grupos taxonômicos, competências, CRBio, localização e viagem.
 
 ### Matching
 

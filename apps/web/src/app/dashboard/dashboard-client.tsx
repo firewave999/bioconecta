@@ -176,6 +176,9 @@ export function DashboardClient() {
           <Button asChild variant="secondary">
             <Link href="/vagas">Vagas publicadas</Link>
           </Button>
+          <Button asChild variant="secondary">
+            <Link href="/candidaturas">Minhas candidaturas</Link>
+          </Button>
         </div>
       </section>
     </div>

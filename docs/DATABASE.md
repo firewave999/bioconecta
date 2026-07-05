@@ -40,6 +40,10 @@ Etapa 8 adicionou empresas e vagas:
 - `companies`
 - `jobs`
 
+Etapa 9 adicionou candidaturas:
+
+- `applications`
+
 ## Entidades Minimas
 
 ### Identidade e Acesso

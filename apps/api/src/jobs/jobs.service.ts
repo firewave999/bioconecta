@@ -25,6 +25,19 @@ export class JobsService {
     return { jobs };
   }
 
+  async getPublished(jobId: string) {
+    const job = await this.jobsRepository.findOne({
+      relations: { company: true },
+      where: { id: jobId, status: "PUBLISHED" },
+    });
+
+    if (!job) {
+      throw new NotFoundException("Vaga publicada nao encontrada.");
+    }
+
+    return { job };
+  }
+
   async listMine(userId: string) {
     const company = await this.getRequiredCompany(userId);
     const jobs = await this.jobsRepository.find({

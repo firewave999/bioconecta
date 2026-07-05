@@ -109,6 +109,8 @@ Status: concluida.
 
 ## Etapa 9: Candidaturas e Matching
 
+Status: base concluida; favoritos pendente para refinamento.
+
 - Candidatura.
 - Pipeline da empresa.
 - Score transparente.
@@ -128,4 +130,4 @@ Status: concluida.
 
 ## Marco Atual
 
-A proxima tarefa e candidaturas e matching: candidatura do biologo, pipeline da empresa, score transparente, elegibilidade de estudantes e favoritos.
+A proxima tarefa e admin e producao: painel admin, verificacoes, auditoria, notificacoes, testes, hardening de seguranca, CI/CD e deploy.

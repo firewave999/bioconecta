@@ -78,6 +78,16 @@ export function CompanyJobsClient() {
                   {job.status}
                 </span>
               </div>
+              <div className="mt-4 flex flex-wrap gap-3">
+                <Button asChild size="sm" variant="secondary">
+                  <Link href={`/empresa/vagas/${job.id}/candidatos`}>Ver candidatos</Link>
+                </Button>
+                {job.status === "PUBLISHED" ? (
+                  <Button asChild size="sm">
+                    <Link href={`/vagas/${job.id}`}>Ver vaga publica</Link>
+                  </Button>
+                ) : null}
+              </div>
             </article>
           ))
         ) : (

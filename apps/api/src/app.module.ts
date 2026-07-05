@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 
+import { ApplicationsModule } from "./applications/applications.module.js";
 import { AuthModule } from "./auth/auth.module.js";
 import { BiologistProfileModule } from "./biologist-profile/biologist-profile.module.js";
 import { CompaniesModule } from "./companies/companies.module.js";
@@ -17,6 +18,7 @@ import { UsersModule } from "./users/users.module.js";
       validate: validateEnv,
     }),
     DatabaseModule,
+    ApplicationsModule,
     AuthModule,
     BiologistProfileModule,
     CompaniesModule,

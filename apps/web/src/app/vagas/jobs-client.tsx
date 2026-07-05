@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { apiFetch } from "@/lib/api";
@@ -47,8 +48,14 @@ export function JobsClient() {
             </p>
             <h2 className="mt-2 text-2xl font-semibold text-slate-950">{job.title}</h2>
             <p className="mt-2 text-slate-600">
-              {job.city}/{job.state} · {job.contractType} · {job.workMode}
+              {job.city}/{job.state} | {job.contractType} | {job.workMode}
             </p>
+            <Link
+              className="mt-4 inline-flex text-sm font-semibold text-cyan-800"
+              href={`/vagas/${job.id}`}
+            >
+              Ver detalhes
+            </Link>
           </article>
         ))
       ) : (
