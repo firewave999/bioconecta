@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
+import { AuthModule } from "../auth/auth.module.js";
 import { User } from "../users/user.entity.js";
 import { BiologistProfileController } from "./biologist-profile.controller.js";
 import { BiologistProfile } from "./biologist-profile.entity.js";
@@ -15,6 +16,7 @@ import { TaxonomicGroup } from "./entities/taxonomic-group.entity.js";
 @Module({
   controllers: [BiologistProfileController],
   imports: [
+    AuthModule,
     TypeOrmModule.forFeature([
       BiologistCertification,
       BiologistDocument,
