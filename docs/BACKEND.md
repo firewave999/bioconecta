@@ -2,7 +2,7 @@
 
 ## Status
 
-Etapa 9 concluida.
+Etapa 9.1 concluida.
 
 ## Stack
 
@@ -40,6 +40,11 @@ apps/api/src/
     applications.module.ts
     applications.service.ts
     application.entity.ts
+  favorites/
+    favorites.controller.ts
+    favorites.module.ts
+    favorites.service.ts
+    saved-job.entity.ts
   biologist-profile/
     biologist-profile.controller.ts
     biologist-profile.entity.ts
@@ -101,6 +106,10 @@ pnpm --filter @bioconecta/api schema:log
 - `POST /api/v1/applications/jobs/:jobId`
 - `GET /api/v1/applications/jobs/:jobId/candidates`
 - `PUT /api/v1/applications/:id/status`
+- `GET /api/v1/favorites/jobs`
+- `GET /api/v1/favorites/jobs/:jobId`
+- `POST /api/v1/favorites/jobs/:jobId`
+- `DELETE /api/v1/favorites/jobs/:jobId`
 - `/api/docs`
 - `/api/docs-json`
 

@@ -7,6 +7,7 @@ import { BiologistProfileModule } from "./biologist-profile/biologist-profile.mo
 import { CompaniesModule } from "./companies/companies.module.js";
 import { validateEnv } from "./config/env.validation.js";
 import { DatabaseModule } from "./database/database.module.js";
+import { FavoritesModule } from "./favorites/favorites.module.js";
 import { HealthModule } from "./health/health.module.js";
 import { JobsModule } from "./jobs/jobs.module.js";
 import { UsersModule } from "./users/users.module.js";
@@ -22,6 +23,7 @@ import { UsersModule } from "./users/users.module.js";
     AuthModule,
     BiologistProfileModule,
     CompaniesModule,
+    FavoritesModule,
     HealthModule,
     JobsModule,
     UsersModule,

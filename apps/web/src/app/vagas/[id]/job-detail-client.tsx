@@ -36,8 +36,10 @@ export function JobDetailClient() {
   const [application, setApplication] = useState<Application | null>(null);
   const [coverMessage, setCoverMessage] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [favoriteLoading, setFavoriteLoading] = useState(false);
   const [job, setJob] = useState<Job | null>(null);
   const [loading, setLoading] = useState(false);
+  const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     apiFetch<{ job: Job }>(`/jobs/${params.id}`)
@@ -53,6 +55,9 @@ export function JobDetailClient() {
         token,
       })
         .then((response) => setApplication(response.application))
+        .catch(() => undefined);
+      apiFetch<{ saved: boolean }>(`/favorites/jobs/${params.id}`, { token })
+        .then((response) => setSaved(response.saved))
         .catch(() => undefined);
     }
   }, [params.id]);
@@ -86,6 +91,37 @@ export function JobDetailClient() {
     }
   }
 
+  async function toggleFavorite() {
+    const token = getStoredAccessToken();
+
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+
+    setFavoriteLoading(true);
+
+    try {
+      if (saved) {
+        await apiFetch<{ success: boolean }>(`/favorites/jobs/${params.id}`, {
+          method: "DELETE",
+          token,
+        });
+        setSaved(false);
+      } else {
+        await apiFetch<{ savedJob: unknown }>(`/favorites/jobs/${params.id}`, {
+          method: "POST",
+          token,
+        });
+        setSaved(true);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Nao foi possivel atualizar favorito.");
+    } finally {
+      setFavoriteLoading(false);
+    }
+  }
+
   if (error && !job) {
     return (
       <div className="rounded-[8px] border border-red-200 bg-red-50 p-5 text-red-700">{error}</div>
@@ -109,6 +145,15 @@ export function JobDetailClient() {
         <p className="mt-3 text-slate-600">
           {formatSalary(job.salaryMinCents, job.salaryMaxCents)}
         </p>
+        <Button
+          className="mt-5"
+          disabled={favoriteLoading}
+          onClick={toggleFavorite}
+          type="button"
+          variant="secondary"
+        >
+          {saved ? "Remover dos favoritos" : "Salvar vaga"}
+        </Button>
       </section>
 
       <section className="rounded-[8px] border border-slate-200 bg-white p-6">

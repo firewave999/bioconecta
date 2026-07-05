@@ -15,7 +15,7 @@ export class ApiError extends Error {
 
 type ApiOptions<TBody> = {
   body?: TBody;
-  method?: "GET" | "POST" | "PUT";
+  method?: "DELETE" | "GET" | "POST" | "PUT";
   token?: string | null;
 };
 

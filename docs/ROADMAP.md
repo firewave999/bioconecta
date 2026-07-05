@@ -109,7 +109,7 @@ Status: concluida.
 
 ## Etapa 9: Candidaturas e Matching
 
-Status: base concluida; favoritos pendente para refinamento.
+Status: base concluida; favoritos de vagas e filtros concluidos; favoritos de profissionais pendente para refinamento.
 
 - Candidatura.
 - Pipeline da empresa.

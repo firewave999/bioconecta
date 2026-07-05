@@ -179,6 +179,9 @@ export function DashboardClient() {
           <Button asChild variant="secondary">
             <Link href="/candidaturas">Minhas candidaturas</Link>
           </Button>
+          <Button asChild variant="secondary">
+            <Link href="/favoritos">Favoritos</Link>
+          </Button>
         </div>
       </section>
     </div>

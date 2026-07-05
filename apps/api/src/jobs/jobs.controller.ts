@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Param, Post, Put, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Put, Query, Req, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from "@nestjs/swagger";
 
 import { AuthGuard } from "../auth/auth.guard.js";
 import type { AuthenticatedRequest } from "../auth/types.js";
+import { ListJobsQueryDto } from "./dto/list-jobs-query.dto.js";
 import { UpsertJobDto } from "./dto/upsert-job.dto.js";
 import { JobsService } from "./jobs.service.js";
 
@@ -13,8 +14,8 @@ export class JobsController {
 
   @Get()
   @ApiOkResponse({ description: "Vagas publicadas." })
-  listPublished() {
-    return this.jobsService.listPublished();
+  listPublished(@Query() query: ListJobsQueryDto) {
+    return this.jobsService.listPublished(query);
   }
 
   @Get("mine")

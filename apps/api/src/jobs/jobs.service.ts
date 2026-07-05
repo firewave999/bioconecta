@@ -3,6 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
 import { Company } from "../companies/company.entity.js";
+import { ListJobsQueryDto } from "./dto/list-jobs-query.dto.js";
 import { UpsertJobDto } from "./dto/upsert-job.dto.js";
 import { Job } from "./job.entity.js";
 
@@ -15,12 +16,53 @@ export class JobsService {
     private readonly jobsRepository: Repository<Job>,
   ) {}
 
-  async listPublished() {
-    const jobs = await this.jobsRepository.find({
-      order: { publishedAt: "DESC", createdAt: "DESC" },
-      relations: { company: true },
-      where: { status: "PUBLISHED" },
-    });
+  async listPublished(query: ListJobsQueryDto) {
+    const builder = this.jobsRepository
+      .createQueryBuilder("job")
+      .leftJoinAndSelect("job.company", "company")
+      .where("job.status = :status", { status: "PUBLISHED" })
+      .orderBy("job.published_at", "DESC")
+      .addOrderBy("job.created_at", "DESC");
+
+    if (query.q?.trim()) {
+      builder.andWhere(
+        "(job.title ILIKE :q OR job.description ILIKE :q OR company.name ILIKE :q)",
+        {
+          q: `%${query.q.trim()}%`,
+        },
+      );
+    }
+
+    if (query.state?.trim()) {
+      builder.andWhere("job.state = :state", { state: query.state.trim().toUpperCase() });
+    }
+
+    if (query.city?.trim()) {
+      builder.andWhere("job.city ILIKE :city", { city: `%${query.city.trim()}%` });
+    }
+
+    if (query.workMode?.trim()) {
+      builder.andWhere("job.work_mode = :workMode", { workMode: query.workMode.trim() });
+    }
+
+    if (query.contractType?.trim()) {
+      builder.andWhere("job.contract_type = :contractType", {
+        contractType: query.contractType.trim(),
+      });
+    }
+
+    if (query.requirement?.trim()) {
+      builder.andWhere(
+        `(
+          :requirement = ANY(job.required_practice_areas)
+          OR :requirement = ANY(job.required_taxonomic_groups)
+          OR :requirement = ANY(job.required_skills)
+        )`,
+        { requirement: query.requirement.trim() },
+      );
+    }
+
+    const jobs = await builder.getMany();
 
     return { jobs };
   }

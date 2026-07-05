@@ -76,6 +76,6 @@ Nesta sessao do Codex, os comandos foram executados usando o runtime empacotado 
 
 ## Status Atual
 
-Etapa 9 base concluida: autenticacao real, onboarding do biologo, perfil profissional, cadastro empresarial, vagas, candidaturas, pipeline simples da empresa e score inicial de compatibilidade.
+Etapa 9.1 concluida: autenticacao real, onboarding do biologo, perfil profissional, cadastro empresarial, vagas com filtros, favoritos, candidaturas, pipeline simples da empresa e score inicial de compatibilidade.
 
-Ainda faltam favoritos, refinamento do matching, admin, recuperacao de senha e testes automatizados. Essas partes entram nos proximos refinamentos.
+Ainda faltam favoritos de profissionais para empresas, refinamento do matching, admin, recuperacao de senha e testes automatizados. Essas partes entram nos proximos refinamentos.

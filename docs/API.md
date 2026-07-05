@@ -6,7 +6,7 @@ A API sera REST, documentada por Swagger/OpenAPI e versionada sob `/api/v1`.
 
 ## Status da Implementacao
 
-Etapa 9 ja cobre autenticacao, perfil profissional do biologo, empresas, vagas, candidaturas e matching inicial.
+Etapa 9.1 ja cobre autenticacao, perfil profissional do biologo, empresas, vagas com filtros, favoritos, candidaturas e matching inicial.
 
 Disponivel:
 
@@ -33,6 +33,10 @@ Disponivel:
 - `POST /api/v1/applications/jobs/:jobId`
 - `GET /api/v1/applications/jobs/:jobId/candidates`
 - `PUT /api/v1/applications/:id/status`
+- `GET /api/v1/favorites/jobs`
+- `GET /api/v1/favorites/jobs/:jobId`
+- `POST /api/v1/favorites/jobs/:jobId`
+- `DELETE /api/v1/favorites/jobs/:jobId`
 - Swagger UI em `/api/docs`
 - OpenAPI JSON em `/api/docs-json`
 - Prefixo global `/api/v1`
@@ -101,6 +105,15 @@ Implementado nesta etapa:
 - `POST /api/v1/jobs`: cria vaga para a empresa autenticada.
 - `PUT /api/v1/jobs/:id`: atualiza vaga da empresa autenticada.
 
+Filtros suportados em `GET /api/v1/jobs`:
+
+- `q`
+- `state`
+- `city`
+- `workMode`
+- `contractType`
+- `requirement`
+
 ### Candidaturas
 
 - `GET /api/v1/applications/mine`
@@ -116,6 +129,13 @@ Implementado nesta etapa:
 - Empresa autenticada vê candidatos por vaga.
 - Empresa atualiza status do pipeline.
 - Candidatura recebe `matchScore` e `matchReasons` calculados a partir de áreas, grupos taxonômicos, competências, CRBio, localização e viagem.
+
+### Favoritos
+
+- `GET /api/v1/favorites/jobs`: lista vagas salvas.
+- `GET /api/v1/favorites/jobs/:jobId`: retorna se a vaga esta salva.
+- `POST /api/v1/favorites/jobs/:jobId`: salva vaga.
+- `DELETE /api/v1/favorites/jobs/:jobId`: remove vaga salva.
 
 ### Matching
 

@@ -44,6 +44,10 @@ Etapa 9 adicionou candidaturas:
 
 - `applications`
 
+Etapa 9.1 adicionou favoritos de vagas:
+
+- `saved_jobs`
+
 ## Entidades Minimas
 
 ### Identidade e Acesso
