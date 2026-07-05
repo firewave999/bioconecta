@@ -17,23 +17,36 @@ const buttonVariants = cva(
         sm: "h-9 gap-2 px-3",
       },
       variant: {
-        ghost: "text-slate-700 hover:bg-slate-100",
-        outline:
-          "border border-white/30 bg-white/10 text-white shadow-sm backdrop-blur hover:bg-white/20",
-        primary: "bg-cyan-400 text-slate-950 shadow-sm shadow-cyan-950/10 hover:bg-cyan-300",
-        secondary: "bg-slate-950 text-white hover:bg-slate-800",
+        ghost: "hover:bg-slate-100",
+        outline: "border border-white/30 bg-white/10 shadow-sm backdrop-blur hover:bg-white/20",
+        primary: "bg-cyan-400 shadow-sm shadow-cyan-950/10 hover:bg-cyan-300",
+        secondary: "bg-slate-950 hover:bg-slate-800",
       },
     },
   },
 );
+
+const buttonTextColor = {
+  ghost: "#334155",
+  outline: "#ffffff",
+  primary: "#101820",
+  secondary: "#ffffff",
+};
 
 type ButtonProps = ComponentPropsWithoutRef<"button"> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean;
   };
 
-export function Button({ asChild, className, size, variant, ...props }: ButtonProps) {
+export function Button({ asChild, className, size, style, variant, ...props }: ButtonProps) {
   const Comp = asChild ? Slot : "button";
+  const selectedVariant = variant ?? "primary";
 
-  return <Comp className={cn(buttonVariants({ className, size, variant }))} {...props} />;
+  return (
+    <Comp
+      className={cn(buttonVariants({ className, size, variant }))}
+      style={{ color: buttonTextColor[selectedVariant], ...style }}
+      {...props}
+    />
+  );
 }
