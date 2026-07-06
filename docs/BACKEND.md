@@ -137,6 +137,8 @@ Os primeiros testes automatizados usam Vitest e cobrem:
 
 - `AdminGuard`: permite `ADMIN` e bloqueia usuarios sem essa role.
 - `AdminService`: contadores operacionais, sanitizacao de `passwordHash`, atualizacao de verificacao de empresa e publicacao de vaga.
+- `AuthService`: cadastro, normalizacao de dados, duplicidade de e-mail, login valido, senha invalida e usuario bloqueado.
+- `ApplicationsService`: candidatura, bloqueio de vaga nao publicada, exigencia de perfil, bloqueio de candidatura duplicada e score inicial de compatibilidade.
 
 Para desenvolvimento local:
 

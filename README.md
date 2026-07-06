@@ -77,6 +77,6 @@ Nesta sessao do Codex, os comandos foram executados usando o runtime empacotado 
 
 ## Status Atual
 
-Etapa 10 base concluida: autenticacao real, onboarding do biologo, perfil profissional, cadastro empresarial, vagas com filtros, favoritos, candidaturas, pipeline simples da empresa, score inicial de compatibilidade, painel admin basico e primeiros testes automatizados da API.
+Etapa 10 base concluida: autenticacao real, onboarding do biologo, perfil profissional, cadastro empresarial, vagas com filtros, favoritos, candidaturas, pipeline simples da empresa, score inicial de compatibilidade, painel admin basico e testes automatizados iniciais da API para admin, auth e candidaturas.
 
 Ainda faltam favoritos de profissionais para empresas, refinamento do matching, recuperacao de senha, ampliar testes automatizados, auditoria, notificacoes, hardening de seguranca, CI/CD e deploy. Essas partes entram nos proximos refinamentos.
