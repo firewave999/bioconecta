@@ -126,11 +126,12 @@ Status: base admin concluida; producao pendente.
 - Controle de status de vagas concluido no admin basico.
 - Auditoria pendente.
 - Notificacoes pendentes.
-- Testes automatizados pendentes.
+- Primeiros testes automatizados da API concluidos.
+- Ampliar cobertura de testes automatizados pendente.
 - Hardening de seguranca pendente.
 - CI/CD pendente.
 - Deploy pendente.
 
 ## Marco Atual
 
-A proxima tarefa e preparar qualidade e producao: testes automatizados, auditoria, notificacoes, hardening de seguranca, CI/CD e deploy.
+A proxima tarefa e preparar qualidade e producao: ampliar testes automatizados, auditoria, notificacoes, hardening de seguranca, CI/CD e deploy.

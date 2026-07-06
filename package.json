@@ -19,6 +19,7 @@
     "infra:reset": "docker compose down -v --remove-orphans",
     "infra:up": "docker compose up -d",
     "lint": "turbo run lint",
+    "test": "turbo run test",
     "typecheck": "turbo run typecheck",
     "web:dev": "pnpm --filter @bioconecta/web dev",
     "web:start": "pnpm --filter @bioconecta/web start",
@@ -35,6 +36,7 @@
     "prettier": "^3.7.4",
     "turbo": "^2.6.3",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.49.0"
+    "typescript-eslint": "^8.49.0",
+    "vitest": "^4.1.9"
   }
 }

@@ -11,6 +11,7 @@
     "migration:run": "pnpm build && typeorm migration:run -d dist/database/data-source.js",
     "schema:log": "pnpm build && typeorm schema:log -d dist/database/data-source.js",
     "start": "node dist/main.js",
+    "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
@@ -36,6 +37,7 @@
   },
   "devDependencies": {
     "@bioconecta/eslint-config": "workspace:*",
-    "@bioconecta/typescript-config": "workspace:*"
+    "@bioconecta/typescript-config": "workspace:*",
+    "vitest": "^4.1.9"
   }
 }

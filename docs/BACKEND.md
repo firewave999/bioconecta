@@ -82,6 +82,7 @@ apps/api/src/
 pnpm api:dev
 pnpm --filter @bioconecta/api build
 pnpm --filter @bioconecta/api start
+pnpm --filter @bioconecta/api test
 pnpm --filter @bioconecta/api migration:run
 pnpm --filter @bioconecta/api migration:revert
 pnpm --filter @bioconecta/api schema:log
@@ -131,6 +132,11 @@ pnpm --filter @bioconecta/api schema:log
 ## Observacoes
 
 A API depende de variaveis de ambiente validas e de PostgreSQL acessivel para iniciar com TypeORM. O admin basico usa `AuthGuard` mais `AdminGuard` e exige role `ADMIN` no token.
+
+Os primeiros testes automatizados usam Vitest e cobrem:
+
+- `AdminGuard`: permite `ADMIN` e bloqueia usuarios sem essa role.
+- `AdminService`: contadores operacionais, sanitizacao de `passwordHash`, atualizacao de verificacao de empresa e publicacao de vaga.
 
 Para desenvolvimento local:
 
