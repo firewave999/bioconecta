@@ -2,7 +2,7 @@
 
 ## Status
 
-Etapa 9.1 concluida.
+Etapa 10 base concluida.
 
 ## Stack
 
@@ -28,6 +28,7 @@ apps/web/
       globals.css
       layout.tsx
       page.tsx
+      admin/
       dashboard/
       candidaturas/
       empresa/
@@ -49,6 +50,7 @@ apps/web/
 - `/`
 - `/cadastro`
 - `/login`
+- `/admin`
 - `/onboarding/biologo`
 - `/dashboard`
 - `/candidaturas`
@@ -83,4 +85,4 @@ pnpm web:dev
 
 A Home atual e publica e funcional como primeira tela institucional do produto. Os CTAs principais navegam para cadastro e login.
 
-Atualizacao: `/cadastro`, `/login`, `/onboarding/biologo`, `/dashboard`, `/candidaturas`, `/favoritos`, `/perfil/editar`, `/perfil/profissional`, `/empresa`, `/empresa/vagas`, `/empresa/vagas/nova`, `/empresa/vagas/:id/candidatos`, `/vagas` e `/vagas/:id` ja chamam a API real. Em desenvolvimento, os tokens sao guardados no `localStorage` ate a etapa de sessao segura com cookies httpOnly.
+Atualizacao: `/cadastro`, `/login`, `/admin`, `/onboarding/biologo`, `/dashboard`, `/candidaturas`, `/favoritos`, `/perfil/editar`, `/perfil/profissional`, `/empresa`, `/empresa/vagas`, `/empresa/vagas/nova`, `/empresa/vagas/:id/candidatos`, `/vagas` e `/vagas/:id` ja chamam a API real. Em desenvolvimento, os tokens sao guardados no `localStorage` ate a etapa de sessao segura com cookies httpOnly.

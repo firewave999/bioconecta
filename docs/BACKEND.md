@@ -2,7 +2,7 @@
 
 ## Status
 
-Etapa 9.1 concluida.
+Etapa 10 base concluida.
 
 ## Stack
 
@@ -35,6 +35,12 @@ apps/api/src/
     auth.guard.ts
     auth.module.ts
     auth.service.ts
+  admin/
+    admin.controller.ts
+    admin.guard.ts
+    admin.module.ts
+    admin.service.ts
+    dto/
   applications/
     applications.controller.ts
     applications.module.ts
@@ -110,12 +116,21 @@ pnpm --filter @bioconecta/api schema:log
 - `GET /api/v1/favorites/jobs/:jobId`
 - `POST /api/v1/favorites/jobs/:jobId`
 - `DELETE /api/v1/favorites/jobs/:jobId`
+- `GET /api/v1/admin/overview`
+- `GET /api/v1/admin/users`
+- `GET /api/v1/admin/companies`
+- `GET /api/v1/admin/biologists`
+- `GET /api/v1/admin/jobs`
+- `GET /api/v1/admin/applications`
+- `PUT /api/v1/admin/companies/:id/verification`
+- `PUT /api/v1/admin/biologists/:id/verification`
+- `PUT /api/v1/admin/jobs/:id/status`
 - `/api/docs`
 - `/api/docs-json`
 
 ## Observacoes
 
-A API depende de variaveis de ambiente validas e de PostgreSQL acessivel para iniciar com TypeORM.
+A API depende de variaveis de ambiente validas e de PostgreSQL acessivel para iniciar com TypeORM. O admin basico usa `AuthGuard` mais `AdminGuard` e exige role `ADMIN` no token.
 
 Para desenvolvimento local:
 

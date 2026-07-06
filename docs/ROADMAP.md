@@ -119,15 +119,18 @@ Status: base concluida; favoritos de vagas e filtros concluidos; favoritos de pr
 
 ## Etapa 10: Admin e Producao
 
-- Painel admin.
-- Verificacoes.
-- Auditoria.
-- Notificacoes.
-- Testes.
-- Hardening de seguranca.
-- CI/CD.
-- Deploy.
+Status: base admin concluida; producao pendente.
+
+- Painel admin basico concluido.
+- Verificacoes de empresas e biologos concluidas no admin basico.
+- Controle de status de vagas concluido no admin basico.
+- Auditoria pendente.
+- Notificacoes pendentes.
+- Testes automatizados pendentes.
+- Hardening de seguranca pendente.
+- CI/CD pendente.
+- Deploy pendente.
 
 ## Marco Atual
 
-A proxima tarefa e admin e producao: painel admin, verificacoes, auditoria, notificacoes, testes, hardening de seguranca, CI/CD e deploy.
+A proxima tarefa e preparar qualidade e producao: testes automatizados, auditoria, notificacoes, hardening de seguranca, CI/CD e deploy.

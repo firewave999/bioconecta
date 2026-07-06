@@ -6,7 +6,7 @@ A API sera REST, documentada por Swagger/OpenAPI e versionada sob `/api/v1`.
 
 ## Status da Implementacao
 
-Etapa 9.1 ja cobre autenticacao, perfil profissional do biologo, empresas, vagas com filtros, favoritos, candidaturas e matching inicial.
+Etapa 10 base ja cobre autenticacao, perfil profissional do biologo, empresas, vagas com filtros, favoritos, candidaturas, matching inicial e admin basico.
 
 Disponivel:
 
@@ -37,6 +37,15 @@ Disponivel:
 - `GET /api/v1/favorites/jobs/:jobId`
 - `POST /api/v1/favorites/jobs/:jobId`
 - `DELETE /api/v1/favorites/jobs/:jobId`
+- `GET /api/v1/admin/overview`
+- `GET /api/v1/admin/users`
+- `GET /api/v1/admin/companies`
+- `GET /api/v1/admin/biologists`
+- `GET /api/v1/admin/jobs`
+- `GET /api/v1/admin/applications`
+- `PUT /api/v1/admin/companies/:id/verification`
+- `PUT /api/v1/admin/biologists/:id/verification`
+- `PUT /api/v1/admin/jobs/:id/status`
 - Swagger UI em `/api/docs`
 - OpenAPI JSON em `/api/docs-json`
 - Prefixo global `/api/v1`
@@ -144,9 +153,17 @@ Implementado nesta etapa:
 
 ### Admin
 
-- `GET /api/v1/admin/verifications`
-- `POST /api/v1/admin/verifications/:id/approve`
-- `POST /api/v1/admin/verifications/:id/reject`
+- `GET /api/v1/admin/overview`: contadores operacionais.
+- `GET /api/v1/admin/users`: lista usuarios recentes sem `passwordHash`.
+- `GET /api/v1/admin/companies`: lista empresas recentes.
+- `GET /api/v1/admin/biologists`: lista perfis de biologos recentes.
+- `GET /api/v1/admin/jobs`: lista vagas recentes.
+- `GET /api/v1/admin/applications`: lista candidaturas recentes.
+- `PUT /api/v1/admin/companies/:id/verification`: altera status de verificacao da empresa.
+- `PUT /api/v1/admin/biologists/:id/verification`: altera status de verificacao do biologo.
+- `PUT /api/v1/admin/jobs/:id/status`: altera status da vaga.
+
+Todas as rotas admin exigem bearer token de usuario com role `ADMIN`.
 
 ## Primeiro Fluxo Completo
 

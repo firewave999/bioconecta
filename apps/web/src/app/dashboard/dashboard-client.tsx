@@ -182,6 +182,9 @@ export function DashboardClient() {
           <Button asChild variant="secondary">
             <Link href="/favoritos">Favoritos</Link>
           </Button>
+          <Button asChild variant="secondary">
+            <Link href="/admin">Admin</Link>
+          </Button>
         </div>
       </section>
     </div>
