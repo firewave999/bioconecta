@@ -139,6 +139,8 @@ Os primeiros testes automatizados usam Vitest e cobrem:
 - `AdminService`: contadores operacionais, sanitizacao de `passwordHash`, atualizacao de verificacao de empresa e publicacao de vaga.
 - `AuthService`: cadastro, normalizacao de dados, duplicidade de e-mail, login valido, senha invalida e usuario bloqueado.
 - `ApplicationsService`: candidatura, bloqueio de vaga nao publicada, exigencia de perfil, bloqueio de candidatura duplicada e score inicial de compatibilidade.
+- `JobsService`: criacao e atualizacao de vagas, normalizacao, filtros de vagas publicadas e bloqueio de vaga de outra empresa.
+- `FavoritesService`: listagem, salvar, impedir duplicidade, remover e consultar estado de vaga favorita.
 
 Para desenvolvimento local:
 

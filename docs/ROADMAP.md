@@ -126,7 +126,7 @@ Status: base admin concluida; producao pendente.
 - Controle de status de vagas concluido no admin basico.
 - Auditoria pendente.
 - Notificacoes pendentes.
-- Testes automatizados iniciais da API concluidos para admin, auth e candidaturas.
+- Testes automatizados iniciais da API concluidos para admin, auth, candidaturas, vagas e favoritos.
 - Ampliar cobertura de testes automatizados pendente.
 - Hardening de seguranca pendente.
 - CI/CD pendente.
