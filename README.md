@@ -75,8 +75,19 @@ pnpm test
 
 Nesta sessao do Codex, os comandos foram executados usando o runtime empacotado em `C:\Users\ACER\.cache\codex-runtimes\codex-primary-runtime\dependencies`.
 
+## CI
+
+O repositorio possui GitHub Actions em `.github/workflows/ci.yml`, executando em push e pull request para `main`:
+
+- `pnpm install --frozen-lockfile`
+- `pnpm format:check`
+- `pnpm lint`
+- `pnpm typecheck`
+- `pnpm test`
+- `pnpm build`
+
 ## Status Atual
 
-Etapa 10 base concluida: autenticacao real, onboarding do biologo, perfil profissional, cadastro empresarial, vagas com filtros, favoritos, candidaturas, pipeline simples da empresa, score inicial de compatibilidade, painel admin basico e testes automatizados iniciais da API para admin, auth, candidaturas, vagas e favoritos.
+Etapa 10 base concluida: autenticacao real, onboarding do biologo, perfil profissional, cadastro empresarial, vagas com filtros, favoritos, candidaturas, pipeline simples da empresa, score inicial de compatibilidade, painel admin basico, testes automatizados iniciais da API e CI de qualidade no GitHub Actions.
 
 Ainda faltam favoritos de profissionais para empresas, refinamento do matching, recuperacao de senha, ampliar testes automatizados, auditoria, notificacoes, hardening de seguranca, CI/CD e deploy. Essas partes entram nos proximos refinamentos.
