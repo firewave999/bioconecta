@@ -128,11 +128,12 @@ Status: base admin concluida; producao pendente.
 - Notificacoes pendentes.
 - Testes automatizados iniciais da API concluidos para admin, auth, candidaturas, vagas e favoritos.
 - Ampliar cobertura de testes automatizados pendente.
-- Hardening de seguranca pendente.
+- Hardening inicial de seguranca concluido com rate limit nas rotas sensiveis de auth.
+- Hardening adicional de seguranca pendente.
 - CI de qualidade no GitHub Actions concluido.
 - CD/deploy pendente.
 - Deploy pendente.
 
 ## Marco Atual
 
-A proxima tarefa e preparar qualidade e producao: ampliar testes automatizados, auditoria, notificacoes, hardening de seguranca, CD e deploy.
+A proxima tarefa e preparar qualidade e producao: auditoria, notificacoes, hardening adicional de seguranca, CD e deploy.

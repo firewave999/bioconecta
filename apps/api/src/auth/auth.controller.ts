@@ -7,6 +7,8 @@ import { LoginDto } from "./dto/login.dto.js";
 import { RefreshTokenDto } from "./dto/refresh-token.dto.js";
 import { RegisterDto } from "./dto/register.dto.js";
 import { VerifyEmailDto } from "./dto/verify-email.dto.js";
+import { RateLimit } from "../rate-limit/rate-limit.decorator.js";
+import { RateLimitGuard } from "../rate-limit/rate-limit.guard.js";
 import type { AuthenticatedRequest } from "./types.js";
 
 @ApiTags("auth")
@@ -15,6 +17,8 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post("register")
+  @RateLimit({ keyPrefix: "auth:register", limit: 10, windowMs: 60 * 60 * 1000 })
+  @UseGuards(RateLimitGuard)
   @ApiCreatedResponse({ description: "Conta criada com sucesso." })
   register(
     @Body() dto: RegisterDto,
@@ -25,6 +29,8 @@ export class AuthController {
   }
 
   @Post("login")
+  @RateLimit({ keyPrefix: "auth:login", limit: 5, windowMs: 60 * 1000 })
+  @UseGuards(RateLimitGuard)
   @ApiOkResponse({ description: "Login realizado com sucesso." })
   login(
     @Body() dto: LoginDto,
@@ -35,6 +41,8 @@ export class AuthController {
   }
 
   @Post("refresh")
+  @RateLimit({ keyPrefix: "auth:refresh", limit: 30, windowMs: 60 * 1000 })
+  @UseGuards(RateLimitGuard)
   @ApiOkResponse({ description: "Tokens renovados com sucesso." })
   refresh(
     @Body() dto: RefreshTokenDto,
@@ -45,6 +53,8 @@ export class AuthController {
   }
 
   @Post("logout")
+  @RateLimit({ keyPrefix: "auth:logout", limit: 30, windowMs: 60 * 1000 })
+  @UseGuards(RateLimitGuard)
   @ApiOkResponse({ description: "Sessao encerrada com sucesso." })
   logout(@Body() dto: RefreshTokenDto) {
     return this.authService.logout(dto.refreshToken);
@@ -59,6 +69,8 @@ export class AuthController {
   }
 
   @Post("verify-email")
+  @RateLimit({ keyPrefix: "auth:verify-email", limit: 10, windowMs: 10 * 60 * 1000 })
+  @UseGuards(RateLimitGuard)
   @ApiOkResponse({ description: "E-mail verificado com sucesso." })
   verifyEmail(@Body() dto: VerifyEmailDto) {
     return this.authService.verifyEmail(dto.token);

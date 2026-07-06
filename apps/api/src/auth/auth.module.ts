@@ -3,6 +3,7 @@ import { JwtModule } from "@nestjs/jwt";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
 import { User } from "../users/user.entity.js";
+import { RateLimitGuard } from "../rate-limit/rate-limit.guard.js";
 import { AuthController } from "./auth.controller.js";
 import { AuthGuard } from "./auth.guard.js";
 import { AuthService } from "./auth.service.js";
@@ -16,6 +17,6 @@ import { Session } from "./entities/session.entity.js";
     JwtModule.register({}),
     TypeOrmModule.forFeature([User, Session, EmailVerificationToken]),
   ],
-  providers: [AuthGuard, AuthService],
+  providers: [AuthGuard, AuthService, RateLimitGuard],
 })
 export class AuthModule {}

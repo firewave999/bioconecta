@@ -75,6 +75,8 @@ Disponivel:
 - `POST /api/v1/auth/password/forgot`
 - `POST /api/v1/auth/password/reset`
 
+Rotas sensiveis de auth usam rate limit por IP e retornam `429` quando o limite e excedido.
+
 ### Perfil do Biologo
 
 - `GET /api/v1/biologist-profile/me`

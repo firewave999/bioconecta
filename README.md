@@ -88,6 +88,6 @@ O repositorio possui GitHub Actions em `.github/workflows/ci.yml`, executando em
 
 ## Status Atual
 
-Etapa 10 base concluida: autenticacao real, onboarding do biologo, perfil profissional, cadastro empresarial, vagas com filtros, favoritos, candidaturas, pipeline simples da empresa, score inicial de compatibilidade, painel admin basico, testes automatizados iniciais da API e CI de qualidade no GitHub Actions.
+Etapa 10 base concluida: autenticacao real, onboarding do biologo, perfil profissional, cadastro empresarial, vagas com filtros, favoritos, candidaturas, pipeline simples da empresa, score inicial de compatibilidade, painel admin basico, testes automatizados iniciais da API, CI de qualidade no GitHub Actions e hardening inicial de auth com rate limit.
 
 Ainda faltam favoritos de profissionais para empresas, refinamento do matching, recuperacao de senha, ampliar testes automatizados, auditoria, notificacoes, hardening de seguranca, CI/CD e deploy. Essas partes entram nos proximos refinamentos.

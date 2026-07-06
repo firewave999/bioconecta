@@ -68,6 +68,9 @@ apps/api/src/
     jobs.module.ts
     jobs.service.ts
     job.entity.ts
+  rate-limit/
+    rate-limit.decorator.ts
+    rate-limit.guard.ts
   users/
     user.entity.ts
     users.module.ts
@@ -135,12 +138,20 @@ A API depende de variaveis de ambiente validas e de PostgreSQL acessivel para in
 
 Os primeiros testes automatizados usam Vitest e cobrem:
 
+- `RateLimitGuard`: limite por IP, excesso com `429`, reset por janela e suporte a `x-forwarded-for`.
 - `AdminGuard`: permite `ADMIN` e bloqueia usuarios sem essa role.
 - `AdminService`: contadores operacionais, sanitizacao de `passwordHash`, atualizacao de verificacao de empresa e publicacao de vaga.
 - `AuthService`: cadastro, normalizacao de dados, duplicidade de e-mail, login valido, senha invalida e usuario bloqueado.
 - `ApplicationsService`: candidatura, bloqueio de vaga nao publicada, exigencia de perfil, bloqueio de candidatura duplicada e score inicial de compatibilidade.
 - `JobsService`: criacao e atualizacao de vagas, normalizacao, filtros de vagas publicadas e bloqueio de vaga de outra empresa.
 - `FavoritesService`: listagem, salvar, impedir duplicidade, remover e consultar estado de vaga favorita.
+
+Hardening atual:
+
+- `Helmet` global.
+- CORS restrito por `APP_WEB_URL`.
+- `ValidationPipe` global com whitelist e bloqueio de campos nao permitidos.
+- Rate limit in-memory nas rotas sensiveis de autenticacao.
 
 Para desenvolvimento local:
 

@@ -23,6 +23,7 @@ Status atual:
 - Refresh token e rotacionado a cada renovacao.
 - Verificacao de e-mail usa token aleatorio armazenado como SHA-256.
 - Em `development`, o token de verificacao e retornado na resposta para facilitar testes locais sem SMTP.
+- Rotas sensiveis de autenticacao possuem rate limit in-memory e retornam `429` quando o limite e excedido.
 - Recuperacao de senha e 2FA ainda nao foram implementados.
 
 ## Autorizacao
@@ -43,6 +44,16 @@ Status atual:
 - Protecao contra IDOR.
 - Logs de autenticacao.
 - Audit log em acoes administrativas e sensiveis.
+
+Rate limits atuais:
+
+- `POST /api/v1/auth/login`: 5 tentativas por minuto por IP.
+- `POST /api/v1/auth/register`: 10 tentativas por hora por IP.
+- `POST /api/v1/auth/refresh`: 30 tentativas por minuto por IP.
+- `POST /api/v1/auth/logout`: 30 tentativas por minuto por IP.
+- `POST /api/v1/auth/verify-email`: 10 tentativas a cada 10 minutos por IP.
+
+Observacao realista: o rate limit atual e in-memory. Ele e util para MVP, desenvolvimento e uma instancia simples, mas em producao com multiplas instancias deve ser substituido ou complementado por Redis, gateway, WAF ou edge rate limit.
 
 ## Uploads
 
