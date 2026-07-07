@@ -11,7 +11,7 @@ RUN corepack enable
 COPY . .
 
 RUN pnpm install --frozen-lockfile \
-  && pnpm --filter @bioconecta/web build \
+  && pnpm --filter @bioconecta/web... build \
   && pnpm store prune
 
 WORKDIR /app/apps/web
