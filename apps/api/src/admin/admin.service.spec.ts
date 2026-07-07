@@ -80,14 +80,24 @@ describe("AdminService", () => {
 
     repositories.companies.findOne.mockResolvedValueOnce(company);
     repositories.companies.save.mockImplementationOnce(async (value) => value);
+    repositories.auditLogs.create.mockImplementationOnce((value) => ({ id: "audit-id", ...value }));
+    repositories.auditLogs.save.mockImplementationOnce(async (value) => value);
 
     await expect(
-      service.updateCompanyVerificationStatus("company-id", {
+      service.updateCompanyVerificationStatus("admin-id", "company-id", {
         verificationStatus: "VERIFIED",
       }),
     ).resolves.toEqual({
       id: "company-id",
       verificationStatus: "VERIFIED",
+    });
+    expect(repositories.auditLogs.create).toHaveBeenCalledWith({
+      action: "COMPANY_VERIFICATION_UPDATED",
+      actorUserId: "admin-id",
+      afterState: { verificationStatus: "VERIFIED" },
+      beforeState: { verificationStatus: "UNVERIFIED" },
+      targetId: "company-id",
+      targetType: "COMPANY",
     });
   });
 
@@ -97,7 +107,7 @@ describe("AdminService", () => {
     repositories.companies.findOne.mockResolvedValueOnce(null);
 
     await expect(
-      service.updateCompanyVerificationStatus("missing-id", {
+      service.updateCompanyVerificationStatus("admin-id", "missing-id", {
         verificationStatus: "REJECTED",
       }),
     ).rejects.toThrow(NotFoundException);
@@ -109,16 +119,51 @@ describe("AdminService", () => {
 
     repositories.jobs.findOne.mockResolvedValueOnce(job);
     repositories.jobs.save.mockImplementationOnce(async (value) => value);
+    repositories.auditLogs.create.mockImplementationOnce((value) => ({ id: "audit-id", ...value }));
+    repositories.auditLogs.save.mockImplementationOnce(async (value) => value);
 
-    const updated = await service.updateJobStatus("job-id", { status: "PUBLISHED" });
+    const updated = await service.updateJobStatus("admin-id", "job-id", { status: "PUBLISHED" });
 
     expect(updated.status).toBe("PUBLISHED");
     expect(updated.publishedAt).toBeInstanceOf(Date);
+    expect(repositories.auditLogs.create).toHaveBeenCalledWith({
+      action: "JOB_STATUS_UPDATED",
+      actorUserId: "admin-id",
+      afterState: { status: "PUBLISHED" },
+      beforeState: { status: "DRAFT" },
+      targetId: "job-id",
+      targetType: "JOB",
+    });
+  });
+
+  it("lists audit logs without exposing actor passwordHash", async () => {
+    const { repositories, service } = createService();
+
+    repositories.auditLogs.find.mockResolvedValueOnce([
+      {
+        action: "JOB_STATUS_UPDATED",
+        actor: createUser({ email: "admin@bioconecta.local", passwordHash: "secret" }),
+        actorUserId: "admin-id",
+        id: "audit-id",
+        targetId: "job-id",
+        targetType: "JOB",
+      },
+    ]);
+
+    const logs = await service.listAuditLogs();
+
+    expect(logs[0].actor).toEqual(
+      expect.objectContaining({
+        email: "admin@bioconecta.local",
+      }),
+    );
+    expect(logs[0].actor).not.toHaveProperty("passwordHash");
   });
 });
 
 function createService() {
   const repositories = {
+    auditLogs: createRepository(),
     applications: createRepository(),
     biologists: createRepository(),
     companies: createRepository(),
@@ -129,6 +174,7 @@ function createService() {
   return {
     repositories,
     service: new AdminService(
+      repositories.auditLogs,
       repositories.applications,
       repositories.biologists,
       repositories.companies,
@@ -141,6 +187,7 @@ function createService() {
 function createRepository() {
   return {
     count: vi.fn(),
+    create: vi.fn((value) => value),
     find: vi.fn(),
     findOne: vi.fn(),
     save: vi.fn(),

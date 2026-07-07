@@ -56,6 +56,17 @@ type Application = {
   status: string;
 };
 
+type AuditLog = {
+  action: string;
+  actor: AdminUser;
+  afterState: Record<string, unknown> | null;
+  beforeState: Record<string, unknown> | null;
+  createdAt: string;
+  id: string;
+  targetId: string;
+  targetType: string;
+};
+
 type Overview = {
   applicationsCount: number;
   biologistProfilesCount: number;
@@ -69,6 +80,7 @@ type Overview = {
 
 type AdminState = {
   applications: Application[];
+  auditLogs: AuditLog[];
   biologists: Biologist[];
   companies: Company[];
   jobs: Job[];
@@ -89,16 +101,18 @@ export function AdminClient() {
       return;
     }
 
-    const [overview, users, companies, biologists, jobs, applications] = await Promise.all([
-      apiFetch<Overview>("/admin/overview", { token }),
-      apiFetch<AdminUser[]>("/admin/users", { token }),
-      apiFetch<Company[]>("/admin/companies", { token }),
-      apiFetch<Biologist[]>("/admin/biologists", { token }),
-      apiFetch<Job[]>("/admin/jobs", { token }),
-      apiFetch<Application[]>("/admin/applications", { token }),
-    ]);
+    const [overview, users, companies, biologists, jobs, applications, auditLogs] =
+      await Promise.all([
+        apiFetch<Overview>("/admin/overview", { token }),
+        apiFetch<AdminUser[]>("/admin/users", { token }),
+        apiFetch<Company[]>("/admin/companies", { token }),
+        apiFetch<Biologist[]>("/admin/biologists", { token }),
+        apiFetch<Job[]>("/admin/jobs", { token }),
+        apiFetch<Application[]>("/admin/applications", { token }),
+        apiFetch<AuditLog[]>("/admin/audit-logs", { token }),
+      ]);
 
-    setState({ applications, biologists, companies, jobs, overview, users });
+    setState({ applications, auditLogs, biologists, companies, jobs, overview, users });
     setError(null);
   }
 
@@ -197,10 +211,10 @@ export function AdminClient() {
                 <div>
                   <p className="font-semibold text-slate-950">{company.name}</p>
                   <p className="mt-1 text-sm text-slate-600">
-                    {company.city}/{company.state} · CNPJ {company.cnpj}
+                    {company.city}/{company.state} - CNPJ {company.cnpj}
                   </p>
                   <p className="mt-1 text-sm text-slate-500">
-                    Dono: {company.owner.email} · Status: {company.verificationStatus}
+                    Dono: {company.owner.email} - Status: {company.verificationStatus}
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -236,11 +250,11 @@ export function AdminClient() {
                 <div>
                   <p className="font-semibold text-slate-950">{biologist.fullName}</p>
                   <p className="mt-1 text-sm text-slate-600">
-                    CRBio {biologist.crbioNumber}/{biologist.crbioRegion} · {biologist.city}/
+                    CRBio {biologist.crbioNumber}/{biologist.crbioRegion} - {biologist.city}/
                     {biologist.state}
                   </p>
                   <p className="mt-1 text-sm text-slate-500">
-                    {biologist.user.email} · Status: {biologist.verificationStatus}
+                    {biologist.user.email} - Status: {biologist.verificationStatus}
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -280,7 +294,7 @@ export function AdminClient() {
                 <div>
                   <p className="font-semibold text-slate-950">{job.title}</p>
                   <p className="mt-1 text-sm text-slate-600">
-                    {job.company.name} · {job.city}/{job.state}
+                    {job.company.name} - {job.city}/{job.state}
                   </p>
                   <p className="mt-1 text-sm text-slate-500">Status: {job.status}</p>
                 </div>
@@ -326,7 +340,7 @@ export function AdminClient() {
                 </p>
                 <p className="mt-1 text-sm text-slate-600">{application.job.title}</p>
                 <p className="mt-1 text-sm text-slate-500">
-                  {application.status} · match {application.matchScore}%
+                  {application.status} - match {application.matchScore}%
                 </p>
               </article>
             ))}
@@ -346,6 +360,27 @@ export function AdminClient() {
               </article>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="rounded-[8px] border border-slate-200 bg-white p-6">
+        <SectionTitle title="Auditoria admin" subtitle="Ultimas 100 acoes sensiveis" />
+        <div className="mt-5 grid gap-3">
+          {state.auditLogs.slice(0, 20).map((log) => (
+            <article className="rounded-[8px] border border-slate-200 p-4" key={log.id}>
+              <p className="font-semibold text-slate-950">{formatAuditAction(log.action)}</p>
+              <p className="mt-1 text-sm text-slate-600">
+                {log.actor.email} - {log.targetType} - {new Date(log.createdAt).toLocaleString()}
+              </p>
+              <p className="mt-1 text-sm text-slate-500">
+                Antes: {formatAuditState(log.beforeState)} - Depois:{" "}
+                {formatAuditState(log.afterState)}
+              </p>
+            </article>
+          ))}
+          {state.auditLogs.length === 0 ? (
+            <p className="text-sm text-slate-500">Nenhuma acao auditada ainda.</p>
+          ) : null}
         </div>
       </section>
     </div>
@@ -386,4 +421,24 @@ function ActionButton({
       {busy ? "Salvando..." : children}
     </Button>
   );
+}
+
+function formatAuditAction(action: string) {
+  const labels: Record<string, string> = {
+    BIOLOGIST_VERIFICATION_UPDATED: "Verificacao de biologo alterada",
+    COMPANY_VERIFICATION_UPDATED: "Verificacao de empresa alterada",
+    JOB_STATUS_UPDATED: "Status de vaga alterado",
+  };
+
+  return labels[action] ?? action;
+}
+
+function formatAuditState(state: Record<string, unknown> | null) {
+  if (!state) {
+    return "-";
+  }
+
+  return Object.entries(state)
+    .map(([key, value]) => `${key}=${String(value)}`)
+    .join(", ");
 }

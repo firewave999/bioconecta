@@ -55,6 +55,14 @@ Rate limits atuais:
 
 Observacao realista: o rate limit atual e in-memory. Ele e util para MVP, desenvolvimento e uma instancia simples, mas em producao com multiplas instancias deve ser substituido ou complementado por Redis, gateway, WAF ou edge rate limit.
 
+Audit log atual:
+
+- Alteracao de verificacao de empresa.
+- Alteracao de verificacao de biologo.
+- Alteracao de status de vaga pelo admin.
+
+Cada registro guarda ator, acao, alvo, estado anterior, estado posterior e data. Ainda falta ampliar auditoria para outros eventos sensiveis, como login suspeito, bloqueio de usuario, alteracoes de roles e futuras rotas de recuperacao de senha.
+
 ## Uploads
 
 - Validar MIME type.

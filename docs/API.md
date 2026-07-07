@@ -43,6 +43,7 @@ Disponivel:
 - `GET /api/v1/admin/biologists`
 - `GET /api/v1/admin/jobs`
 - `GET /api/v1/admin/applications`
+- `GET /api/v1/admin/audit-logs`
 - `PUT /api/v1/admin/companies/:id/verification`
 - `PUT /api/v1/admin/biologists/:id/verification`
 - `PUT /api/v1/admin/jobs/:id/status`
@@ -161,11 +162,12 @@ Implementado nesta etapa:
 - `GET /api/v1/admin/biologists`: lista perfis de biologos recentes.
 - `GET /api/v1/admin/jobs`: lista vagas recentes.
 - `GET /api/v1/admin/applications`: lista candidaturas recentes.
+- `GET /api/v1/admin/audit-logs`: lista as ultimas 100 acoes administrativas sensiveis.
 - `PUT /api/v1/admin/companies/:id/verification`: altera status de verificacao da empresa.
 - `PUT /api/v1/admin/biologists/:id/verification`: altera status de verificacao do biologo.
 - `PUT /api/v1/admin/jobs/:id/status`: altera status da vaga.
 
-Todas as rotas admin exigem bearer token de usuario com role `ADMIN`.
+Todas as rotas admin exigem bearer token de usuario com role `ADMIN`. Mudancas em verificacao de empresa, verificacao de biologo e status de vaga geram registro em `admin_audit_logs`.
 
 ## Primeiro Fluxo Completo
 

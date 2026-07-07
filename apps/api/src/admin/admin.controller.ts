@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, Put, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Param, Put, Req, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
 import { AuthGuard } from "../auth/auth.guard.js";
+import type { AuthenticatedRequest } from "../auth/types.js";
 import { AdminGuard } from "./admin.guard.js";
 import { AdminService } from "./admin.service.js";
 import { UpdateBiologistVerificationStatusDto } from "./dto/update-biologist-verification-status.dto.js";
@@ -45,24 +46,35 @@ export class AdminController {
     return this.adminService.listApplications();
   }
 
+  @Get("audit-logs")
+  listAuditLogs() {
+    return this.adminService.listAuditLogs();
+  }
+
   @Put("companies/:id/verification")
   updateCompanyVerificationStatus(
+    @Req() request: AuthenticatedRequest,
     @Param("id") id: string,
     @Body() dto: UpdateCompanyVerificationStatusDto,
   ) {
-    return this.adminService.updateCompanyVerificationStatus(id, dto);
+    return this.adminService.updateCompanyVerificationStatus(request.user.sub, id, dto);
   }
 
   @Put("biologists/:id/verification")
   updateBiologistVerificationStatus(
+    @Req() request: AuthenticatedRequest,
     @Param("id") id: string,
     @Body() dto: UpdateBiologistVerificationStatusDto,
   ) {
-    return this.adminService.updateBiologistVerificationStatus(id, dto);
+    return this.adminService.updateBiologistVerificationStatus(request.user.sub, id, dto);
   }
 
   @Put("jobs/:id/status")
-  updateJobStatus(@Param("id") id: string, @Body() dto: UpdateJobStatusDto) {
-    return this.adminService.updateJobStatus(id, dto);
+  updateJobStatus(
+    @Req() request: AuthenticatedRequest,
+    @Param("id") id: string,
+    @Body() dto: UpdateJobStatusDto,
+  ) {
+    return this.adminService.updateJobStatus(request.user.sub, id, dto);
   }
 }

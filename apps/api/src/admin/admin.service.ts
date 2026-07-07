@@ -7,6 +7,7 @@ import { BiologistProfile } from "../biologist-profile/biologist-profile.entity.
 import { Company } from "../companies/company.entity.js";
 import { Job } from "../jobs/job.entity.js";
 import { User } from "../users/user.entity.js";
+import { AdminAuditLog, AdminAuditAction, AdminAuditTargetType } from "./admin-audit-log.entity.js";
 import { UpdateBiologistVerificationStatusDto } from "./dto/update-biologist-verification-status.dto.js";
 import { UpdateCompanyVerificationStatusDto } from "./dto/update-company-verification-status.dto.js";
 import { UpdateJobStatusDto } from "./dto/update-job-status.dto.js";
@@ -14,6 +15,8 @@ import { UpdateJobStatusDto } from "./dto/update-job-status.dto.js";
 @Injectable()
 export class AdminService {
   constructor(
+    @InjectRepository(AdminAuditLog)
+    private readonly auditLogsRepository: Repository<AdminAuditLog>,
     @InjectRepository(Application)
     private readonly applicationsRepository: Repository<Application>,
     @InjectRepository(BiologistProfile)
@@ -118,42 +121,115 @@ export class AdminService {
     }));
   }
 
-  async updateCompanyVerificationStatus(id: string, dto: UpdateCompanyVerificationStatusDto) {
+  async listAuditLogs() {
+    const logs = await this.auditLogsRepository.find({
+      order: { createdAt: "DESC" },
+      relations: { actor: true },
+      take: 100,
+    });
+
+    return logs.map((log) => ({
+      ...log,
+      actor: toAdminUser(log.actor),
+    }));
+  }
+
+  async updateCompanyVerificationStatus(
+    actorUserId: string,
+    id: string,
+    dto: UpdateCompanyVerificationStatusDto,
+  ) {
     const company = await this.companiesRepository.findOne({ where: { id } });
 
     if (!company) {
       throw new NotFoundException("Empresa nao encontrada.");
     }
 
+    const previousStatus = company.verificationStatus;
     company.verificationStatus = dto.verificationStatus;
-    return this.companiesRepository.save(company);
+    const saved = await this.companiesRepository.save(company);
+
+    await this.createAuditLog({
+      action: "COMPANY_VERIFICATION_UPDATED",
+      actorUserId,
+      afterState: { verificationStatus: saved.verificationStatus },
+      beforeState: { verificationStatus: previousStatus },
+      targetId: saved.id,
+      targetType: "COMPANY",
+    });
+
+    return saved;
   }
 
-  async updateBiologistVerificationStatus(id: string, dto: UpdateBiologistVerificationStatusDto) {
+  async updateBiologistVerificationStatus(
+    actorUserId: string,
+    id: string,
+    dto: UpdateBiologistVerificationStatusDto,
+  ) {
     const profile = await this.biologistProfilesRepository.findOne({ where: { id } });
 
     if (!profile) {
       throw new NotFoundException("Biologo nao encontrado.");
     }
 
+    const previousStatus = profile.verificationStatus;
     profile.verificationStatus = dto.verificationStatus;
-    return this.biologistProfilesRepository.save(profile);
+    const saved = await this.biologistProfilesRepository.save(profile);
+
+    await this.createAuditLog({
+      action: "BIOLOGIST_VERIFICATION_UPDATED",
+      actorUserId,
+      afterState: { verificationStatus: saved.verificationStatus },
+      beforeState: { verificationStatus: previousStatus },
+      targetId: saved.id,
+      targetType: "BIOLOGIST_PROFILE",
+    });
+
+    return saved;
   }
 
-  async updateJobStatus(id: string, dto: UpdateJobStatusDto) {
+  async updateJobStatus(actorUserId: string, id: string, dto: UpdateJobStatusDto) {
     const job = await this.jobsRepository.findOne({ where: { id } });
 
     if (!job) {
       throw new NotFoundException("Vaga nao encontrada.");
     }
 
+    const previousStatus = job.status;
     job.status = dto.status;
 
     if (dto.status === "PUBLISHED" && !job.publishedAt) {
       job.publishedAt = new Date();
     }
 
-    return this.jobsRepository.save(job);
+    const saved = await this.jobsRepository.save(job);
+
+    await this.createAuditLog({
+      action: "JOB_STATUS_UPDATED",
+      actorUserId,
+      afterState: { status: saved.status },
+      beforeState: { status: previousStatus },
+      targetId: saved.id,
+      targetType: "JOB",
+    });
+
+    return saved;
+  }
+
+  private async createAuditLog(input: {
+    action: AdminAuditAction;
+    actorUserId: string;
+    afterState: Record<string, unknown>;
+    beforeState: Record<string, unknown>;
+    targetId: string;
+    targetType: AdminAuditTargetType;
+  }) {
+    if (input.actorUserId === "system") {
+      return;
+    }
+
+    const auditLog = this.auditLogsRepository.create(input);
+    await this.auditLogsRepository.save(auditLog);
   }
 }
 

@@ -48,6 +48,10 @@ Etapa 9.1 adicionou favoritos de vagas:
 
 - `saved_jobs`
 
+Etapa 10 adicionou auditoria administrativa:
+
+- `admin_audit_logs`
+
 ## Entidades Minimas
 
 ### Identidade e Acesso
@@ -57,7 +61,7 @@ Etapa 9.1 adicionou favoritos de vagas:
 - PasswordResetToken
 - EmailVerificationToken
 - Consent
-- AuditLog
+- AdminAuditLog
 
 ### Perfis
 
@@ -121,6 +125,7 @@ Etapa 9.1 adicionou favoritos de vagas:
 - User pode se candidatar a muitas Jobs, respeitando regras de elegibilidade.
 - BiologistProfile se relaciona com Skills, TaxonomicGroups e PracticeAreas por tabelas intermediarias.
 - VerificationRequest referencia documentos e registra decisoes administrativas.
+- AdminAuditLog registra ator, acao, alvo, estado anterior, estado posterior e data de acoes administrativas sensiveis.
 
 ## Enums Iniciais
 

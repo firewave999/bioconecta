@@ -96,7 +96,7 @@ describe("BioConecta API E2E", () => {
       })
       .expect(200);
 
-    await request(app.getHttpServer())
+    const companyProfileResponse = await request(app.getHttpServer())
       .put("/api/v1/companies/me")
       .set("Authorization", `Bearer ${company.accessToken}`)
       .send({
@@ -109,6 +109,31 @@ describe("BioConecta API E2E", () => {
         website: "https://example.com",
       })
       .expect(200);
+
+    await dataSource.query(
+      `UPDATE "users" SET "roles" = array_append("roles", 'ADMIN') WHERE "email" = $1 AND NOT ('ADMIN' = ANY("roles"))`,
+      [company.email],
+    );
+    const admin = await login({
+      email: company.email,
+      password: "SenhaTeste123",
+    });
+
+    await request(app.getHttpServer())
+      .put(`/api/v1/admin/companies/${companyProfileResponse.body.company.id}/verification`)
+      .set("Authorization", `Bearer ${admin.accessToken}`)
+      .send({ verificationStatus: "VERIFIED" })
+      .expect(200);
+
+    await request(app.getHttpServer())
+      .get("/api/v1/admin/audit-logs")
+      .set("Authorization", `Bearer ${admin.accessToken}`)
+      .expect(200)
+      .expect((response) => {
+        expect(response.body).toHaveLength(1);
+        expect(response.body[0].action).toBe("COMPANY_VERIFICATION_UPDATED");
+        expect(response.body[0].actor.email).toBe(company.email);
+      });
 
     const jobResponse = await request(app.getHttpServer())
       .post("/api/v1/jobs")
@@ -182,12 +207,18 @@ describe("BioConecta API E2E", () => {
       })
       .expect(201);
 
+    const loginResponse = await login({ email: input.email, password: "SenhaTeste123" });
+
+    return {
+      accessToken: loginResponse.accessToken,
+      email: input.email,
+    };
+  }
+
+  async function login(input: { email: string; password: string }) {
     const loginResponse = await request(app.getHttpServer())
       .post("/api/v1/auth/login")
-      .send({
-        email: input.email,
-        password: "SenhaTeste123",
-      })
+      .send(input)
       .expect(200);
 
     return {
