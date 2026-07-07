@@ -5,11 +5,11 @@ import { ApplicationsService } from "./applications.service.js";
 
 describe("ApplicationsService", () => {
   it("creates an application with transparent match score", async () => {
-    const { repositories, service } = createService();
+    const { notifications, repositories, service } = createService();
 
     repositories.jobs.findOne.mockResolvedValueOnce({
       acceptsStudents: false,
-      company: { id: "company-id", name: "Eco" },
+      company: { id: "company-id", name: "Eco", ownerUserId: "company-user-id" },
       id: "job-id",
       requiredPracticeAreas: ["Fauna"],
       requiredSkills: ["Geoprocessamento"],
@@ -22,6 +22,7 @@ describe("ApplicationsService", () => {
     repositories.profiles.findOneBy.mockResolvedValueOnce({
       acceptsTravel: true,
       id: "profile-id",
+      fullName: "Ana E2E",
       registrationStatus: "ACTIVE",
       state: "SP",
       userId: "user-id",
@@ -57,6 +58,14 @@ describe("ApplicationsService", () => {
     );
     expect(result.match.reasons).toContain("1/1 area(s) em comum.");
     expect(result.match.reasons).toContain("CRBio compativel com a exigencia da vaga.");
+    expect(notifications.createForUser).toHaveBeenCalledWith(
+      expect.objectContaining({
+        actionUrl: "/empresa/vagas/job-id/candidatos",
+        title: "Nova candidatura recebida",
+        type: "APPLICATION_CREATED",
+        userId: "company-user-id",
+      }),
+    );
   });
 
   it("rejects applications for unpublished jobs", async () => {
@@ -86,9 +95,40 @@ describe("ApplicationsService", () => {
 
     await expect(service.apply("user-id", "job-id", {})).rejects.toThrow(ConflictException);
   });
+
+  it("notifies the biologist when application status changes", async () => {
+    const { notifications, repositories, service } = createService();
+
+    repositories.companies.findOneBy.mockResolvedValueOnce({ id: "company-id" });
+    repositories.applications.findOne.mockResolvedValueOnce({
+      biologistProfile: { userId: "biologist-user-id" },
+      id: "application-id",
+      job: { companyId: "company-id", id: "job-id", title: "Biologo de aves" },
+      jobId: "job-id",
+      status: "APPLIED",
+    });
+    repositories.applications.save.mockImplementationOnce(async (value) => value);
+
+    const result = await service.updateStatus("company-user-id", "application-id", {
+      status: "INTERVIEW",
+    });
+
+    expect(result.application.status).toBe("INTERVIEW");
+    expect(notifications.createForUser).toHaveBeenCalledWith(
+      expect.objectContaining({
+        actionUrl: "/candidaturas",
+        title: "Status da candidatura atualizado",
+        type: "APPLICATION_STATUS_UPDATED",
+        userId: "biologist-user-id",
+      }),
+    );
+  });
 });
 
 function createService() {
+  const notifications = {
+    createForUser: vi.fn(async (value) => value),
+  };
   const repositories = {
     applications: createRepository(),
     companies: createRepository(),
@@ -100,6 +140,7 @@ function createService() {
   };
 
   return {
+    notifications,
     repositories,
     service: new ApplicationsService(
       repositories.applications,
@@ -109,6 +150,7 @@ function createService() {
       repositories.practiceAreas,
       repositories.taxonomicGroups,
       repositories.skills,
+      notifications,
     ),
   };
 }

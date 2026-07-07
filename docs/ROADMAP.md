@@ -125,7 +125,7 @@ Status: base admin concluida; producao pendente.
 - Verificacoes de empresas e biologos concluidas no admin basico.
 - Controle de status de vagas concluido no admin basico.
 - Auditoria admin basica concluida para verificacoes e status de vagas.
-- Notificacoes pendentes.
+- Notificacoes internas concluidas para nova candidatura e mudanca de status.
 - Testes automatizados iniciais da API concluidos para admin, auth, candidaturas, vagas e favoritos.
 - E2E inicial da API concluido para fluxo biologo-empresa-vaga-candidatura.
 - Ampliar cobertura de testes automatizados pendente.
@@ -137,4 +137,4 @@ Status: base admin concluida; producao pendente.
 
 ## Marco Atual
 
-A proxima tarefa e preparar qualidade e producao: notificacoes, hardening adicional de seguranca, CD e deploy.
+A proxima tarefa e preparar qualidade e producao: hardening adicional de seguranca, CD e deploy.

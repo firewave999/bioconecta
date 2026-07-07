@@ -11,6 +11,7 @@ import { DatabaseModule } from "./database/database.module.js";
 import { FavoritesModule } from "./favorites/favorites.module.js";
 import { HealthModule } from "./health/health.module.js";
 import { JobsModule } from "./jobs/jobs.module.js";
+import { NotificationsModule } from "./notifications/notifications.module.js";
 import { UsersModule } from "./users/users.module.js";
 
 @Module({
@@ -28,6 +29,7 @@ import { UsersModule } from "./users/users.module.js";
     FavoritesModule,
     HealthModule,
     JobsModule,
+    NotificationsModule,
     UsersModule,
   ],
 })

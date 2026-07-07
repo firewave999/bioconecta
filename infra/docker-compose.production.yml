@@ -1,0 +1,88 @@
+name: bioconecta
+
+services:
+  bioconecta-postgres:
+    image: postgres:17-alpine
+    container_name: bioconecta-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-bioconecta_prod}
+      POSTGRES_USER: ${POSTGRES_USER:-bioconecta}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - bioconecta_postgres_data:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d:ro
+    networks:
+      - bioconecta_internal
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  bioconecta-redis:
+    image: redis:7.4-alpine
+    container_name: bioconecta-redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - bioconecta_redis_data:/data
+    networks:
+      - bioconecta_internal
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  bioconecta-api:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile.api
+    container_name: bioconecta-api
+    restart: unless-stopped
+    env_file:
+      - ./.env.production
+    environment:
+      APP_API_PORT: 4000
+      DATABASE_URL: postgresql://${POSTGRES_USER:-bioconecta}:${POSTGRES_PASSWORD}@bioconecta-postgres:5432/${POSTGRES_DB:-bioconecta_prod}
+      REDIS_URL: redis://bioconecta-redis:6379
+    depends_on:
+      bioconecta-postgres:
+        condition: service_healthy
+      bioconecta-redis:
+        condition: service_healthy
+    ports:
+      - "${BIOCONECTA_API_HOST_PORT:-4100}:4000"
+    networks:
+      - bioconecta_internal
+
+  bioconecta-web:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile.web
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+    container_name: bioconecta-web
+    restart: unless-stopped
+    env_file:
+      - ./.env.production
+    depends_on:
+      - bioconecta-api
+    ports:
+      - "${BIOCONECTA_WEB_HOST_PORT:-3100}:3000"
+    networks:
+      - bioconecta_internal
+
+networks:
+  bioconecta_internal:
+    name: bioconecta_internal
+    driver: bridge
+
+volumes:
+  bioconecta_postgres_data:
+    name: bioconecta_postgres_data
+  bioconecta_redis_data:
+    name: bioconecta_redis_data

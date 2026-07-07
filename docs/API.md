@@ -6,7 +6,7 @@ A API sera REST, documentada por Swagger/OpenAPI e versionada sob `/api/v1`.
 
 ## Status da Implementacao
 
-Etapa 10 base ja cobre autenticacao, perfil profissional do biologo, empresas, vagas com filtros, favoritos, candidaturas, matching inicial e admin basico.
+Etapa 10 base ja cobre autenticacao, perfil profissional do biologo, empresas, vagas com filtros, favoritos, candidaturas, matching inicial, notificacoes internas e admin basico.
 
 Disponivel:
 
@@ -37,6 +37,9 @@ Disponivel:
 - `GET /api/v1/favorites/jobs/:jobId`
 - `POST /api/v1/favorites/jobs/:jobId`
 - `DELETE /api/v1/favorites/jobs/:jobId`
+- `GET /api/v1/notifications/mine`
+- `PUT /api/v1/notifications/:id/read`
+- `PUT /api/v1/notifications/read-all`
 - `GET /api/v1/admin/overview`
 - `GET /api/v1/admin/users`
 - `GET /api/v1/admin/companies`
@@ -148,6 +151,17 @@ Implementado nesta etapa:
 - `GET /api/v1/favorites/jobs/:jobId`: retorna se a vaga esta salva.
 - `POST /api/v1/favorites/jobs/:jobId`: salva vaga.
 - `DELETE /api/v1/favorites/jobs/:jobId`: remove vaga salva.
+
+### Notificacoes
+
+- `GET /api/v1/notifications/mine`: lista ate 50 notificacoes do usuario autenticado e retorna `unreadCount`.
+- `PUT /api/v1/notifications/:id/read`: marca uma notificacao propria como lida.
+- `PUT /api/v1/notifications/read-all`: marca todas as notificacoes do usuario autenticado como lidas.
+
+Eventos atuais:
+
+- Nova candidatura recebida pela empresa.
+- Status da candidatura atualizado para o biologo.
 
 ### Matching
 

@@ -1,0 +1,19 @@
+FROM node:24-alpine
+
+WORKDIR /app
+
+ENV NODE_ENV=production
+
+RUN corepack enable
+
+COPY . .
+
+RUN pnpm install --frozen-lockfile \
+  && pnpm --filter @bioconecta/api build \
+  && pnpm store prune
+
+WORKDIR /app/apps/api
+
+EXPOSE 4000
+
+CMD ["pnpm", "start"]

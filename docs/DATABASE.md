@@ -52,6 +52,10 @@ Etapa 10 adicionou auditoria administrativa:
 
 - `admin_audit_logs`
 
+Etapa 11 adicionou notificacoes internas:
+
+- `notifications`
+
 ## Entidades Minimas
 
 ### Identidade e Acesso
@@ -62,6 +66,7 @@ Etapa 10 adicionou auditoria administrativa:
 - EmailVerificationToken
 - Consent
 - AdminAuditLog
+- Notification
 
 ### Perfis
 
@@ -126,6 +131,7 @@ Etapa 10 adicionou auditoria administrativa:
 - BiologistProfile se relaciona com Skills, TaxonomicGroups e PracticeAreas por tabelas intermediarias.
 - VerificationRequest referencia documentos e registra decisoes administrativas.
 - AdminAuditLog registra ator, acao, alvo, estado anterior, estado posterior e data de acoes administrativas sensiveis.
+- Notification pertence a um User, guarda tipo, titulo, mensagem, link de acao, metadados, data de leitura e data de criacao.
 
 ## Enums Iniciais
 

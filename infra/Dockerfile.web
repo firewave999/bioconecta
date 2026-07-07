@@ -1,0 +1,21 @@
+FROM node:24-alpine
+
+WORKDIR /app
+
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ENV NODE_ENV=production
+
+RUN corepack enable
+
+COPY . .
+
+RUN pnpm install --frozen-lockfile \
+  && pnpm --filter @bioconecta/web build \
+  && pnpm store prune
+
+WORKDIR /app/apps/web
+
+EXPOSE 3000
+
+CMD ["pnpm", "start"]

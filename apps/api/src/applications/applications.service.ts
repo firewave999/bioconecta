@@ -13,6 +13,7 @@ import { Skill } from "../biologist-profile/entities/skill.entity.js";
 import { TaxonomicGroup } from "../biologist-profile/entities/taxonomic-group.entity.js";
 import { Company } from "../companies/company.entity.js";
 import { Job } from "../jobs/job.entity.js";
+import { NotificationsService } from "../notifications/notifications.service.js";
 import { Application } from "./application.entity.js";
 import { CreateApplicationDto } from "./dto/create-application.dto.js";
 import { UpdateApplicationStatusDto } from "./dto/update-application-status.dto.js";
@@ -40,6 +41,7 @@ export class ApplicationsService {
     private readonly taxonomicGroupsRepository: Repository<TaxonomicGroup>,
     @InjectRepository(Skill)
     private readonly skillsRepository: Repository<Skill>,
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   async apply(userId: string, jobId: string, dto: CreateApplicationDto) {
@@ -76,7 +78,23 @@ export class ApplicationsService {
       status: "APPLIED",
     });
 
-    return { application: await this.applicationsRepository.save(application), match };
+    const savedApplication = await this.applicationsRepository.save(application);
+
+    await this.notificationsService.createForUser({
+      actionUrl: `/empresa/vagas/${job.id}/candidatos`,
+      message: `${profile.fullName} se candidatou para ${job.title}. Match: ${match.score}%.`,
+      metadata: {
+        applicationId: savedApplication.id,
+        biologistProfileId: profile.id,
+        jobId: job.id,
+        matchScore: match.score,
+      },
+      title: "Nova candidatura recebida",
+      type: "APPLICATION_CREATED",
+      userId: job.company.ownerUserId,
+    });
+
+    return { application: savedApplication, match };
   }
 
   async listMine(userId: string) {
@@ -125,7 +143,7 @@ export class ApplicationsService {
     }
 
     const application = await this.applicationsRepository.findOne({
-      relations: { job: true },
+      relations: { biologistProfile: true, job: true },
       where: { id: applicationId },
     });
 
@@ -137,9 +155,28 @@ export class ApplicationsService {
       throw new ForbiddenException("Esta candidatura pertence a outra empresa.");
     }
 
+    const previousStatus = application.status;
     application.status = dto.status;
 
-    return { application: await this.applicationsRepository.save(application) };
+    const savedApplication = await this.applicationsRepository.save(application);
+
+    if (previousStatus !== dto.status) {
+      await this.notificationsService.createForUser({
+        actionUrl: "/candidaturas",
+        message: `Sua candidatura para ${application.job.title} mudou de ${previousStatus} para ${dto.status}.`,
+        metadata: {
+          applicationId: savedApplication.id,
+          jobId: application.jobId,
+          newStatus: dto.status,
+          previousStatus,
+        },
+        title: "Status da candidatura atualizado",
+        type: "APPLICATION_STATUS_UPDATED",
+        userId: application.biologistProfile.userId,
+      });
+    }
+
+    return { application: savedApplication };
   }
 
   async getMyApplicationForJob(userId: string, jobId: string) {

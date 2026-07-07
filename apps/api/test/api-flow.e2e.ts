@@ -184,12 +184,56 @@ describe("BioConecta API E2E", () => {
       });
 
     await request(app.getHttpServer())
+      .get("/api/v1/notifications/mine")
+      .set("Authorization", `Bearer ${company.accessToken}`)
+      .expect(200)
+      .expect((response) => {
+        expect(response.body.unreadCount).toBe(1);
+        expect(response.body.notifications[0].type).toBe("APPLICATION_CREATED");
+      });
+
+    await request(app.getHttpServer())
       .get(`/api/v1/applications/jobs/${jobId}/candidates`)
       .set("Authorization", `Bearer ${company.accessToken}`)
       .expect(200)
       .expect((response) => {
         expect(response.body.applications).toHaveLength(1);
         expect(response.body.applications[0].matchScore).toBe(100);
+      });
+
+    const candidatesResponse = await request(app.getHttpServer())
+      .get(`/api/v1/applications/jobs/${jobId}/candidates`)
+      .set("Authorization", `Bearer ${company.accessToken}`)
+      .expect(200);
+
+    const applicationId = candidatesResponse.body.applications[0].id as string;
+
+    await request(app.getHttpServer())
+      .put(`/api/v1/applications/${applicationId}/status`)
+      .set("Authorization", `Bearer ${company.accessToken}`)
+      .send({ status: "INTERVIEW" })
+      .expect(200);
+
+    const biologistNotificationsResponse = await request(app.getHttpServer())
+      .get("/api/v1/notifications/mine")
+      .set("Authorization", `Bearer ${biologist.accessToken}`)
+      .expect(200)
+      .expect((response) => {
+        expect(response.body.unreadCount).toBe(1);
+        expect(response.body.notifications[0].type).toBe("APPLICATION_STATUS_UPDATED");
+      });
+
+    await request(app.getHttpServer())
+      .put(`/api/v1/notifications/${biologistNotificationsResponse.body.notifications[0].id}/read`)
+      .set("Authorization", `Bearer ${biologist.accessToken}`)
+      .expect(200);
+
+    await request(app.getHttpServer())
+      .get("/api/v1/notifications/mine")
+      .set("Authorization", `Bearer ${biologist.accessToken}`)
+      .expect(200)
+      .expect((response) => {
+        expect(response.body.unreadCount).toBe(0);
       });
   });
 

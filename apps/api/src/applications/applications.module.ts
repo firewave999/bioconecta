@@ -8,6 +8,7 @@ import { Skill } from "../biologist-profile/entities/skill.entity.js";
 import { TaxonomicGroup } from "../biologist-profile/entities/taxonomic-group.entity.js";
 import { Company } from "../companies/company.entity.js";
 import { Job } from "../jobs/job.entity.js";
+import { NotificationsModule } from "../notifications/notifications.module.js";
 import { Application } from "./application.entity.js";
 import { ApplicationsController } from "./applications.controller.js";
 import { ApplicationsService } from "./applications.service.js";
@@ -16,6 +17,7 @@ import { ApplicationsService } from "./applications.service.js";
   controllers: [ApplicationsController],
   imports: [
     AuthModule,
+    NotificationsModule,
     TypeOrmModule.forFeature([
       Application,
       BiologistProfile,
