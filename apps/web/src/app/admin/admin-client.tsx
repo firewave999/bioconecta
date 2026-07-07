@@ -88,7 +88,10 @@ type AdminState = {
   users: AdminUser[];
 };
 
+type AuthState = "checking" | "allowed" | "denied";
+
 export function AdminClient() {
+  const [authState, setAuthState] = useState<AuthState>("checking");
   const [state, setState] = useState<AdminState | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busyAction, setBusyAction] = useState<string | null>(null);
@@ -100,6 +103,16 @@ export function AdminClient() {
       setError("Voce precisa entrar com uma conta admin.");
       return;
     }
+
+    const me = await apiFetch<{ user: { roles: string[] } }>("/auth/me", { token });
+
+    if (!me.user.roles.includes("ADMIN")) {
+      setAuthState("denied");
+      setError("Esta area e exclusiva para administradores.");
+      return;
+    }
+
+    setAuthState("allowed");
 
     const [overview, users, companies, biologists, jobs, applications, auditLogs] =
       await Promise.all([
@@ -178,13 +191,28 @@ export function AdminClient() {
     }
   }
 
+  if (authState === "checking" && !error) {
+    return <p className="text-slate-600">Validando acesso admin...</p>;
+  }
+
   if (error) {
     return (
       <div className="rounded-[8px] border border-red-200 bg-red-50 p-5 text-red-700">
         <p>{error}</p>
-        <Button asChild className="mt-4">
-          <Link href="/login">Entrar</Link>
-        </Button>
+        <div className="mt-4 flex flex-wrap gap-3">
+          {authState === "denied" ? (
+            <Button asChild>
+              <Link href="/dashboard">Voltar ao dashboard</Link>
+            </Button>
+          ) : (
+            <Button asChild>
+              <Link href="/login">Entrar</Link>
+            </Button>
+          )}
+          <Button asChild variant="secondary">
+            <Link href="/">Voltar para home</Link>
+          </Button>
+        </div>
       </div>
     );
   }
@@ -195,14 +223,14 @@ export function AdminClient() {
 
   return (
     <div className="grid gap-6">
-      <section className="grid gap-4 md:grid-cols-4">
+      <section className="grid gap-4 md:grid-cols-4" id="visao-geral">
         <Metric label="Usuarios" value={state.overview.usersCount} />
         <Metric label="Empresas verificadas" value={state.overview.verifiedCompaniesCount} />
         <Metric label="Biologos verificados" value={state.overview.verifiedBiologistsCount} />
         <Metric label="Vagas publicadas" value={state.overview.publishedJobsCount} />
       </section>
 
-      <section className="rounded-[8px] border border-slate-200 bg-white p-6">
+      <section className="rounded-[8px] border border-slate-200 bg-white p-6" id="empresas">
         <SectionTitle title="Empresas" subtitle={`${state.overview.companiesCount} cadastradas`} />
         <div className="mt-5 grid gap-3">
           {state.companies.map((company) => (
@@ -238,7 +266,7 @@ export function AdminClient() {
         </div>
       </section>
 
-      <section className="rounded-[8px] border border-slate-200 bg-white p-6">
+      <section className="rounded-[8px] border border-slate-200 bg-white p-6" id="biologos">
         <SectionTitle
           title="Biologos"
           subtitle={`${state.overview.biologistProfilesCount} perfis cadastrados`}
@@ -285,7 +313,7 @@ export function AdminClient() {
         </div>
       </section>
 
-      <section className="rounded-[8px] border border-slate-200 bg-white p-6">
+      <section className="rounded-[8px] border border-slate-200 bg-white p-6" id="vagas">
         <SectionTitle title="Vagas" subtitle={`${state.overview.jobsCount} vagas criadas`} />
         <div className="mt-5 grid gap-3">
           {state.jobs.map((job) => (
@@ -326,7 +354,7 @@ export function AdminClient() {
         </div>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-2">
+      <section className="grid gap-4 md:grid-cols-2" id="candidaturas">
         <div className="rounded-[8px] border border-slate-200 bg-white p-6">
           <SectionTitle
             title="Candidaturas recentes"
@@ -363,7 +391,7 @@ export function AdminClient() {
         </div>
       </section>
 
-      <section className="rounded-[8px] border border-slate-200 bg-white p-6">
+      <section className="rounded-[8px] border border-slate-200 bg-white p-6" id="auditoria">
         <SectionTitle title="Auditoria admin" subtitle="Ultimas 100 acoes sensiveis" />
         <div className="mt-5 grid gap-3">
           {state.auditLogs.slice(0, 20).map((log) => (

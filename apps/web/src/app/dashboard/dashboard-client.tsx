@@ -14,6 +14,7 @@ type DashboardState = {
   email: string;
   experiencesCount: number;
   firstName: string;
+  isAdmin: boolean;
   profileExists: boolean;
   professionalStarted: boolean;
   title: string;
@@ -32,7 +33,9 @@ export function DashboardClient() {
     }
 
     Promise.all([
-      apiFetch<{ user: { email: string; firstName: string } }>("/auth/me", { token }),
+      apiFetch<{ user: { email: string; firstName: string; roles: string[] } }>("/auth/me", {
+        token,
+      }),
       apiFetch<{
         completion: number;
         professional: {
@@ -62,6 +65,7 @@ export function DashboardClient() {
           email: me.user.email,
           experiencesCount: profile.professional.experiences.length,
           firstName: me.user.firstName,
+          isAdmin: me.user.roles.includes("ADMIN"),
           profileExists: Boolean(profile.profile),
           professionalStarted: professionalCount > 0,
           title: profile.profile?.headline || "Perfil profissional em construcao",
@@ -185,11 +189,23 @@ export function DashboardClient() {
           <Button asChild variant="secondary">
             <Link href="/notificacoes">Notificacoes</Link>
           </Button>
-          <Button asChild variant="secondary">
-            <Link href="/admin">Admin</Link>
-          </Button>
         </div>
       </section>
+
+      {state.isAdmin ? (
+        <section className="rounded-[8px] border border-cyan-200 bg-cyan-50 p-6">
+          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-800">
+            Administracao
+          </p>
+          <h2 className="mt-2 text-xl font-semibold text-slate-950">Painel admin separado</h2>
+          <p className="mt-2 text-slate-600">
+            Acesse a area operacional para validar empresas, biologos, vagas e auditoria.
+          </p>
+          <Button asChild className="mt-5">
+            <Link href="/admin">Ir para painel admin</Link>
+          </Button>
+        </section>
+      ) : null}
     </div>
   );
 }

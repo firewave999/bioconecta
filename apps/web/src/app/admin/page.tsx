@@ -24,6 +24,14 @@ export default function AdminPage() {
           <p className="mt-2 max-w-3xl text-slate-600">
             Validacao de empresas, biologos, vagas e acompanhamento rapido da plataforma.
           </p>
+          <nav className="mt-5 flex flex-wrap gap-3 text-sm font-semibold text-slate-700">
+            <a href="#visao-geral">Visao geral</a>
+            <a href="#empresas">Empresas</a>
+            <a href="#biologos">Biologos</a>
+            <a href="#vagas">Vagas</a>
+            <a href="#candidaturas">Candidaturas</a>
+            <a href="#auditoria">Auditoria</a>
+          </nav>
         </section>
         <div className="mt-6">
           <AdminClient />
