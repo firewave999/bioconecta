@@ -1,4 +1,4 @@
-import { ConflictException, NotFoundException } from "@nestjs/common";
+import { ConflictException, ForbiddenException, NotFoundException } from "@nestjs/common";
 import { describe, expect, it, vi } from "vitest";
 
 import { FavoritesService } from "./favorites.service.js";
@@ -21,6 +21,7 @@ describe("FavoritesService", () => {
   it("saves a published job", async () => {
     const { repositories, service } = createService();
 
+    repositories.users.findOneByOrFail.mockResolvedValueOnce({ roles: ["BIOLOGIST"] });
     repositories.jobs.findOneBy.mockResolvedValueOnce({ id: "job-id", status: "PUBLISHED" });
     repositories.savedJobs.findOneBy.mockResolvedValueOnce(null);
     repositories.savedJobs.create.mockImplementationOnce((value) => ({ id: "saved-id", ...value }));
@@ -38,6 +39,7 @@ describe("FavoritesService", () => {
   it("rejects saving unpublished or missing jobs", async () => {
     const { repositories, service } = createService();
 
+    repositories.users.findOneByOrFail.mockResolvedValueOnce({ roles: ["BIOLOGIST"] });
     repositories.jobs.findOneBy.mockResolvedValueOnce(null);
 
     await expect(service.saveJob("user-id", "job-id")).rejects.toThrow(NotFoundException);
@@ -50,15 +52,26 @@ describe("FavoritesService", () => {
   it("rejects duplicated saved jobs", async () => {
     const { repositories, service } = createService();
 
+    repositories.users.findOneByOrFail.mockResolvedValueOnce({ roles: ["BIOLOGIST"] });
     repositories.jobs.findOneBy.mockResolvedValueOnce({ id: "job-id", status: "PUBLISHED" });
     repositories.savedJobs.findOneBy.mockResolvedValueOnce({ id: "saved-id" });
 
     await expect(service.saveJob("user-id", "job-id")).rejects.toThrow(ConflictException);
   });
 
+  it("blocks company accounts from saving jobs", async () => {
+    const { repositories, service } = createService();
+
+    repositories.users.findOneByOrFail.mockResolvedValueOnce({ roles: ["COMPANY"] });
+
+    await expect(service.saveJob("company-user-id", "job-id")).rejects.toThrow(ForbiddenException);
+    expect(repositories.jobs.findOneBy).not.toHaveBeenCalled();
+  });
+
   it("removes a saved job", async () => {
     const { repositories, service } = createService();
 
+    repositories.users.findOneByOrFail.mockResolvedValueOnce({ roles: ["STUDENT"] });
     repositories.savedJobs.delete.mockResolvedValueOnce({ affected: 1 });
 
     await expect(service.unsaveJob("user-id", "job-id")).resolves.toEqual({ success: true });
@@ -71,6 +84,7 @@ describe("FavoritesService", () => {
   it("returns saved state", async () => {
     const { repositories, service } = createService();
 
+    repositories.users.findOneByOrFail.mockResolvedValueOnce({ roles: ["BIOLOGIST"] });
     repositories.savedJobs.findOneBy.mockResolvedValueOnce({ id: "saved-id" });
 
     await expect(service.getSavedState("user-id", "job-id")).resolves.toEqual({ saved: true });
@@ -81,11 +95,12 @@ function createService() {
   const repositories = {
     jobs: createRepository(),
     savedJobs: createRepository(),
+    users: createRepository(),
   };
 
   return {
     repositories,
-    service: new FavoritesService(repositories.jobs, repositories.savedJobs),
+    service: new FavoritesService(repositories.jobs, repositories.savedJobs, repositories.users),
   };
 }
 
@@ -95,6 +110,7 @@ function createRepository() {
     delete: vi.fn(),
     find: vi.fn(),
     findOneBy: vi.fn(),
+    findOneByOrFail: vi.fn(),
     save: vi.fn(),
   };
 }
