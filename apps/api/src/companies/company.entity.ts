@@ -52,6 +52,9 @@ export class Company {
   @Column({ name: "verification_status", type: "varchar", length: 24, default: "UNVERIFIED" })
   verificationStatus!: CompanyVerificationStatus;
 
+  @Column({ name: "verification_notes", type: "text", nullable: true })
+  verificationNotes!: string | null;
+
   @CreateDateColumn({ name: "created_at", type: "timestamptz" })
   createdAt!: Date;
 

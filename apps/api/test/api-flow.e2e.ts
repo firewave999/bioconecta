@@ -120,10 +120,30 @@ describe("BioConecta API E2E", () => {
     });
 
     await request(app.getHttpServer())
+      .post("/api/v1/jobs")
+      .set("Authorization", `Bearer ${company.accessToken}`)
+      .send(createJobPayload({ status: "PUBLISHED", title: "Publicacao bloqueada" }))
+      .expect(403);
+
+    const draftJobResponse = await request(app.getHttpServer())
+      .post("/api/v1/jobs")
+      .set("Authorization", `Bearer ${company.accessToken}`)
+      .send(createJobPayload({ status: "DRAFT", title: "Rascunho antes da verificacao" }))
+      .expect(201)
+      .expect((response) => {
+        expect(response.body.job.status).toBe("DRAFT");
+        expect(response.body.job.publishedAt).toBeNull();
+      });
+
+    await request(app.getHttpServer())
       .put(`/api/v1/admin/companies/${companyProfileResponse.body.company.id}/verification`)
       .set("Authorization", `Bearer ${admin.accessToken}`)
-      .send({ verificationStatus: "VERIFIED" })
-      .expect(200);
+      .send({ verificationNotes: "Empresa validada no E2E.", verificationStatus: "VERIFIED" })
+      .expect(200)
+      .expect((response) => {
+        expect(response.body.verificationNotes).toBe("Empresa validada no E2E.");
+        expect(response.body.verificationStatus).toBe("VERIFIED");
+      });
 
     await request(app.getHttpServer())
       .get("/api/v1/admin/audit-logs")
@@ -133,29 +153,29 @@ describe("BioConecta API E2E", () => {
         expect(response.body).toHaveLength(1);
         expect(response.body[0].action).toBe("COMPANY_VERIFICATION_UPDATED");
         expect(response.body[0].actor.email).toBe(company.email);
+        expect(response.body[0].afterState.verificationNotes).toBe("Empresa validada no E2E.");
+      });
+
+    const draftJobId = draftJobResponse.body.job.id as string;
+
+    await request(app.getHttpServer())
+      .get(`/api/v1/jobs/mine/${draftJobId}`)
+      .set("Authorization", `Bearer ${company.accessToken}`)
+      .expect(200)
+      .expect((response) => {
+        expect(response.body.job.id).toBe(draftJobId);
+        expect(response.body.job.status).toBe("DRAFT");
       });
 
     const jobResponse = await request(app.getHttpServer())
-      .post("/api/v1/jobs")
+      .put(`/api/v1/jobs/${draftJobId}`)
       .set("Authorization", `Bearer ${company.accessToken}`)
-      .send({
-        acceptsStudents: false,
-        city: "Sao Paulo",
-        contractType: "PJ",
-        description: "Monitoramento de avifauna.",
-        requiredPracticeAreas: ["Fauna"],
-        requiredSkills: ["Geoprocessamento"],
-        requiredTaxonomicGroups: ["Aves"],
-        requiresCrbio: true,
-        requiresTravel: true,
-        salaryMaxCents: 900000,
-        salaryMinCents: 500000,
-        state: "SP",
-        status: "PUBLISHED",
-        title: "Biologo de aves",
-        workMode: "FIELD",
-      })
-      .expect(201);
+      .send(createJobPayload({ status: "PUBLISHED", title: "Biologo de aves" }))
+      .expect(200)
+      .expect((response) => {
+        expect(response.body.job.status).toBe("PUBLISHED");
+        expect(response.body.job.publishedAt).toBeTruthy();
+      });
 
     const jobId = jobResponse.body.job.id as string;
 
@@ -235,6 +255,15 @@ describe("BioConecta API E2E", () => {
       .expect((response) => {
         expect(response.body.unreadCount).toBe(0);
       });
+
+    await request(app.getHttpServer())
+      .put(`/api/v1/jobs/${jobId}`)
+      .set("Authorization", `Bearer ${company.accessToken}`)
+      .send(createJobPayload({ status: "CLOSED", title: "Biologo de aves" }))
+      .expect(200)
+      .expect((response) => {
+        expect(response.body.job.status).toBe("CLOSED");
+      });
   });
 
   async function registerAndLogin(input: { email: string; role: "BIOLOGIST" | "COMPANY" }) {
@@ -270,6 +299,33 @@ describe("BioConecta API E2E", () => {
     };
   }
 });
+
+function createJobPayload(overrides: Partial<ReturnType<typeof createJobPayloadBase>> = {}) {
+  return {
+    ...createJobPayloadBase(),
+    ...overrides,
+  };
+}
+
+function createJobPayloadBase() {
+  return {
+    acceptsStudents: false,
+    city: "Sao Paulo",
+    contractType: "PJ",
+    description: "Monitoramento de avifauna.",
+    requiredPracticeAreas: ["Fauna"],
+    requiredSkills: ["Geoprocessamento"],
+    requiredTaxonomicGroups: ["Aves"],
+    requiresCrbio: true,
+    requiresTravel: true,
+    salaryMaxCents: 900000,
+    salaryMinCents: 500000,
+    state: "SP",
+    status: "PUBLISHED" as const,
+    title: "Biologo de aves",
+    workMode: "FIELD",
+  };
+}
 
 function configureTestEnv() {
   process.env.NODE_ENV = "test";

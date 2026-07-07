@@ -146,14 +146,22 @@ export class AdminService {
     }
 
     const previousStatus = company.verificationStatus;
+    const previousNotes = company.verificationNotes;
     company.verificationStatus = dto.verificationStatus;
+    company.verificationNotes = dto.verificationNotes?.trim() || null;
     const saved = await this.companiesRepository.save(company);
 
     await this.createAuditLog({
       action: "COMPANY_VERIFICATION_UPDATED",
       actorUserId,
-      afterState: { verificationStatus: saved.verificationStatus },
-      beforeState: { verificationStatus: previousStatus },
+      afterState: {
+        verificationNotes: saved.verificationNotes,
+        verificationStatus: saved.verificationStatus,
+      },
+      beforeState: {
+        verificationNotes: previousNotes,
+        verificationStatus: previousStatus,
+      },
       targetId: saved.id,
       targetType: "COMPANY",
     });

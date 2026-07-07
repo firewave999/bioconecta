@@ -26,6 +26,14 @@ export class JobsController {
     return this.jobsService.listMine(request.user.sub);
   }
 
+  @Get("mine/:id")
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @ApiOkResponse({ description: "Detalhe de vaga da empresa autenticada." })
+  getMine(@Req() request: AuthenticatedRequest, @Param("id") id: string) {
+    return this.jobsService.getMine(request.user.sub, id);
+  }
+
   @Get(":id")
   @ApiOkResponse({ description: "Detalhe de vaga publicada." })
   getPublished(@Param("id") id: string) {

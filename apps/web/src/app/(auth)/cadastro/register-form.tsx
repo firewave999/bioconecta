@@ -25,7 +25,9 @@ type RegisterResponse = {
 export function RegisterForm() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [registeredRole, setRegisteredRole] = useState<string | null>(null);
   const [result, setResult] = useState<RegisterResponse | null>(null);
+  const [selectedRole, setSelectedRole] = useState("BIOLOGIST");
   const [verificationToken, setVerificationToken] = useState("");
   const [verified, setVerified] = useState(false);
 
@@ -35,6 +37,7 @@ export function RegisterForm() {
     setLoading(true);
 
     const form = new FormData(event.currentTarget);
+    const role = selectedRole;
 
     try {
       const response = await apiRequest<RegisterResponse, Record<string, unknown>>(
@@ -47,12 +50,13 @@ export function RegisterForm() {
           lastName: form.get("lastName"),
           password: form.get("password"),
           phone: form.get("phone"),
-          role: form.get("role"),
+          role,
         },
       );
 
       localStorage.setItem("bioconecta.accessToken", response.tokens.accessToken);
       localStorage.setItem("bioconecta.refreshToken", response.tokens.refreshToken);
+      setRegisteredRole(role);
       setResult(response);
       setVerificationToken(response.devVerificationToken ?? "");
     } catch (err) {
@@ -94,18 +98,31 @@ export function RegisterForm() {
         <Field label="Telefone" name="phone" type="tel" />
         <Field label="Senha" minLength={8} name="password" required type="password" />
 
-        <label className="grid gap-2 text-sm font-medium text-slate-700">
-          Tipo de conta
-          <select
-            className="h-11 rounded-[8px] border border-slate-300 bg-white px-3 text-slate-950 outline-none focus:border-cyan-500"
-            name="role"
-            required
-          >
-            <option value="BIOLOGIST">Biologo</option>
-            <option value="STUDENT">Estudante</option>
-            <option value="COMPANY">Empresa</option>
-          </select>
-        </label>
+        <input name="role" type="hidden" value={selectedRole} />
+
+        <fieldset className="grid gap-3">
+          <legend className="text-sm font-medium text-slate-700">Tipo de conta</legend>
+          <div className="grid gap-3 md:grid-cols-3">
+            <RoleOption
+              checked={selectedRole === "BIOLOGIST"}
+              description="Para criar perfil profissional, buscar vagas e se candidatar."
+              label="Biologo"
+              onSelect={() => setSelectedRole("BIOLOGIST")}
+            />
+            <RoleOption
+              checked={selectedRole === "STUDENT"}
+              description="Para acompanhar vagas, favoritos e oportunidades para estudantes."
+              label="Estudante"
+              onSelect={() => setSelectedRole("STUDENT")}
+            />
+            <RoleOption
+              checked={selectedRole === "COMPANY"}
+              description="Para cadastrar empresa, publicar vagas e receber candidatos."
+              label="Empresa"
+              onSelect={() => setSelectedRole("COMPANY")}
+            />
+          </div>
+        </fieldset>
 
         <label className="flex gap-3 text-sm text-slate-600">
           <input className="mt-1" name="acceptTerms" required type="checkbox" /> Aceito os termos de
@@ -142,14 +159,14 @@ export function RegisterForm() {
               </Button>
               {verified ? (
                 <Button asChild>
-                  <Link href="/onboarding/biologo">Continuar onboarding de biologo</Link>
+                  <Link href={getNextPath(registeredRole)}>{getNextLabel(registeredRole)}</Link>
                 </Button>
               ) : null}
             </div>
           ) : null}
           {!result.devVerificationToken ? (
             <Button asChild className="mt-4">
-              <Link href="/onboarding/biologo">Continuar onboarding de biologo</Link>
+              <Link href={getNextPath(registeredRole)}>{getNextLabel(registeredRole)}</Link>
             </Button>
           ) : null}
         </div>
@@ -163,6 +180,64 @@ export function RegisterForm() {
       </p>
     </section>
   );
+}
+
+function RoleOption({
+  checked,
+  description,
+  label,
+  onSelect,
+}: {
+  checked: boolean;
+  description: string;
+  label: string;
+  onSelect: () => void;
+}) {
+  return (
+    <button
+      className={`rounded-[8px] border p-4 text-left transition ${
+        checked
+          ? "border-cyan-500 bg-cyan-50 shadow-sm"
+          : "border-slate-200 bg-white hover:border-cyan-300"
+      }`}
+      onClick={onSelect}
+      type="button"
+    >
+      <span className="flex items-center gap-2 text-sm font-semibold text-slate-950">
+        <span
+          className={`h-3 w-3 rounded-full border ${
+            checked ? "border-cyan-600 bg-cyan-600" : "border-slate-300 bg-white"
+          }`}
+        />
+        {label}
+      </span>
+      <span className="mt-2 block text-sm leading-5 text-slate-600">{description}</span>
+    </button>
+  );
+}
+
+function getNextPath(role: string | null) {
+  if (role === "COMPANY") {
+    return "/empresa";
+  }
+
+  if (role === "STUDENT") {
+    return "/dashboard";
+  }
+
+  return "/onboarding/biologo";
+}
+
+function getNextLabel(role: string | null) {
+  if (role === "COMPANY") {
+    return "Cadastrar empresa";
+  }
+
+  if (role === "STUDENT") {
+    return "Ir para o dashboard";
+  }
+
+  return "Continuar onboarding de biologo";
 }
 
 function Field({

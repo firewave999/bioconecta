@@ -7,7 +7,10 @@ describe("JobsService", () => {
   it("creates a normalized published job for the user's company", async () => {
     const { repositories, service } = createService();
 
-    repositories.companies.findOneBy.mockResolvedValueOnce({ id: "company-id" });
+    repositories.companies.findOneBy.mockResolvedValueOnce({
+      id: "company-id",
+      verificationStatus: "VERIFIED",
+    });
     repositories.jobs.create.mockImplementationOnce((value) => ({ id: "job-id", ...value }));
     repositories.jobs.save.mockImplementationOnce(async (value) => value);
 
@@ -37,10 +40,83 @@ describe("JobsService", () => {
     await expect(service.createMine("owner-id", createJobDto())).rejects.toThrow(NotFoundException);
   });
 
+  it("returns a job owned by the user's company", async () => {
+    const { repositories, service } = createService();
+
+    repositories.companies.findOneBy.mockResolvedValueOnce({
+      id: "company-id",
+      verificationStatus: "VERIFIED",
+    });
+    repositories.jobs.findOneBy.mockResolvedValueOnce({
+      companyId: "company-id",
+      id: "job-id",
+      title: "Vaga propria",
+    });
+
+    await expect(service.getMine("owner-id", "job-id")).resolves.toEqual({
+      company: {
+        id: "company-id",
+        verificationStatus: "VERIFIED",
+      },
+      job: {
+        companyId: "company-id",
+        id: "job-id",
+        title: "Vaga propria",
+      },
+    });
+  });
+
+  it("blocks reads to jobs from another company", async () => {
+    const { repositories, service } = createService();
+
+    repositories.companies.findOneBy.mockResolvedValueOnce({
+      id: "company-id",
+      verificationStatus: "VERIFIED",
+    });
+    repositories.jobs.findOneBy.mockResolvedValueOnce({
+      companyId: "other-company-id",
+      id: "job-id",
+    });
+
+    await expect(service.getMine("owner-id", "job-id")).rejects.toThrow(ForbiddenException);
+  });
+
+  it("allows draft jobs for unverified companies", async () => {
+    const { repositories, service } = createService();
+
+    repositories.companies.findOneBy.mockResolvedValueOnce({
+      id: "company-id",
+      verificationStatus: "UNVERIFIED",
+    });
+    repositories.jobs.create.mockImplementationOnce((value) => ({ id: "job-id", ...value }));
+    repositories.jobs.save.mockImplementationOnce(async (value) => value);
+
+    const result = await service.createMine("owner-id", createJobDto({ status: "DRAFT" }));
+
+    expect(result.job.status).toBe("DRAFT");
+    expect(result.job.publishedAt).toBeNull();
+  });
+
+  it("blocks published jobs for unverified companies", async () => {
+    const { repositories, service } = createService();
+
+    repositories.companies.findOneBy.mockResolvedValueOnce({
+      id: "company-id",
+      verificationStatus: "UNVERIFIED",
+    });
+
+    await expect(service.createMine("owner-id", createJobDto())).rejects.toThrow(
+      ForbiddenException,
+    );
+  });
+
   it("sets publishedAt when updating a draft to published", async () => {
     const { repositories, service } = createService();
 
-    repositories.companies.findOneBy.mockResolvedValueOnce({ id: "company-id" });
+    repositories.companies.findOneBy.mockResolvedValueOnce({
+      id: "company-id",
+      verificationStatus: "VERIFIED",
+    });
     repositories.jobs.findOneBy.mockResolvedValueOnce({
       companyId: "company-id",
       id: "job-id",
@@ -59,7 +135,10 @@ describe("JobsService", () => {
   it("blocks updates to jobs from another company", async () => {
     const { repositories, service } = createService();
 
-    repositories.companies.findOneBy.mockResolvedValueOnce({ id: "company-id" });
+    repositories.companies.findOneBy.mockResolvedValueOnce({
+      id: "company-id",
+      verificationStatus: "VERIFIED",
+    });
     repositories.jobs.findOneBy.mockResolvedValueOnce({
       companyId: "other-company-id",
       id: "job-id",
@@ -134,7 +213,14 @@ function createQueryBuilder(jobs: Array<{ id: string }>) {
   };
 }
 
-function createJobDto() {
+function createJobDto(overrides: Partial<ReturnType<typeof createJobDtoBase>> = {}) {
+  return {
+    ...createJobDtoBase(),
+    ...overrides,
+  };
+}
+
+function createJobDtoBase() {
   return {
     acceptsStudents: false,
     city: " Sao Paulo ",

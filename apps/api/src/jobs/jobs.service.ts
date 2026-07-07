@@ -90,9 +90,27 @@ export class JobsService {
     return { company, jobs };
   }
 
+  async getMine(userId: string, jobId: string) {
+    const company = await this.getRequiredCompany(userId);
+    const job = await this.jobsRepository.findOneBy({ id: jobId });
+
+    if (!job) {
+      throw new NotFoundException("Vaga nao encontrada.");
+    }
+
+    if (job.companyId !== company.id) {
+      throw new ForbiddenException("Esta vaga pertence a outra empresa.");
+    }
+
+    return { company, job };
+  }
+
   async createMine(userId: string, dto: UpsertJobDto) {
     const company = await this.getRequiredCompany(userId);
     const normalized = this.normalize(dto);
+
+    this.assertCanUseStatus(company, normalized.status);
+
     const job = this.jobsRepository.create({
       ...normalized,
       companyId: company.id,
@@ -115,6 +133,9 @@ export class JobsService {
     }
 
     const normalized = this.normalize(dto);
+
+    this.assertCanUseStatus(company, normalized.status);
+
     const job = this.jobsRepository.create({
       ...existing,
       ...normalized,
@@ -159,5 +180,13 @@ export class JobsService {
 
   private normalizeList(values: string[]) {
     return [...new Set(values.map((value) => value.trim()).filter(Boolean))].slice(0, 30);
+  }
+
+  private assertCanUseStatus(company: Company, status: UpsertJobDto["status"]) {
+    if (status === "PUBLISHED" && company.verificationStatus !== "VERIFIED") {
+      throw new ForbiddenException(
+        "A empresa precisa estar verificada para publicar vagas. Salve como rascunho.",
+      );
+    }
   }
 }

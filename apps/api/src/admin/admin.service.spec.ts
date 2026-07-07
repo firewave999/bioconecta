@@ -76,7 +76,11 @@ describe("AdminService", () => {
 
   it("updates company verification status", async () => {
     const { repositories, service } = createService();
-    const company = { id: "company-id", verificationStatus: "UNVERIFIED" };
+    const company = {
+      id: "company-id",
+      verificationNotes: null,
+      verificationStatus: "UNVERIFIED",
+    };
 
     repositories.companies.findOne.mockResolvedValueOnce(company);
     repositories.companies.save.mockImplementationOnce(async (value) => value);
@@ -85,17 +89,25 @@ describe("AdminService", () => {
 
     await expect(
       service.updateCompanyVerificationStatus("admin-id", "company-id", {
+        verificationNotes: "Documentacao conferida.",
         verificationStatus: "VERIFIED",
       }),
     ).resolves.toEqual({
       id: "company-id",
+      verificationNotes: "Documentacao conferida.",
       verificationStatus: "VERIFIED",
     });
     expect(repositories.auditLogs.create).toHaveBeenCalledWith({
       action: "COMPANY_VERIFICATION_UPDATED",
       actorUserId: "admin-id",
-      afterState: { verificationStatus: "VERIFIED" },
-      beforeState: { verificationStatus: "UNVERIFIED" },
+      afterState: {
+        verificationNotes: "Documentacao conferida.",
+        verificationStatus: "VERIFIED",
+      },
+      beforeState: {
+        verificationNotes: null,
+        verificationStatus: "UNVERIFIED",
+      },
       targetId: "company-id",
       targetType: "COMPANY",
     });

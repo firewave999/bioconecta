@@ -24,6 +24,7 @@ type Company = {
   name: string;
   owner: AdminUser;
   state: string;
+  verificationNotes: string | null;
   verificationStatus: "UNVERIFIED" | "PENDING" | "VERIFIED" | "REJECTED";
 };
 
@@ -95,6 +96,7 @@ export function AdminClient() {
   const [state, setState] = useState<AdminState | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busyAction, setBusyAction] = useState<string | null>(null);
+  const [companyNotes, setCompanyNotes] = useState<Record<string, string>>({});
 
   async function loadAdminData() {
     const token = getStoredAccessToken();
@@ -141,7 +143,7 @@ export function AdminClient() {
   ) {
     await runAction(`company-${id}-${verificationStatus}`, async (token) => {
       await apiFetch(`/admin/companies/${id}/verification`, {
-        body: { verificationStatus },
+        body: { verificationNotes: companyNotes[id] ?? "", verificationStatus },
         method: "PUT",
         token,
       });
@@ -244,21 +246,49 @@ export function AdminClient() {
                   <p className="mt-1 text-sm text-slate-500">
                     Dono: {company.owner.email} - Status: {company.verificationStatus}
                   </p>
+                  {company.verificationNotes ? (
+                    <p className="mt-1 text-sm text-slate-500">
+                      Observacao: {company.verificationNotes}
+                    </p>
+                  ) : null}
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  <ActionButton
-                    busy={busyAction === `company-${company.id}-VERIFIED`}
-                    onClick={() => updateCompanyStatus(company.id, "VERIFIED")}
-                  >
-                    Verificar
-                  </ActionButton>
-                  <ActionButton
-                    busy={busyAction === `company-${company.id}-REJECTED`}
-                    onClick={() => updateCompanyStatus(company.id, "REJECTED")}
-                    variant="secondary"
-                  >
-                    Rejeitar
-                  </ActionButton>
+                <div className="grid gap-3 md:min-w-80">
+                  <label className="grid gap-2 text-sm font-medium text-slate-700">
+                    Observacao da verificacao
+                    <textarea
+                      className="min-h-20 rounded-[8px] border border-slate-300 px-3 py-2 text-slate-950 outline-none focus:border-cyan-500"
+                      onChange={(event) =>
+                        setCompanyNotes((current) => ({
+                          ...current,
+                          [company.id]: event.target.value,
+                        }))
+                      }
+                      placeholder="Ex.: Documentacao conferida ou motivo da rejeicao."
+                      value={companyNotes[company.id] ?? company.verificationNotes ?? ""}
+                    />
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    <ActionButton
+                      busy={busyAction === `company-${company.id}-VERIFIED`}
+                      onClick={() => updateCompanyStatus(company.id, "VERIFIED")}
+                    >
+                      Verificar
+                    </ActionButton>
+                    <ActionButton
+                      busy={busyAction === `company-${company.id}-REJECTED`}
+                      onClick={() => updateCompanyStatus(company.id, "REJECTED")}
+                      variant="secondary"
+                    >
+                      Rejeitar
+                    </ActionButton>
+                    <ActionButton
+                      busy={busyAction === `company-${company.id}-PENDING`}
+                      onClick={() => updateCompanyStatus(company.id, "PENDING")}
+                      variant="secondary"
+                    >
+                      Pendente
+                    </ActionButton>
+                  </div>
                 </div>
               </div>
             </article>

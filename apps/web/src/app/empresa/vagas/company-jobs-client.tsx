@@ -18,6 +18,7 @@ type Job = {
 export function CompanyJobsClient() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [companyName, setCompanyName] = useState<string | null>(null);
+  const [verificationStatus, setVerificationStatus] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -28,9 +29,13 @@ export function CompanyJobsClient() {
       return;
     }
 
-    apiFetch<{ company: { name: string }; jobs: Job[] }>("/jobs/mine", { token })
+    apiFetch<{ company: { name: string; verificationStatus?: string }; jobs: Job[] }>(
+      "/jobs/mine",
+      { token },
+    )
       .then((response) => {
         setCompanyName(response.company.name);
+        setVerificationStatus(response.company.verificationStatus ?? null);
         setJobs(response.jobs);
       })
       .catch((err) =>
@@ -57,6 +62,11 @@ export function CompanyJobsClient() {
           <h1 className="mt-2 text-3xl font-semibold text-slate-950">
             {companyName ?? "Carregando empresa..."}
           </h1>
+          {verificationStatus ? (
+            <p className="mt-2 text-sm font-semibold text-slate-600">
+              Status da empresa: {getCompanyStatusLabel(verificationStatus)}
+            </p>
+          ) : null}
         </div>
         <Button asChild>
           <Link href="/empresa/vagas/nova">Nova vaga</Link>
@@ -79,6 +89,9 @@ export function CompanyJobsClient() {
                 </span>
               </div>
               <div className="mt-4 flex flex-wrap gap-3">
+                <Button asChild size="sm">
+                  <Link href={`/empresa/vagas/${job.id}`}>Editar vaga</Link>
+                </Button>
                 <Button asChild size="sm" variant="secondary">
                   <Link href={`/empresa/vagas/${job.id}/candidatos`}>Ver candidatos</Link>
                 </Button>
@@ -98,4 +111,15 @@ export function CompanyJobsClient() {
       </section>
     </div>
   );
+}
+
+function getCompanyStatusLabel(status: string) {
+  const labels: Record<string, string> = {
+    PENDING: "Verificacao pendente",
+    REJECTED: "Rejeitada",
+    UNVERIFIED: "Nao verificada",
+    VERIFIED: "Verificada",
+  };
+
+  return labels[status] ?? status;
 }
