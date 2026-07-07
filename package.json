@@ -20,6 +20,7 @@
     "infra:up": "docker compose up -d",
     "lint": "turbo run lint",
     "test": "turbo run test",
+    "test:e2e": "turbo run test:e2e --filter @bioconecta/api",
     "typecheck": "turbo run typecheck",
     "web:dev": "pnpm --filter @bioconecta/web dev",
     "web:start": "pnpm --filter @bioconecta/web start",

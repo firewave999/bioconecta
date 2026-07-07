@@ -1,4 +1,15 @@
-import { Body, Controller, Get, Headers, Ip, Post, Req, UseGuards } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  Headers,
+  HttpCode,
+  HttpStatus,
+  Ip,
+  Post,
+  Req,
+  UseGuards,
+} from "@nestjs/common";
 import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiTags } from "@nestjs/swagger";
 
 import { AuthGuard } from "./auth.guard.js";
@@ -31,6 +42,7 @@ export class AuthController {
   @Post("login")
   @RateLimit({ keyPrefix: "auth:login", limit: 5, windowMs: 60 * 1000 })
   @UseGuards(RateLimitGuard)
+  @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "Login realizado com sucesso." })
   login(
     @Body() dto: LoginDto,
@@ -43,6 +55,7 @@ export class AuthController {
   @Post("refresh")
   @RateLimit({ keyPrefix: "auth:refresh", limit: 30, windowMs: 60 * 1000 })
   @UseGuards(RateLimitGuard)
+  @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "Tokens renovados com sucesso." })
   refresh(
     @Body() dto: RefreshTokenDto,
@@ -55,6 +68,7 @@ export class AuthController {
   @Post("logout")
   @RateLimit({ keyPrefix: "auth:logout", limit: 30, windowMs: 60 * 1000 })
   @UseGuards(RateLimitGuard)
+  @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "Sessao encerrada com sucesso." })
   logout(@Body() dto: RefreshTokenDto) {
     return this.authService.logout(dto.refreshToken);
@@ -62,6 +76,7 @@ export class AuthController {
 
   @Post("logout-all")
   @UseGuards(AuthGuard)
+  @HttpCode(HttpStatus.OK)
   @ApiBearerAuth()
   @ApiOkResponse({ description: "Todas as sessoes foram encerradas." })
   logoutAll(@Req() request: AuthenticatedRequest) {
@@ -71,6 +86,7 @@ export class AuthController {
   @Post("verify-email")
   @RateLimit({ keyPrefix: "auth:verify-email", limit: 10, windowMs: 10 * 60 * 1000 })
   @UseGuards(RateLimitGuard)
+  @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: "E-mail verificado com sucesso." })
   verifyEmail(@Body() dto: VerifyEmailDto) {
     return this.authService.verifyEmail(dto.token);

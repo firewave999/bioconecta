@@ -16,6 +16,28 @@
       "dependsOn": ["^build"],
       "outputs": []
     },
+    "test:e2e": {
+      "dependsOn": ["build", "^build"],
+      "env": [
+        "APP_API_PORT",
+        "APP_API_URL",
+        "APP_WEB_URL",
+        "DATABASE_URL",
+        "EMAIL_VERIFICATION_TOKEN_TTL_HOURS",
+        "JWT_ACCESS_SECRET",
+        "JWT_ACCESS_TOKEN_TTL_SECONDS",
+        "JWT_REFRESH_SECRET",
+        "JWT_REFRESH_TOKEN_TTL_DAYS",
+        "NODE_ENV",
+        "POSTGRES_DB",
+        "POSTGRES_HOST",
+        "POSTGRES_PASSWORD",
+        "POSTGRES_PORT",
+        "POSTGRES_USER",
+        "REDIS_URL"
+      ],
+      "outputs": []
+    },
     "typecheck": {
       "dependsOn": ["^build", "^typecheck"]
     }

@@ -86,6 +86,7 @@ pnpm api:dev
 pnpm --filter @bioconecta/api build
 pnpm --filter @bioconecta/api start
 pnpm --filter @bioconecta/api test
+pnpm --filter @bioconecta/api test:e2e
 pnpm --filter @bioconecta/api migration:run
 pnpm --filter @bioconecta/api migration:revert
 pnpm --filter @bioconecta/api schema:log
@@ -152,6 +153,24 @@ Hardening atual:
 - CORS restrito por `APP_WEB_URL`.
 - `ValidationPipe` global com whitelist e bloqueio de campos nao permitidos.
 - Rate limit in-memory nas rotas sensiveis de autenticacao.
+
+## E2E
+
+O E2E inicial da API usa Nest Testing, Supertest, PostgreSQL real e migrations reais.
+
+Fluxo coberto:
+
+1. Cadastro/login de biologo.
+2. Cadastro/login de empresa.
+3. Perfil basico e profissional do biologo.
+4. Cadastro da empresa.
+5. Criacao de vaga publicada.
+6. Busca de vaga.
+7. Favorito de vaga.
+8. Candidatura.
+9. Listagem de candidatos pela empresa.
+
+Por seguranca, o E2E recusa rodar se o banco configurado nao tiver `e2e` no nome.
 
 Para desenvolvimento local:
 

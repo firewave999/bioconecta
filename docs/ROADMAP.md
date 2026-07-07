@@ -127,6 +127,7 @@ Status: base admin concluida; producao pendente.
 - Auditoria pendente.
 - Notificacoes pendentes.
 - Testes automatizados iniciais da API concluidos para admin, auth, candidaturas, vagas e favoritos.
+- E2E inicial da API concluido para fluxo biologo-empresa-vaga-candidatura.
 - Ampliar cobertura de testes automatizados pendente.
 - Hardening inicial de seguranca concluido com rate limit nas rotas sensiveis de auth.
 - Hardening adicional de seguranca pendente.

@@ -15,6 +15,37 @@ jobs:
   quality:
     name: Quality checks
     runs-on: ubuntu-24.04
+    env:
+      APP_API_PORT: 4000
+      APP_API_URL: http://localhost:4000
+      APP_WEB_URL: http://localhost:3000
+      DATABASE_URL: postgresql://bioconecta:bioconecta_dev_password@localhost:5432/bioconecta_e2e
+      EMAIL_VERIFICATION_TOKEN_TTL_HOURS: 24
+      JWT_ACCESS_SECRET: ci-access-secret-change-me
+      JWT_ACCESS_TOKEN_TTL_SECONDS: 900
+      JWT_REFRESH_SECRET: ci-refresh-secret-change-me
+      JWT_REFRESH_TOKEN_TTL_DAYS: 30
+      NODE_ENV: test
+      POSTGRES_DB: bioconecta_e2e
+      POSTGRES_HOST: localhost
+      POSTGRES_PASSWORD: bioconecta_dev_password
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: bioconecta
+      REDIS_URL: redis://localhost:6379
+    services:
+      postgres:
+        env:
+          POSTGRES_DB: bioconecta_e2e
+          POSTGRES_PASSWORD: bioconecta_dev_password
+          POSTGRES_USER: bioconecta
+        image: postgres:16-alpine
+        options: >-
+          --health-cmd "pg_isready -U bioconecta -d bioconecta_e2e"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
 
     steps:
       - name: Checkout
@@ -49,3 +80,6 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+      - name: E2E tests
+        run: pnpm test:e2e

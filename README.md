@@ -71,6 +71,7 @@ pnpm build
 pnpm lint
 pnpm typecheck
 pnpm test
+pnpm test:e2e
 ```
 
 Nesta sessao do Codex, os comandos foram executados usando o runtime empacotado em `C:\Users\ACER\.cache\codex-runtimes\codex-primary-runtime\dependencies`.
@@ -85,9 +86,10 @@ O repositorio possui GitHub Actions em `.github/workflows/ci.yml`, executando em
 - `pnpm typecheck`
 - `pnpm test`
 - `pnpm build`
+- `pnpm test:e2e`
 
 ## Status Atual
 
-Etapa 10 base concluida: autenticacao real, onboarding do biologo, perfil profissional, cadastro empresarial, vagas com filtros, favoritos, candidaturas, pipeline simples da empresa, score inicial de compatibilidade, painel admin basico, testes automatizados iniciais da API, CI de qualidade no GitHub Actions e hardening inicial de auth com rate limit.
+Etapa 10 base concluida: autenticacao real, onboarding do biologo, perfil profissional, cadastro empresarial, vagas com filtros, favoritos, candidaturas, pipeline simples da empresa, score inicial de compatibilidade, painel admin basico, testes automatizados iniciais da API, E2E inicial da API, CI de qualidade no GitHub Actions e hardening inicial de auth com rate limit.
 
 Ainda faltam favoritos de profissionais para empresas, refinamento do matching, recuperacao de senha, ampliar testes automatizados, auditoria, notificacoes, hardening de seguranca, CI/CD e deploy. Essas partes entram nos proximos refinamentos.

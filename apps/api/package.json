@@ -12,6 +12,7 @@
     "schema:log": "pnpm build && typeorm schema:log -d dist/database/data-source.js",
     "start": "node dist/main.js",
     "test": "vitest run",
+    "test:e2e": "vitest run --config vitest.e2e.config.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
@@ -38,6 +39,9 @@
   "devDependencies": {
     "@bioconecta/eslint-config": "workspace:*",
     "@bioconecta/typescript-config": "workspace:*",
+    "@nestjs/testing": "^11.1.27",
+    "@types/supertest": "^7.2.0",
+    "supertest": "^7.2.2",
     "vitest": "^4.1.9"
   }
 }
