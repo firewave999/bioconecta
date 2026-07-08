@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
 import { apiFetch, getStoredAccessToken } from "@/lib/api";
 
 type Job = {
@@ -54,6 +55,10 @@ export function CompanyJobsClient() {
     );
   }
 
+  const publishedCount = jobs.filter((job) => job.status === "PUBLISHED").length;
+  const draftCount = jobs.filter((job) => job.status === "DRAFT").length;
+  const closedCount = jobs.filter((job) => job.status === "CLOSED").length;
+
   return (
     <div className="grid gap-6">
       <section className="flex flex-col gap-4 rounded-[8px] border border-slate-200 bg-white p-6 shadow-sm md:flex-row md:items-center md:justify-between">
@@ -72,6 +77,15 @@ export function CompanyJobsClient() {
           <Link href="/empresa/vagas/nova">Nova vaga</Link>
         </Button>
       </section>
+
+      {jobs.length ? (
+        <section className="grid gap-4 md:grid-cols-4">
+          <Metric label="Total" value={jobs.length} />
+          <Metric label="Publicadas" value={publishedCount} />
+          <Metric label="Rascunhos" value={draftCount} />
+          <Metric label="Fechadas" value={closedCount} />
+        </section>
+      ) : null}
 
       <section className="grid gap-4">
         {jobs.length ? (
@@ -104,11 +118,23 @@ export function CompanyJobsClient() {
             </article>
           ))
         ) : (
-          <div className="rounded-[8px] border border-slate-200 bg-white p-6 text-slate-600">
-            Nenhuma vaga criada ainda.
-          </div>
+          <EmptyState
+            actionHref="/empresa/vagas/nova"
+            actionLabel="Criar primeira vaga"
+            description="Crie uma vaga como rascunho. Se a empresa ja estiver verificada, voce tambem podera publicar."
+            title="Nenhuma vaga criada ainda"
+          />
         )}
       </section>
+    </div>
+  );
+}
+
+function Metric({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="rounded-[8px] border border-slate-200 bg-white p-5">
+      <p className="text-sm text-slate-500">{label}</p>
+      <p className="mt-2 text-3xl font-semibold text-slate-950">{value}</p>
     </div>
   );
 }

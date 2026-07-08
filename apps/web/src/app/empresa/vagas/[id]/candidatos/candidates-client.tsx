@@ -1,9 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
 import { apiFetch, getStoredAccessToken } from "@/lib/api";
 
 type Candidate = {
@@ -96,7 +98,17 @@ export function CandidatesClient() {
 
   if (error) {
     return (
-      <div className="rounded-[8px] border border-red-200 bg-red-50 p-5 text-red-700">{error}</div>
+      <div className="rounded-[8px] border border-red-200 bg-red-50 p-5 text-red-700">
+        <p>{error}</p>
+        <div className="mt-4 flex flex-wrap gap-3">
+          <Button asChild>
+            <Link href="/empresa/vagas">Voltar para vagas</Link>
+          </Button>
+          <Button asChild variant="secondary">
+            <Link href="/dashboard">Voltar ao dashboard</Link>
+          </Button>
+        </div>
+      </div>
     );
   }
 
@@ -159,9 +171,12 @@ export function CandidatesClient() {
             </article>
           ))
         ) : (
-          <div className="rounded-[8px] border border-slate-200 bg-white p-6 text-slate-600">
-            Nenhum candidato ainda.
-          </div>
+          <EmptyState
+            actionHref="/empresa/vagas"
+            actionLabel="Voltar para vagas"
+            description="Quando biologos se candidatarem, eles aparecerao aqui com match, status e proximas acoes."
+            title="Nenhum candidato ainda"
+          />
         )}
       </section>
     </div>
