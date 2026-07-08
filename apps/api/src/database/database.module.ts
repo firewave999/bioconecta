@@ -10,6 +10,7 @@ function envFromConfig(configService: ConfigService<Env, true>): Env {
     APP_API_PORT: configService.get("APP_API_PORT", { infer: true }),
     APP_API_URL: configService.get("APP_API_URL", { infer: true }),
     APP_WEB_URL: configService.get("APP_WEB_URL", { infer: true }),
+    BREVO_API_KEY: configService.get("BREVO_API_KEY", { infer: true }),
     DATABASE_URL: configService.get("DATABASE_URL", { infer: true }),
     EMAIL_VERIFICATION_TOKEN_TTL_HOURS: configService.get("EMAIL_VERIFICATION_TOKEN_TTL_HOURS", {
       infer: true,
@@ -20,6 +21,8 @@ function envFromConfig(configService: ConfigService<Env, true>): Env {
     }),
     JWT_REFRESH_SECRET: configService.get("JWT_REFRESH_SECRET", { infer: true }),
     JWT_REFRESH_TOKEN_TTL_DAYS: configService.get("JWT_REFRESH_TOKEN_TTL_DAYS", { infer: true }),
+    MAIL_FROM_EMAIL: configService.get("MAIL_FROM_EMAIL", { infer: true }),
+    MAIL_FROM_NAME: configService.get("MAIL_FROM_NAME", { infer: true }),
     NODE_ENV: configService.get("NODE_ENV", { infer: true }),
     POSTGRES_DB: configService.get("POSTGRES_DB", { infer: true }),
     POSTGRES_HOST: configService.get("POSTGRES_HOST", { infer: true }),

@@ -11,7 +11,7 @@ import { AuthService } from "./auth.service.js";
 
 describe("AuthService", () => {
   it("registers a user with normalized data and hides passwordHash", async () => {
-    const { repositories, service } = createService();
+    const { mailService, repositories, service } = createService();
 
     repositories.users.findOne.mockResolvedValueOnce(null);
 
@@ -44,6 +44,12 @@ describe("AuthService", () => {
       expect.objectContaining({
         accessToken: "signed-access-token",
         expiresIn: 900,
+      }),
+    );
+    expect(mailService.sendEmailVerification).toHaveBeenCalledWith(
+      expect.objectContaining({
+        email: "bio@example.com",
+        name: "Ana",
       }),
     );
   });
@@ -147,6 +153,12 @@ function createService() {
       save: vi.fn(async (value) => value),
       update: vi.fn(),
     },
+    passwordResetTokens: {
+      create: vi.fn((value) => ({ id: "password-reset-token-id", ...value })),
+      findOneBy: vi.fn(),
+      save: vi.fn(async (value) => value),
+      update: vi.fn(),
+    },
     sessions: {
       create: vi.fn((value) => ({ id: "session-id", ...value })),
       findOneBy: vi.fn(),
@@ -187,14 +199,22 @@ function createService() {
     signAsync: vi.fn(async () => "signed-access-token"),
   };
 
+  const mailService = {
+    sendEmailVerification: vi.fn(async () => undefined),
+    sendPasswordReset: vi.fn(async () => undefined),
+  };
+
   return {
+    mailService,
     repositories,
     service: new AuthService(
       repositories.users,
       repositories.sessions,
       repositories.emailTokens,
+      repositories.passwordResetTokens,
       configService,
       jwtService,
+      mailService,
     ),
   };
 }

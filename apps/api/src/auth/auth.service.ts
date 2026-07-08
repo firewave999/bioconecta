@@ -14,10 +14,12 @@ import { compare, hash } from "bcryptjs";
 import { IsNull, Repository } from "typeorm";
 
 import { Env } from "../config/env.validation.js";
+import { MailService } from "../mail/mail.service.js";
 import { User } from "../users/user.entity.js";
 import { LoginDto } from "./dto/login.dto.js";
 import { RegisterDto } from "./dto/register.dto.js";
 import { EmailVerificationToken } from "./entities/email-verification-token.entity.js";
+import { PasswordResetToken } from "./entities/password-reset-token.entity.js";
 import { Session } from "./entities/session.entity.js";
 import { AccessTokenPayload, PublicUser } from "./types.js";
 
@@ -41,8 +43,11 @@ export class AuthService {
     private readonly sessionsRepository: Repository<Session>,
     @InjectRepository(EmailVerificationToken)
     private readonly emailTokensRepository: Repository<EmailVerificationToken>,
+    @InjectRepository(PasswordResetToken)
+    private readonly passwordResetTokensRepository: Repository<PasswordResetToken>,
     private readonly configService: ConfigService<Env, true>,
     private readonly jwtService: JwtService,
+    private readonly mailService: MailService,
   ) {}
 
   async register(dto: RegisterDto, context: RequestContext) {
@@ -78,6 +83,11 @@ export class AuthService {
 
     const verificationToken = await this.createEmailVerificationToken(user.id);
     const tokens = await this.createSession(user, context);
+    await this.mailService.sendEmailVerification({
+      email: user.email,
+      name: user.firstName,
+      token: verificationToken,
+    });
 
     return {
       devVerificationToken: this.shouldExposeDevTokens() ? verificationToken : undefined,
@@ -188,6 +198,90 @@ export class AuthService {
     };
   }
 
+  async resendVerificationEmail(email: string) {
+    const user = await this.usersRepository.findOne({
+      where: {
+        email: email.trim().toLowerCase(),
+      },
+    });
+
+    if (!user || user.emailVerifiedAt || user.blockedAt) {
+      return {
+        success: true,
+      };
+    }
+
+    const token = await this.createEmailVerificationToken(user.id);
+    await this.mailService.sendEmailVerification({
+      email: user.email,
+      name: user.firstName,
+      token,
+    });
+
+    return {
+      success: true,
+    };
+  }
+
+  async forgotPassword(email: string) {
+    const user = await this.usersRepository.findOne({
+      where: {
+        email: email.trim().toLowerCase(),
+      },
+    });
+
+    if (!user || user.blockedAt) {
+      return {
+        success: true,
+      };
+    }
+
+    const token = await this.createPasswordResetToken(user.id);
+    await this.mailService.sendPasswordReset({
+      email: user.email,
+      name: user.firstName,
+      token,
+    });
+
+    return {
+      success: true,
+    };
+  }
+
+  async resetPassword(token: string, password: string) {
+    const tokenHash = this.sha256(token);
+    const reset = await this.passwordResetTokensRepository.findOneBy({ tokenHash });
+
+    if (!reset || reset.usedAt || reset.expiresAt <= new Date()) {
+      throw new BadRequestException("Token de redefinicao invalido ou expirado.");
+    }
+
+    const user = await this.usersRepository.findOneByOrFail({ id: reset.userId });
+
+    if (user.blockedAt) {
+      throw new ForbiddenException("Usuario bloqueado.");
+    }
+
+    user.passwordHash = await hash(password, 12);
+    reset.usedAt = new Date();
+
+    await this.usersRepository.save(user);
+    await this.passwordResetTokensRepository.save(reset);
+    await this.sessionsRepository.update(
+      {
+        revokedAt: IsNull(),
+        userId: user.id,
+      },
+      {
+        revokedAt: new Date(),
+      },
+    );
+
+    return {
+      success: true,
+    };
+  }
+
   async me(userId: string) {
     const user = await this.usersRepository.findOneByOrFail({ id: userId });
 
@@ -252,6 +346,29 @@ export class AuthService {
     });
 
     await this.emailTokensRepository.save(verification);
+
+    return token;
+  }
+
+  private async createPasswordResetToken(userId: string) {
+    await this.passwordResetTokensRepository.update(
+      {
+        usedAt: IsNull(),
+        userId,
+      },
+      {
+        usedAt: new Date(),
+      },
+    );
+
+    const token = this.generateTokenSecret();
+    const reset = this.passwordResetTokensRepository.create({
+      expiresAt: this.hoursFromNow(2),
+      tokenHash: this.sha256(token),
+      userId,
+    });
+
+    await this.passwordResetTokensRepository.save(reset);
 
     return token;
   }

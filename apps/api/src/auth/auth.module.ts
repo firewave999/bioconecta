@@ -3,11 +3,13 @@ import { JwtModule } from "@nestjs/jwt";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
 import { User } from "../users/user.entity.js";
+import { MailModule } from "../mail/mail.module.js";
 import { RateLimitGuard } from "../rate-limit/rate-limit.guard.js";
 import { AuthController } from "./auth.controller.js";
 import { AuthGuard } from "./auth.guard.js";
 import { AuthService } from "./auth.service.js";
 import { EmailVerificationToken } from "./entities/email-verification-token.entity.js";
+import { PasswordResetToken } from "./entities/password-reset-token.entity.js";
 import { Session } from "./entities/session.entity.js";
 
 @Module({
@@ -15,7 +17,8 @@ import { Session } from "./entities/session.entity.js";
   exports: [AuthGuard, JwtModule],
   imports: [
     JwtModule.register({}),
-    TypeOrmModule.forFeature([User, Session, EmailVerificationToken]),
+    MailModule,
+    TypeOrmModule.forFeature([User, Session, EmailVerificationToken, PasswordResetToken]),
   ],
   providers: [AuthGuard, AuthService, RateLimitGuard],
 })

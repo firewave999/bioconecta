@@ -93,6 +93,12 @@ export function LoginForm() {
       </form>
 
       <p className="mt-5 text-sm text-slate-600">
+        <Link className="font-semibold text-cyan-800" href="/recuperar-senha">
+          Esqueci minha senha
+        </Link>
+      </p>
+
+      <p className="mt-3 text-sm text-slate-600">
         Ainda nao tem conta?{" "}
         <Link className="font-semibold text-cyan-800" href="/cadastro">
           Criar conta

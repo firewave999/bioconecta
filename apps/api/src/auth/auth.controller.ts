@@ -15,8 +15,11 @@ import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiTags } from "@nest
 import { AuthGuard } from "./auth.guard.js";
 import { AuthService } from "./auth.service.js";
 import { LoginDto } from "./dto/login.dto.js";
+import { ForgotPasswordDto } from "./dto/forgot-password.dto.js";
 import { RefreshTokenDto } from "./dto/refresh-token.dto.js";
 import { RegisterDto } from "./dto/register.dto.js";
+import { ResendVerificationEmailDto } from "./dto/resend-verification-email.dto.js";
+import { ResetPasswordDto } from "./dto/reset-password.dto.js";
 import { VerifyEmailDto } from "./dto/verify-email.dto.js";
 import { RateLimit } from "../rate-limit/rate-limit.decorator.js";
 import { RateLimitGuard } from "../rate-limit/rate-limit.guard.js";
@@ -90,6 +93,33 @@ export class AuthController {
   @ApiOkResponse({ description: "E-mail verificado com sucesso." })
   verifyEmail(@Body() dto: VerifyEmailDto) {
     return this.authService.verifyEmail(dto.token);
+  }
+
+  @Post("resend-verification-email")
+  @RateLimit({ keyPrefix: "auth:resend-verification", limit: 5, windowMs: 60 * 60 * 1000 })
+  @UseGuards(RateLimitGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({ description: "Se a conta existir, o e-mail de verificacao sera reenviado." })
+  resendVerificationEmail(@Body() dto: ResendVerificationEmailDto) {
+    return this.authService.resendVerificationEmail(dto.email);
+  }
+
+  @Post("forgot-password")
+  @RateLimit({ keyPrefix: "auth:forgot-password", limit: 5, windowMs: 60 * 60 * 1000 })
+  @UseGuards(RateLimitGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({ description: "Se a conta existir, o e-mail de redefinicao sera enviado." })
+  forgotPassword(@Body() dto: ForgotPasswordDto) {
+    return this.authService.forgotPassword(dto.email);
+  }
+
+  @Post("reset-password")
+  @RateLimit({ keyPrefix: "auth:reset-password", limit: 10, windowMs: 60 * 60 * 1000 })
+  @UseGuards(RateLimitGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({ description: "Senha redefinida com sucesso." })
+  resetPassword(@Body() dto: ResetPasswordDto) {
+    return this.authService.resetPassword(dto.token, dto.password);
   }
 
   @Get("me")

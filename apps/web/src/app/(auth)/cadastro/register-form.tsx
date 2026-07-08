@@ -165,9 +165,15 @@ export function RegisterForm() {
             </div>
           ) : null}
           {!result.devVerificationToken ? (
-            <Button asChild className="mt-4">
-              <Link href={getNextPath(registeredRole)}>{getNextLabel(registeredRole)}</Link>
-            </Button>
+            <div className="mt-4 grid gap-3">
+              <p>
+                Enviamos um link de verificacao para seu e-mail. Confira sua caixa de entrada antes
+                de continuar.
+              </p>
+              <Button asChild>
+                <Link href={getNextPath(registeredRole)}>{getNextLabel(registeredRole)}</Link>
+              </Button>
+            </div>
           ) : null}
         </div>
       ) : null}

@@ -11,6 +11,7 @@ import { DatabaseModule } from "./database/database.module.js";
 import { FavoritesModule } from "./favorites/favorites.module.js";
 import { HealthModule } from "./health/health.module.js";
 import { JobsModule } from "./jobs/jobs.module.js";
+import { MailModule } from "./mail/mail.module.js";
 import { NotificationsModule } from "./notifications/notifications.module.js";
 import { UploadsModule } from "./uploads/uploads.module.js";
 import { UsersModule } from "./users/users.module.js";
@@ -30,6 +31,7 @@ import { UsersModule } from "./users/users.module.js";
     FavoritesModule,
     HealthModule,
     JobsModule,
+    MailModule,
     NotificationsModule,
     UploadsModule,
     UsersModule,
