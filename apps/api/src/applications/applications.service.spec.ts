@@ -96,6 +96,63 @@ describe("ApplicationsService", () => {
     await expect(service.apply("user-id", "job-id", {})).rejects.toThrow(ConflictException);
   });
 
+  it("returns candidate contact data for the company job candidates view", async () => {
+    const { repositories, service } = createService();
+
+    repositories.companies.findOneBy.mockResolvedValueOnce({ id: "company-id" });
+    repositories.jobs.findOneBy.mockResolvedValueOnce({
+      companyId: "company-id",
+      id: "job-id",
+      title: "Biologo de campo",
+    });
+    repositories.applications.find.mockResolvedValueOnce([
+      {
+        biologistProfile: {
+          avatarUrl: null,
+          city: "Curitiba",
+          fullName: "Ana Silva",
+          headline: "Fauna e licenciamento",
+          id: "profile-id",
+          state: "PR",
+          user: {
+            email: "ana@example.com",
+            firstName: "Ana",
+            id: "user-id",
+            lastName: "Silva",
+            passwordHash: "secret",
+            phone: "41999999999",
+          },
+          verificationStatus: "VERIFIED",
+        },
+        coverMessage: "Tenho experiencia na area.",
+        id: "application-id",
+        matchScore: 88,
+        status: "APPLIED",
+      },
+    ]);
+
+    const result = await service.listForJob("company-user-id", "job-id");
+
+    expect(result.applications[0]).toMatchObject({
+      biologistProfile: {
+        user: {
+          email: "ana@example.com",
+          firstName: "Ana",
+          id: "user-id",
+          lastName: "Silva",
+          phone: "41999999999",
+        },
+      },
+    });
+    expect(result.applications[0].biologistProfile.user).not.toHaveProperty("passwordHash");
+    expect(repositories.applications.find).toHaveBeenCalledWith(
+      expect.objectContaining({
+        relations: { biologistProfile: { user: true } },
+        where: { jobId: "job-id" },
+      }),
+    );
+  });
+
   it("notifies the biologist when application status changes", async () => {
     const { notifications, repositories, service } = createService();
 

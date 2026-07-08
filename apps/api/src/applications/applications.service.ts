@@ -128,11 +128,26 @@ export class ApplicationsService {
 
     const applications = await this.applicationsRepository.find({
       order: { matchScore: "DESC", createdAt: "ASC" },
-      relations: { biologistProfile: true },
+      relations: { biologistProfile: { user: true } },
       where: { jobId },
     });
 
-    return { applications, job };
+    return {
+      applications: applications.map((application) => ({
+        ...application,
+        biologistProfile: {
+          ...application.biologistProfile,
+          user: {
+            email: application.biologistProfile.user.email,
+            firstName: application.biologistProfile.user.firstName,
+            id: application.biologistProfile.user.id,
+            lastName: application.biologistProfile.user.lastName,
+            phone: application.biologistProfile.user.phone,
+          },
+        },
+      })),
+      job,
+    };
   }
 
   async updateStatus(userId: string, applicationId: string, dto: UpdateApplicationStatusDto) {

@@ -15,8 +15,16 @@ type Candidate = {
     fullName: string;
     headline: string | null;
     state: string;
+    user: {
+      email: string;
+      firstName: string;
+      id: string;
+      lastName: string;
+      phone: string | null;
+    };
     verificationStatus: string;
   };
+  coverMessage: string | null;
   id: string;
   matchReasons: string[];
   matchScore: number;
@@ -149,12 +157,64 @@ export function CandidatesClient() {
                     <p className="mt-2 text-sm font-semibold text-cyan-800">
                       Match: {application.matchScore}%
                     </p>
+                    <p className="mt-1 text-sm text-slate-500">
+                      Verificacao: {application.biologistProfile.verificationStatus}
+                    </p>
                   </div>
                 </div>
                 <span className="rounded-full bg-slate-100 px-3 py-1 text-sm font-semibold text-slate-700">
                   {application.status}
                 </span>
               </div>
+
+              <div className="mt-4 grid gap-3 rounded-[8px] border border-cyan-100 bg-cyan-50 p-4 md:grid-cols-[1fr_auto] md:items-center">
+                <div>
+                  <p className="text-sm font-semibold text-cyan-950">Contato do candidato</p>
+                  <p className="mt-1 text-sm text-slate-700">
+                    Email:{" "}
+                    <a
+                      className="font-medium text-cyan-800 underline-offset-2 hover:underline"
+                      href={`mailto:${application.biologistProfile.user.email}`}
+                    >
+                      {application.biologistProfile.user.email}
+                    </a>
+                  </p>
+                  {application.biologistProfile.user.phone ? (
+                    <p className="mt-1 text-sm text-slate-700">
+                      Telefone:{" "}
+                      <a
+                        className="font-medium text-cyan-800 underline-offset-2 hover:underline"
+                        href={`tel:${application.biologistProfile.user.phone}`}
+                      >
+                        {application.biologistProfile.user.phone}
+                      </a>
+                    </p>
+                  ) : (
+                    <p className="mt-1 text-sm text-slate-500">
+                      Telefone nao informado no cadastro.
+                    </p>
+                  )}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <Button asChild size="sm" type="button">
+                    <a href={`mailto:${application.biologistProfile.user.email}`}>Enviar email</a>
+                  </Button>
+                  {application.biologistProfile.user.phone ? (
+                    <Button asChild size="sm" type="button" variant="secondary">
+                      <a href={`tel:${application.biologistProfile.user.phone}`}>Ligar</a>
+                    </Button>
+                  ) : null}
+                </div>
+              </div>
+
+              {application.coverMessage ? (
+                <div className="mt-4 rounded-[8px] border border-slate-200 bg-slate-50 p-4">
+                  <p className="text-sm font-semibold text-slate-950">Mensagem do candidato</p>
+                  <p className="mt-1 whitespace-pre-line text-sm text-slate-600">
+                    {application.coverMessage}
+                  </p>
+                </div>
+              ) : null}
 
               {application.matchReasons.length ? (
                 <ul className="mt-4 list-inside list-disc text-sm text-slate-600">
