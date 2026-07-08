@@ -14,11 +14,11 @@ export default function RegisterPage() {
           Voltar para home
         </Link>
         <h1 className="mt-8 max-w-xl text-4xl font-semibold leading-tight tracking-tight md:text-5xl">
-          Crie sua conta para acessar oportunidades da Biologia.
+          Crie sua conta e complete seu perfil profissional.
         </h1>
-        <p className="mt-5 max-w-lg text-slate-200">
-          Nesta etapa, a conta ja nasce integrada ao backend real com senha hasheada, sessao,
-          refresh token e verificacao de e-mail em ambiente de desenvolvimento.
+        <p className="mt-5 max-w-lg text-lg leading-8 text-slate-200">
+          Biologos, estudantes e empresas entram por fluxos separados, com dados preparados para
+          vagas, candidaturas e verificacao.
         </p>
       </section>
 

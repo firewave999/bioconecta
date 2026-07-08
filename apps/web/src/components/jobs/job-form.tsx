@@ -152,17 +152,14 @@ export function JobForm({ jobId }: JobFormProps) {
 
   if (initialLoading) {
     return (
-      <div className="rounded-[8px] border border-slate-200 bg-white p-6 text-slate-600 shadow-sm">
+      <div className="form-card rounded-[8px] p-6 text-slate-600">
         Carregando dados da empresa...
       </div>
     );
   }
 
   return (
-    <form
-      className="grid gap-5 rounded-[8px] border border-slate-200 bg-white p-6 shadow-sm"
-      onSubmit={handleSubmit}
-    >
+    <form className="form-card grid gap-5 rounded-[8px] p-6" onSubmit={handleSubmit}>
       <div>
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">Vaga</p>
         <h1 className="mt-2 text-3xl font-semibold text-slate-950">
@@ -184,7 +181,7 @@ export function JobForm({ jobId }: JobFormProps) {
       <label className="grid gap-2 text-sm font-medium text-slate-700">
         Descricao da vaga
         <textarea
-          className="min-h-32 rounded-[8px] border border-slate-300 px-3 py-3 text-slate-950 outline-none focus:border-cyan-500"
+          className="field-input min-h-32 rounded-[8px] px-3 py-3"
           defaultValue={job?.description}
           name="description"
           required
@@ -316,12 +313,7 @@ function Field({
   return (
     <label className="grid gap-2 text-sm font-medium text-slate-700">
       {label}
-      <input
-        className="h-11 rounded-[8px] border border-slate-300 px-3 text-slate-950 outline-none focus:border-cyan-500"
-        name={name}
-        type={type}
-        {...props}
-      />
+      <input className="field-input h-11 rounded-[8px] px-3" name={name} type={type} {...props} />
     </label>
   );
 }
@@ -340,11 +332,7 @@ function Select({
   return (
     <label className="grid gap-2 text-sm font-medium text-slate-700">
       {label}
-      <select
-        className="h-11 rounded-[8px] border border-slate-300 bg-white px-3 text-slate-950 outline-none focus:border-cyan-500"
-        defaultValue={value}
-        name={name}
-      >
+      <select className="field-input h-11 rounded-[8px] px-3" defaultValue={value} name={name}>
         {options.map(([value, text]) => (
           <option key={value} value={value}>
             {text}
@@ -365,7 +353,7 @@ function Check({
   name: string;
 }) {
   return (
-    <label className="flex items-center gap-3 rounded-[8px] border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700">
+    <label className="flex items-center gap-3 rounded-[8px] border border-cyan-100 bg-cyan-50/40 px-4 py-3 text-sm font-medium text-slate-700">
       <input defaultChecked={defaultChecked} name={name} type="checkbox" />
       {label}
     </label>
@@ -385,7 +373,7 @@ function TextArea({
     <label className="grid gap-2 text-sm font-medium text-slate-700">
       {label}
       <textarea
-        className="min-h-24 rounded-[8px] border border-slate-300 px-3 py-3 text-slate-950 outline-none focus:border-cyan-500"
+        className="field-input min-h-24 rounded-[8px] px-3 py-3"
         defaultValue={defaultValue}
         name={name}
         placeholder="Separe por virgula"

@@ -14,10 +14,11 @@ export default function LoginPage() {
           Voltar para home
         </Link>
         <h1 className="mt-8 max-w-xl text-4xl font-semibold leading-tight tracking-tight md:text-5xl">
-          Entre para continuar seu percurso profissional.
+          Entre no seu painel BioConecta.
         </h1>
-        <p className="mt-5 max-w-lg text-slate-200">
-          O login usa a API real de autenticacao com access token e refresh token.
+        <p className="mt-5 max-w-lg text-lg leading-8 text-slate-200">
+          Acesse vagas, candidaturas, dados da empresa e fluxos administrativos em um ambiente mais
+          organizado.
         </p>
       </section>
 

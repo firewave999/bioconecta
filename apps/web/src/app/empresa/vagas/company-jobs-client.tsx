@@ -61,7 +61,7 @@ export function CompanyJobsClient() {
 
   return (
     <div className="grid gap-6">
-      <section className="flex flex-col gap-4 rounded-[8px] border border-slate-200 bg-white p-6 shadow-sm md:flex-row md:items-center md:justify-between">
+      <section className="page-header flex flex-col gap-4 rounded-[8px] p-6 md:flex-row md:items-center md:justify-between">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">Vagas</p>
           <h1 className="mt-2 text-3xl font-semibold text-slate-950">
@@ -90,7 +90,10 @@ export function CompanyJobsClient() {
       <section className="grid gap-4">
         {jobs.length ? (
           jobs.map((job) => (
-            <article className="rounded-[8px] border border-slate-200 bg-white p-5" key={job.id}>
+            <article
+              className="soft-card rounded-[8px] p-5 transition hover:-translate-y-0.5 hover:border-cyan-200 hover:shadow-lg"
+              key={job.id}
+            >
               <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
                 <div>
                   <h2 className="text-xl font-semibold text-slate-950">{job.title}</h2>
@@ -132,7 +135,7 @@ export function CompanyJobsClient() {
 
 function Metric({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-[8px] border border-slate-200 bg-white p-5">
+    <div className="soft-card rounded-[8px] p-5">
       <p className="text-sm text-slate-500">{label}</p>
       <p className="mt-2 text-3xl font-semibold text-slate-950">{value}</p>
     </div>

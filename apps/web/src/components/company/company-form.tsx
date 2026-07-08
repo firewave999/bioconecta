@@ -125,9 +125,7 @@ export function CompanyForm() {
 
   if (initialLoading) {
     return (
-      <div className="rounded-[8px] border border-slate-200 bg-white p-6 text-slate-600 shadow-sm">
-        Carregando dados da conta...
-      </div>
+      <div className="form-card rounded-[8px] p-6 text-slate-600">Carregando dados da conta...</div>
     );
   }
 
@@ -168,10 +166,7 @@ export function CompanyForm() {
   }
 
   return (
-    <form
-      className="grid gap-5 rounded-[8px] border border-slate-200 bg-white p-6 shadow-sm"
-      onSubmit={handleSubmit}
-    >
+    <form className="form-card grid gap-5 rounded-[8px] p-6" onSubmit={handleSubmit}>
       <div>
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">Empresa</p>
         <h1 className="mt-2 text-3xl font-semibold text-slate-950">Dados da empresa</h1>
@@ -196,7 +191,7 @@ export function CompanyForm() {
       <div className="grid gap-4 md:grid-cols-2">
         <label className="grid gap-2 text-sm font-medium text-slate-700 md:col-span-2">
           Logo da empresa
-          <div className="flex flex-col gap-3 rounded-[8px] border border-slate-200 bg-slate-50 p-4 md:flex-row md:items-center">
+          <div className="flex flex-col gap-3 rounded-[8px] border border-cyan-100 bg-cyan-50/40 p-4 md:flex-row md:items-center">
             {logoUrl ? (
               <img
                 alt="Logo atual da empresa"
@@ -241,7 +236,7 @@ export function CompanyForm() {
         <label className="grid gap-2 text-sm font-medium text-slate-700">
           Porte
           <select
-            className="h-11 rounded-[8px] border border-slate-300 bg-white px-3 text-slate-950 outline-none focus:border-cyan-500"
+            className="field-input h-11 rounded-[8px] px-3"
             defaultValue={company?.size ?? "SMALL"}
             name="size"
           >
@@ -256,7 +251,7 @@ export function CompanyForm() {
       <label className="grid gap-2 text-sm font-medium text-slate-700">
         Descricao
         <textarea
-          className="min-h-28 rounded-[8px] border border-slate-300 px-3 py-3 text-slate-950 outline-none focus:border-cyan-500"
+          className="field-input min-h-28 rounded-[8px] px-3 py-3"
           defaultValue={company?.description ?? ""}
           name="description"
           placeholder="Descreva a empresa, areas de atuacao e tipos de oportunidades oferecidas."
@@ -322,12 +317,7 @@ function Field({
   return (
     <label className="grid gap-2 text-sm font-medium text-slate-700">
       {label}
-      <input
-        className="h-11 rounded-[8px] border border-slate-300 px-3 text-slate-950 outline-none focus:border-cyan-500"
-        name={name}
-        type={type}
-        {...props}
-      />
+      <input className="field-input h-11 rounded-[8px] px-3" name={name} type={type} {...props} />
     </label>
   );
 }

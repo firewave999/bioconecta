@@ -83,7 +83,7 @@ export function RegisterForm() {
   }
 
   return (
-    <section className="rounded-[8px] border border-slate-200 bg-white p-6 shadow-xl shadow-slate-950/10">
+    <section className="form-card rounded-[8px] p-6">
       <div className="mb-6">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">Cadastro</p>
         <h2 className="mt-2 text-2xl font-semibold text-slate-950">Dados da conta</h2>
@@ -197,8 +197,8 @@ function RoleOption({
     <button
       className={`rounded-[8px] border p-4 text-left transition ${
         checked
-          ? "border-cyan-500 bg-cyan-50 shadow-sm"
-          : "border-slate-200 bg-white hover:border-cyan-300"
+          ? "border-cyan-500 bg-cyan-50 shadow-sm shadow-cyan-950/5"
+          : "border-slate-200 bg-white hover:border-cyan-300 hover:bg-cyan-50/40"
       }`}
       onClick={onSelect}
       type="button"
@@ -255,12 +255,7 @@ function Field({
   return (
     <label className="grid gap-2 text-sm font-medium text-slate-700">
       {label}
-      <input
-        className="h-11 rounded-[8px] border border-slate-300 px-3 text-slate-950 outline-none focus:border-cyan-500"
-        name={name}
-        type={type}
-        {...props}
-      />
+      <input className="field-input h-11 rounded-[8px] px-3" name={name} type={type} {...props} />
     </label>
   );
 }

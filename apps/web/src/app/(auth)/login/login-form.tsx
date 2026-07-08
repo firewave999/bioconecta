@@ -50,7 +50,7 @@ export function LoginForm() {
   }
 
   return (
-    <section className="rounded-[8px] border border-slate-200 bg-white p-6 shadow-xl shadow-slate-950/10">
+    <section className="form-card rounded-[8px] p-6">
       <div className="mb-6">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">Login</p>
         <h2 className="mt-2 text-2xl font-semibold text-slate-950">Acesse sua conta</h2>
@@ -60,7 +60,7 @@ export function LoginForm() {
         <label className="grid gap-2 text-sm font-medium text-slate-700">
           E-mail
           <input
-            className="h-11 rounded-[8px] border border-slate-300 px-3 text-slate-950 outline-none focus:border-cyan-500"
+            className="field-input h-11 rounded-[8px] px-3"
             name="email"
             required
             type="email"
@@ -69,7 +69,7 @@ export function LoginForm() {
         <label className="grid gap-2 text-sm font-medium text-slate-700">
           Senha
           <input
-            className="h-11 rounded-[8px] border border-slate-300 px-3 text-slate-950 outline-none focus:border-cyan-500"
+            className="field-input h-11 rounded-[8px] px-3"
             minLength={8}
             name="password"
             required
