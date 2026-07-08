@@ -107,6 +107,7 @@ describe("ApplicationsService", () => {
     });
     repositories.applications.find.mockResolvedValueOnce([
       {
+        biologistProfileId: "profile-id",
         biologistProfile: {
           avatarUrl: null,
           city: "Curitiba",
@@ -130,6 +131,42 @@ describe("ApplicationsService", () => {
         status: "APPLIED",
       },
     ]);
+    repositories.practiceAreas.createQueryBuilder.mockReturnValueOnce(
+      createQueryBuilder([{ name: "Fauna" }]),
+    );
+    repositories.taxonomicGroups.createQueryBuilder.mockReturnValueOnce(
+      createQueryBuilder([{ name: "Aves" }]),
+    );
+    repositories.skills.createQueryBuilder.mockReturnValueOnce(
+      createQueryBuilder([{ name: "Geoprocessamento" }]),
+    );
+    repositories.profiles.manager.query
+      .mockResolvedValueOnce([
+        {
+          description: "Monitoramento em campo.",
+          end_year: null,
+          is_current: true,
+          organization_name: "Eco Consultoria",
+          start_year: 2022,
+          title: "Analista ambiental",
+        },
+      ])
+      .mockResolvedValueOnce([
+        {
+          credential_url: "https://example.com/certificado",
+          issued_year: 2023,
+          issuer_name: "Instituto Bio",
+          name: "Inventario de fauna",
+        },
+      ])
+      .mockResolvedValueOnce([
+        {
+          file_url: "https://example.com/crbio.pdf",
+          title: "CRBio",
+          type: "CRBIO",
+          verification_status: "PENDING",
+        },
+      ]);
 
     const result = await service.listForJob("company-user-id", "job-id");
 
@@ -145,6 +182,14 @@ describe("ApplicationsService", () => {
       },
     });
     expect(result.applications[0].biologistProfile.user).not.toHaveProperty("passwordHash");
+    expect(result.applications[0].professional).toMatchObject({
+      certifications: [{ name: "Inventario de fauna" }],
+      documents: [{ title: "CRBio" }],
+      experiences: [{ title: "Analista ambiental" }],
+      practiceAreas: ["Fauna"],
+      skills: ["Geoprocessamento"],
+      taxonomicGroups: ["Aves"],
+    });
     expect(repositories.applications.find).toHaveBeenCalledWith(
       expect.objectContaining({
         relations: { biologistProfile: { user: true } },
@@ -219,6 +264,9 @@ function createRepository() {
     find: vi.fn(),
     findOne: vi.fn(),
     findOneBy: vi.fn(),
+    manager: {
+      query: vi.fn(async () => []),
+    },
     save: vi.fn(),
   };
 }

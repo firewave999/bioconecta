@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import type { ReactNode } from "react";
 import { useCallback, useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,31 @@ type Candidate = {
   id: string;
   matchReasons: string[];
   matchScore: number;
+  professional: {
+    certifications: Array<{
+      credentialUrl: string | null;
+      issuedYear: number | null;
+      issuerName: string | null;
+      name: string;
+    }>;
+    documents: Array<{
+      fileUrl: string;
+      title: string;
+      type: string;
+      verificationStatus: string;
+    }>;
+    experiences: Array<{
+      description: string | null;
+      endYear: number | null;
+      isCurrent: boolean;
+      organizationName: string | null;
+      startYear: number;
+      title: string;
+    }>;
+    practiceAreas: string[];
+    skills: string[];
+    taxonomicGroups: string[];
+  };
   status: string;
 };
 
@@ -224,6 +250,80 @@ export function CandidatesClient() {
                 </ul>
               ) : null}
 
+              <div className="mt-4 grid gap-4 border-t border-slate-200 pt-4">
+                <div className="grid gap-3 md:grid-cols-3">
+                  <TagList items={application.professional.practiceAreas} title="Areas" />
+                  <TagList
+                    items={application.professional.taxonomicGroups}
+                    title="Grupos taxonomicos"
+                  />
+                  <TagList items={application.professional.skills} title="Competencias" />
+                </div>
+
+                {application.professional.experiences.length ? (
+                  <ProfileBlock title="Experiencias">
+                    {application.professional.experiences.slice(0, 3).map((experience, index) => (
+                      <div className="rounded-[8px] border border-slate-200 p-3" key={index}>
+                        <p className="font-semibold text-slate-950">{experience.title}</p>
+                        <p className="mt-1 text-sm text-slate-600">
+                          {experience.organizationName ?? "Organizacao nao informada"} -{" "}
+                          {experience.startYear}-
+                          {experience.isCurrent ? "atual" : (experience.endYear ?? "nao informado")}
+                        </p>
+                        {experience.description ? (
+                          <p className="mt-2 whitespace-pre-line text-sm text-slate-600">
+                            {experience.description}
+                          </p>
+                        ) : null}
+                      </div>
+                    ))}
+                  </ProfileBlock>
+                ) : null}
+
+                {application.professional.certifications.length ? (
+                  <ProfileBlock title="Certificacoes">
+                    {application.professional.certifications.slice(0, 4).map((certification) => (
+                      <div
+                        className="rounded-[8px] border border-slate-200 p-3"
+                        key={certification.name}
+                      >
+                        <p className="font-semibold text-slate-950">{certification.name}</p>
+                        <p className="mt-1 text-sm text-slate-600">
+                          {certification.issuerName ?? "Emissor nao informado"}
+                          {certification.issuedYear ? ` - ${certification.issuedYear}` : ""}
+                        </p>
+                        {certification.credentialUrl ? (
+                          <a
+                            className="mt-2 inline-flex text-sm font-semibold text-cyan-800"
+                            href={certification.credentialUrl}
+                            rel="noreferrer"
+                            target="_blank"
+                          >
+                            Ver credencial
+                          </a>
+                        ) : null}
+                      </div>
+                    ))}
+                  </ProfileBlock>
+                ) : null}
+
+                {application.professional.documents.length ? (
+                  <ProfileBlock title="Documentos">
+                    {application.professional.documents.slice(0, 4).map((document) => (
+                      <a
+                        className="rounded-[8px] border border-slate-200 p-3 text-sm font-semibold text-cyan-800"
+                        href={document.fileUrl}
+                        key={`${document.type}-${document.title}`}
+                        rel="noreferrer"
+                        target="_blank"
+                      >
+                        {document.title} ({document.type}) - {document.verificationStatus}
+                      </a>
+                    ))}
+                  </ProfileBlock>
+                ) : null}
+              </div>
+
               <div className="mt-4 flex flex-wrap gap-2">
                 {statuses.map(([value, label]) => (
                   <Button
@@ -249,6 +349,37 @@ export function CandidatesClient() {
           />
         )}
       </section>
+    </div>
+  );
+}
+
+function TagList({ items, title }: { items: string[]; title: string }) {
+  return (
+    <div>
+      <p className="text-sm font-semibold text-slate-950">{title}</p>
+      <div className="mt-2 flex flex-wrap gap-2">
+        {items.length ? (
+          items.slice(0, 8).map((item) => (
+            <span
+              className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700"
+              key={item}
+            >
+              {item}
+            </span>
+          ))
+        ) : (
+          <span className="text-sm text-slate-500">Nao informado.</span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ProfileBlock({ children, title }: { children: ReactNode; title: string }) {
+  return (
+    <div>
+      <p className="text-sm font-semibold text-slate-950">{title}</p>
+      <div className="mt-2 grid gap-2 md:grid-cols-2">{children}</div>
     </div>
   );
 }

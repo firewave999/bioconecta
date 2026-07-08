@@ -24,6 +24,52 @@ type ProfessionalNames = {
   taxonomicGroups: string[];
 };
 
+type ProfessionalSummary = ProfessionalNames & {
+  certifications: Array<{
+    credentialUrl: string | null;
+    issuedYear: number | null;
+    issuerName: string | null;
+    name: string;
+  }>;
+  documents: Array<{
+    fileUrl: string;
+    title: string;
+    type: string;
+    verificationStatus: string;
+  }>;
+  experiences: Array<{
+    description: string | null;
+    endYear: number | null;
+    isCurrent: boolean;
+    organizationName: string | null;
+    startYear: number;
+    title: string;
+  }>;
+};
+
+type RawCertification = {
+  credential_url: string | null;
+  issued_year: number | null;
+  issuer_name: string | null;
+  name: string;
+};
+
+type RawDocument = {
+  file_url: string;
+  title: string;
+  type: string;
+  verification_status: string;
+};
+
+type RawExperience = {
+  description: string | null;
+  end_year: number | null;
+  is_current: boolean;
+  organization_name: string | null;
+  start_year: number;
+  title: string;
+};
+
 @Injectable()
 export class ApplicationsService {
   constructor(
@@ -131,6 +177,14 @@ export class ApplicationsService {
       relations: { biologistProfile: { user: true } },
       where: { jobId },
     });
+    const professionalByProfileId = new Map(
+      await Promise.all(
+        applications.map(async (application): Promise<[string, ProfessionalSummary]> => [
+          application.biologistProfileId,
+          await this.getProfessionalNames(application.biologistProfileId),
+        ]),
+      ),
+    );
 
     return {
       applications: applications.map((application) => ({
@@ -144,6 +198,14 @@ export class ApplicationsService {
             lastName: application.biologistProfile.user.lastName,
             phone: application.biologistProfile.user.phone,
           },
+        },
+        professional: professionalByProfileId.get(application.biologistProfileId) ?? {
+          certifications: [],
+          documents: [],
+          experiences: [],
+          practiceAreas: [],
+          skills: [],
+          taxonomicGroups: [],
         },
       })),
       job,
@@ -209,34 +271,76 @@ export class ApplicationsService {
     return { application };
   }
 
-  private async getProfessionalNames(profileId: string): Promise<ProfessionalNames> {
-    const [practiceAreas, taxonomicGroups, skills] = await Promise.all([
-      this.practiceAreasRepository
-        .createQueryBuilder("practiceArea")
-        .innerJoin(
-          "biologist_profile_practice_areas",
-          "link",
-          "link.practice_area_id = practiceArea.id",
-        )
-        .where("link.profile_id = :profileId", { profileId })
-        .getMany(),
-      this.taxonomicGroupsRepository
-        .createQueryBuilder("taxonomicGroup")
-        .innerJoin(
-          "biologist_profile_taxonomic_groups",
-          "link",
-          "link.taxonomic_group_id = taxonomicGroup.id",
-        )
-        .where("link.profile_id = :profileId", { profileId })
-        .getMany(),
-      this.skillsRepository
-        .createQueryBuilder("skill")
-        .innerJoin("biologist_profile_skills", "link", "link.skill_id = skill.id")
-        .where("link.profile_id = :profileId", { profileId })
-        .getMany(),
-    ]);
+  private async getProfessionalNames(profileId: string): Promise<ProfessionalSummary> {
+    const [practiceAreas, taxonomicGroups, skills, experiences, certifications, documents] =
+      await Promise.all([
+        this.practiceAreasRepository
+          .createQueryBuilder("practiceArea")
+          .innerJoin(
+            "biologist_profile_practice_areas",
+            "link",
+            "link.practice_area_id = practiceArea.id",
+          )
+          .where("link.profile_id = :profileId", { profileId })
+          .getMany(),
+        this.taxonomicGroupsRepository
+          .createQueryBuilder("taxonomicGroup")
+          .innerJoin(
+            "biologist_profile_taxonomic_groups",
+            "link",
+            "link.taxonomic_group_id = taxonomicGroup.id",
+          )
+          .where("link.profile_id = :profileId", { profileId })
+          .getMany(),
+        this.skillsRepository
+          .createQueryBuilder("skill")
+          .innerJoin("biologist_profile_skills", "link", "link.skill_id = skill.id")
+          .where("link.profile_id = :profileId", { profileId })
+          .getMany(),
+        this.profilesRepository.manager.query<RawExperience[]>(
+          `SELECT title, organization_name, start_year, end_year, is_current, description
+           FROM biologist_experiences
+           WHERE profile_id = $1
+           ORDER BY start_year DESC`,
+          [profileId],
+        ),
+        this.profilesRepository.manager.query<RawCertification[]>(
+          `SELECT name, issuer_name, issued_year, credential_url
+           FROM biologist_certifications
+           WHERE profile_id = $1
+           ORDER BY issued_year DESC NULLS LAST, name ASC`,
+          [profileId],
+        ),
+        this.profilesRepository.manager.query<RawDocument[]>(
+          `SELECT type, title, file_url, verification_status
+           FROM biologist_documents
+           WHERE profile_id = $1
+           ORDER BY created_at DESC`,
+          [profileId],
+        ),
+      ]);
 
     return {
+      certifications: certifications.map((item) => ({
+        credentialUrl: item.credential_url,
+        issuedYear: item.issued_year,
+        issuerName: item.issuer_name,
+        name: item.name,
+      })),
+      documents: documents.map((item) => ({
+        fileUrl: item.file_url,
+        title: item.title,
+        type: item.type,
+        verificationStatus: item.verification_status,
+      })),
+      experiences: experiences.map((item) => ({
+        description: item.description,
+        endYear: item.end_year,
+        isCurrent: item.is_current,
+        organizationName: item.organization_name,
+        startYear: item.start_year,
+        title: item.title,
+      })),
       practiceAreas: practiceAreas.map((item) => item.name),
       skills: skills.map((item) => item.name),
       taxonomicGroups: taxonomicGroups.map((item) => item.name),
