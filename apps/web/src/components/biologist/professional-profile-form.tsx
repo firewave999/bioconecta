@@ -404,29 +404,20 @@ export function ProfessionalProfileForm() {
               value={document.title}
             />
             <Field
-              label="URL do arquivo"
+              label="URL externa opcional"
               onChange={(value) => updateItem(documents, setDocuments, index, { fileUrl: value })}
               type="url"
               value={document.fileUrl}
             />
-            <label className="grid gap-2 text-sm font-medium text-slate-700 md:col-span-3">
-              Enviar arquivo
-              <input
-                accept="application/pdf,image/jpeg,image/png"
-                className="rounded-[8px] border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700"
-                onChange={(event) =>
-                  setDocumentFiles((current) => ({
-                    ...current,
-                    [index]: event.target.files?.[0] ?? null,
-                  }))
-                }
-                type="file"
-              />
-              <span className="text-xs text-slate-500">
-                PDF, JPG ou PNG ate 5 MB. Se enviar arquivo, a URL sera preenchida automaticamente
-                ao salvar.
-              </span>
-            </label>
+            <DocumentUploadButton
+              file={documentFiles[index] ?? null}
+              onChange={(file) =>
+                setDocumentFiles((current) => ({
+                  ...current,
+                  [index]: file,
+                }))
+              }
+            />
             <RemoveButton
               onClick={() => {
                 removeItem(documents, setDocuments, index, emptyDocument);
@@ -454,6 +445,38 @@ export function ProfessionalProfileForm() {
         {loading ? "Salvando..." : "Salvar perfil profissional"}
       </Button>
     </form>
+  );
+}
+
+function DocumentUploadButton({
+  file,
+  onChange,
+}: {
+  file: File | null;
+  onChange: (file: File | null) => void;
+}) {
+  return (
+    <label className="grid gap-3 rounded-[8px] border border-dashed border-cyan-300 bg-white p-4 text-sm font-medium text-slate-700 md:col-span-3">
+      <span>Arquivo do documento</span>
+      <span className="inline-flex w-fit cursor-pointer rounded-[8px] bg-cyan-700 px-4 py-2 text-sm font-semibold text-white">
+        Selecionar arquivo
+      </span>
+      <input
+        accept="application/pdf,image/jpeg,image/png"
+        className="sr-only"
+        onChange={(event) => onChange(event.target.files?.[0] ?? null)}
+        type="file"
+      />
+      <span className="text-xs text-slate-500">
+        PDF, JPG ou PNG ate 5 MB. Ao salvar, o sistema envia o arquivo e gera o link
+        automaticamente.
+      </span>
+      {file ? (
+        <span className="rounded-[8px] bg-cyan-50 px-3 py-2 text-sm text-cyan-900">
+          Selecionado: {file.name}
+        </span>
+      ) : null}
+    </label>
   );
 }
 
