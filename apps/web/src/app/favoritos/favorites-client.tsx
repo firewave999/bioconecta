@@ -59,7 +59,7 @@ export function FavoritesClient() {
     <section className="grid gap-4">
       {savedJobs.length ? (
         savedJobs.map((savedJob) => (
-          <article className="rounded-[8px] border border-slate-200 bg-white p-5" key={savedJob.id}>
+          <article className="soft-card rounded-[8px] p-5" key={savedJob.id}>
             <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
               {savedJob.job.company?.name ?? "Empresa"}
             </p>

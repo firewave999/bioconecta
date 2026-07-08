@@ -134,7 +134,7 @@ export function JobDetailClient() {
 
   return (
     <div className="grid gap-6">
-      <section className="rounded-[8px] border border-slate-200 bg-white p-6 shadow-sm">
+      <section className="page-header rounded-[8px] p-6">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
           {job.company?.name ?? "Empresa"}
         </p>
@@ -156,7 +156,7 @@ export function JobDetailClient() {
         </Button>
       </section>
 
-      <section className="rounded-[8px] border border-slate-200 bg-white p-6">
+      <section className="soft-card rounded-[8px] p-6">
         <h2 className="text-xl font-semibold text-slate-950">Descricao</h2>
         <p className="mt-3 whitespace-pre-line text-slate-700">{job.description}</p>
       </section>
@@ -167,7 +167,7 @@ export function JobDetailClient() {
         <RequirementCard title="Competencias" values={job.requiredSkills} />
       </section>
 
-      <section className="rounded-[8px] border border-slate-200 bg-white p-6">
+      <section className="soft-card rounded-[8px] p-6">
         <h2 className="text-xl font-semibold text-slate-950">Candidatura</h2>
         {application ? (
           <div className="mt-4 rounded-[8px] bg-cyan-50 p-4 text-cyan-900">
@@ -190,7 +190,7 @@ export function JobDetailClient() {
             <label className="grid gap-2 text-sm font-medium text-slate-700">
               Mensagem para a empresa
               <textarea
-                className="min-h-28 rounded-[8px] border border-slate-300 px-3 py-3 text-slate-950 outline-none focus:border-cyan-500"
+                className="field-input min-h-28 rounded-[8px] px-3 py-3"
                 onChange={(event) => setCoverMessage(event.target.value)}
                 value={coverMessage}
               />
@@ -210,7 +210,7 @@ export function JobDetailClient() {
 
 function RequirementCard({ title, values }: { title: string; values: string[] }) {
   return (
-    <div className="rounded-[8px] border border-slate-200 bg-white p-5">
+    <div className="soft-card rounded-[8px] p-5">
       <h2 className="font-semibold text-slate-950">{title}</h2>
       <p className="mt-2 text-sm text-slate-600">
         {values.length ? values.join(", ") : "Nao informado"}

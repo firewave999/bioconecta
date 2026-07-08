@@ -223,10 +223,7 @@ export function ProfessionalProfileForm() {
   }
 
   return (
-    <form
-      className="grid gap-6 rounded-[8px] border border-slate-200 bg-white p-6 shadow-sm"
-      onSubmit={handleSubmit}
-    >
+    <form className="form-card grid gap-6 rounded-[8px] p-6" onSubmit={handleSubmit}>
       <div>
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
           Perfil profissional
@@ -253,7 +250,7 @@ export function ProfessionalProfileForm() {
       <div className="grid gap-4">
         {experiences.map((experience, index) => (
           <div
-            className="grid gap-4 rounded-[8px] border border-slate-200 bg-slate-50 p-4"
+            className="grid gap-4 rounded-[8px] border border-cyan-100 bg-cyan-50/40 p-4"
             key={index}
           >
             <div className="grid gap-4 md:grid-cols-2">
@@ -325,7 +322,7 @@ export function ProfessionalProfileForm() {
       <div className="grid gap-4">
         {certifications.map((certification, index) => (
           <div
-            className="grid gap-4 rounded-[8px] border border-slate-200 bg-slate-50 p-4 md:grid-cols-2"
+            className="grid gap-4 rounded-[8px] border border-cyan-100 bg-cyan-50/40 p-4 md:grid-cols-2"
             key={index}
           >
             <Field
@@ -378,13 +375,13 @@ export function ProfessionalProfileForm() {
       <div className="grid gap-4">
         {documents.map((document, index) => (
           <div
-            className="grid gap-4 rounded-[8px] border border-slate-200 bg-slate-50 p-4 md:grid-cols-3"
+            className="grid gap-4 rounded-[8px] border border-cyan-100 bg-cyan-50/40 p-4 md:grid-cols-3"
             key={index}
           >
             <label className="grid gap-2 text-sm font-medium text-slate-700">
               Tipo
               <select
-                className="h-11 rounded-[8px] border border-slate-300 bg-white px-3 text-slate-950 outline-none focus:border-cyan-500"
+                className="field-input h-11 rounded-[8px] px-3"
                 onChange={(event) =>
                   updateItem(documents, setDocuments, index, {
                     type: event.target.value as DocumentItem["type"],
@@ -496,7 +493,7 @@ function Field({
     <label className="grid gap-2 text-sm font-medium text-slate-700">
       {label}
       <input
-        className="h-11 rounded-[8px] border border-slate-300 px-3 text-slate-950 outline-none focus:border-cyan-500"
+        className="field-input h-11 rounded-[8px] px-3"
         onChange={(event) => onChange(event.target.value)}
         type={type}
         value={value}
@@ -518,7 +515,7 @@ function TextArea({
     <label className="grid gap-2 text-sm font-medium text-slate-700">
       {label}
       <textarea
-        className="min-h-28 rounded-[8px] border border-slate-300 px-3 py-3 text-slate-950 outline-none focus:border-cyan-500"
+        className="field-input min-h-28 rounded-[8px] px-3 py-3"
         onChange={(event) => onChange(event.target.value)}
         value={value}
       />

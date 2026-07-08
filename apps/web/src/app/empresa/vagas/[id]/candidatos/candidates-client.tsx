@@ -149,7 +149,7 @@ export function CandidatesClient() {
 
   return (
     <div className="grid gap-6">
-      <section className="rounded-[8px] border border-slate-200 bg-white p-6 shadow-sm">
+      <section className="page-header rounded-[8px] p-6">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
           Candidatos
         </p>
@@ -159,10 +159,7 @@ export function CandidatesClient() {
       <section className="grid gap-4">
         {applications.length ? (
           applications.map((application) => (
-            <article
-              className="rounded-[8px] border border-slate-200 bg-white p-5"
-              key={application.id}
-            >
+            <article className="soft-card rounded-[8px] p-5" key={application.id}>
               <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                 <div className="flex flex-col gap-3 md:flex-row md:items-start">
                   {application.biologistProfile.avatarUrl ? (
@@ -234,7 +231,7 @@ export function CandidatesClient() {
               </div>
 
               {application.coverMessage ? (
-                <div className="mt-4 rounded-[8px] border border-slate-200 bg-slate-50 p-4">
+                <div className="mt-4 rounded-[8px] border border-cyan-100 bg-cyan-50/40 p-4">
                   <p className="text-sm font-semibold text-slate-950">Mensagem do candidato</p>
                   <p className="mt-1 whitespace-pre-line text-sm text-slate-600">
                     {application.coverMessage}
@@ -263,7 +260,10 @@ export function CandidatesClient() {
                 {application.professional.experiences.length ? (
                   <ProfileBlock title="Experiencias">
                     {application.professional.experiences.slice(0, 3).map((experience, index) => (
-                      <div className="rounded-[8px] border border-slate-200 p-3" key={index}>
+                      <div
+                        className="rounded-[8px] border border-cyan-100 bg-white p-3"
+                        key={index}
+                      >
                         <p className="font-semibold text-slate-950">{experience.title}</p>
                         <p className="mt-1 text-sm text-slate-600">
                           {experience.organizationName ?? "Organizacao nao informada"} -{" "}
@@ -284,7 +284,7 @@ export function CandidatesClient() {
                   <ProfileBlock title="Certificacoes">
                     {application.professional.certifications.slice(0, 4).map((certification) => (
                       <div
-                        className="rounded-[8px] border border-slate-200 p-3"
+                        className="rounded-[8px] border border-cyan-100 bg-white p-3"
                         key={certification.name}
                       >
                         <p className="font-semibold text-slate-950">{certification.name}</p>
@@ -311,7 +311,7 @@ export function CandidatesClient() {
                   {application.professional.documents.length ? (
                     application.professional.documents.slice(0, 4).map((document) => (
                       <a
-                        className="rounded-[8px] border border-slate-200 p-3 text-sm font-semibold text-cyan-800"
+                        className="rounded-[8px] border border-cyan-100 bg-white p-3 text-sm font-semibold text-cyan-800"
                         href={document.fileUrl}
                         key={`${document.type}-${document.title}`}
                         rel="noreferrer"
@@ -363,7 +363,7 @@ function TagList({ items, title }: { items: string[]; title: string }) {
         {items.length ? (
           items.slice(0, 8).map((item) => (
             <span
-              className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700"
+              className="rounded-full bg-cyan-50 px-2.5 py-1 text-xs font-semibold text-cyan-800"
               key={item}
             >
               {item}

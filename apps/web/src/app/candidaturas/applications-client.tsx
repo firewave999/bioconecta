@@ -59,10 +59,7 @@ export function ApplicationsClient() {
     <section className="grid gap-4">
       {applications.length ? (
         applications.map((application) => (
-          <article
-            className="rounded-[8px] border border-slate-200 bg-white p-5"
-            key={application.id}
-          >
+          <article className="soft-card rounded-[8px] p-5" key={application.id}>
             <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
               {application.job.company?.name ?? "Empresa"}
             </p>

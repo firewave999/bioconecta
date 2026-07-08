@@ -105,7 +105,7 @@ export function NotificationsClient() {
 
   return (
     <section className="grid gap-4">
-      <div className="flex flex-col gap-3 rounded-[8px] border border-slate-200 bg-white p-5 md:flex-row md:items-center md:justify-between">
+      <div className="soft-card flex flex-col gap-3 rounded-[8px] p-5 md:flex-row md:items-center md:justify-between">
         <div>
           <p className="text-sm text-slate-500">Nao lidas</p>
           <p className="mt-1 text-2xl font-semibold text-slate-950">{state.unreadCount}</p>
@@ -119,7 +119,7 @@ export function NotificationsClient() {
         state.notifications.map((notification) => (
           <article
             className={`rounded-[8px] border p-5 ${
-              notification.readAt ? "border-slate-200 bg-white" : "border-cyan-200 bg-cyan-50"
+              notification.readAt ? "soft-card bg-white" : "border-cyan-200 bg-cyan-50"
             }`}
             key={notification.id}
           >

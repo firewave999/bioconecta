@@ -8,11 +8,16 @@ export const metadata = {
 
 export default function EditProfilePage() {
   return (
-    <main className="min-h-screen bg-slate-50">
+    <main className="page-shell">
       <div className="mx-auto max-w-5xl px-6 py-10">
-        <Link className="text-sm font-semibold text-cyan-800" href="/dashboard">
-          Voltar ao dashboard
-        </Link>
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <Link className="text-sm font-semibold text-cyan-800" href="/dashboard">
+            Voltar ao dashboard
+          </Link>
+          <Link className="text-sm font-semibold text-slate-700" href="/perfil/profissional">
+            Perfil profissional
+          </Link>
+        </div>
         <div className="mt-8">
           <BiologistProfileForm mode="edit" />
         </div>

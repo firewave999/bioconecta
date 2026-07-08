@@ -126,10 +126,7 @@ export function BiologistProfileForm({ mode }: Props) {
   }
 
   return (
-    <form
-      className="grid gap-5 rounded-[8px] border border-slate-200 bg-white p-6 shadow-sm"
-      onSubmit={handleSubmit}
-    >
+    <form className="form-card grid gap-5 rounded-[8px] p-6" onSubmit={handleSubmit}>
       <div>
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
           {mode === "onboarding" ? "Onboarding" : "Editar perfil"}
@@ -144,7 +141,7 @@ export function BiologistProfileForm({ mode }: Props) {
       <div className="grid gap-4 md:grid-cols-2">
         <label className="grid gap-2 text-sm font-medium text-slate-700 md:col-span-2">
           Foto do perfil
-          <div className="flex flex-col gap-3 rounded-[8px] border border-slate-200 bg-slate-50 p-4 md:flex-row md:items-center">
+          <div className="flex flex-col gap-3 rounded-[8px] border border-cyan-100 bg-cyan-50/40 p-4 md:flex-row md:items-center">
             {avatarUrl ? (
               <img
                 alt="Foto atual do perfil"
@@ -195,7 +192,7 @@ export function BiologistProfileForm({ mode }: Props) {
       <label className="grid gap-2 text-sm font-medium text-slate-700">
         Situacao do registro
         <select
-          className="h-11 rounded-[8px] border border-slate-300 bg-white px-3 text-slate-950 outline-none focus:border-cyan-500"
+          className="field-input h-11 rounded-[8px] px-3"
           defaultValue={profile?.registrationStatus ?? "UNKNOWN"}
           name="registrationStatus"
         >
@@ -211,7 +208,7 @@ export function BiologistProfileForm({ mode }: Props) {
       <label className="grid gap-2 text-sm font-medium text-slate-700">
         Biografia
         <textarea
-          className="min-h-28 rounded-[8px] border border-slate-300 px-3 py-3 text-slate-950 outline-none focus:border-cyan-500"
+          className="field-input min-h-28 rounded-[8px] px-3 py-3"
           defaultValue={profile?.bio ?? ""}
           name="bio"
         />
@@ -221,7 +218,7 @@ export function BiologistProfileForm({ mode }: Props) {
         <label className="grid gap-2 text-sm font-medium text-slate-700">
           Disponibilidade
           <select
-            className="h-11 rounded-[8px] border border-slate-300 bg-white px-3 text-slate-950 outline-none focus:border-cyan-500"
+            className="field-input h-11 rounded-[8px] px-3"
             defaultValue={profile?.availabilityStatus ?? "AVAILABLE_NOW"}
             name="availabilityStatus"
           >
@@ -287,12 +284,7 @@ function Field({
   return (
     <label className="grid gap-2 text-sm font-medium text-slate-700">
       {label}
-      <input
-        className="h-11 rounded-[8px] border border-slate-300 px-3 text-slate-950 outline-none focus:border-cyan-500"
-        name={name}
-        type={type}
-        {...props}
-      />
+      <input className="field-input h-11 rounded-[8px] px-3" name={name} type={type} {...props} />
     </label>
   );
 }
@@ -307,7 +299,7 @@ function Check({
   name: string;
 }) {
   return (
-    <label className="flex items-center gap-3 rounded-[8px] border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700">
+    <label className="flex items-center gap-3 rounded-[8px] border border-cyan-100 bg-cyan-50/40 px-4 py-3 text-sm font-medium text-slate-700">
       <input defaultChecked={defaultChecked} name={name} type="checkbox" />
       {label}
     </label>
