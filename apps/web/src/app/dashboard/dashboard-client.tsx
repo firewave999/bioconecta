@@ -1,7 +1,16 @@
 "use client";
 
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
+import {
+  BadgeCheck,
+  BriefcaseBusiness,
+  ClipboardCheck,
+  FileText,
+  LayoutDashboard,
+  Sparkles,
+} from "lucide-react";
 
 import { LogoutButton } from "@/components/auth/logout-button";
 import { Button } from "@/components/ui/button";
@@ -166,13 +175,16 @@ export function DashboardClient() {
 
   return (
     <div className="grid gap-6">
-      <section className="rounded-[8px] border border-slate-200 bg-white p-6 shadow-sm">
+      <section className="glass-panel rounded-[8px] p-6">
         <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
+            <p className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
+              <LayoutDashboard size={16} />
               Dashboard
             </p>
-            <h1 className="mt-2 text-3xl font-semibold text-slate-950">Ola, {state.firstName}</h1>
+            <h1 className="mt-3 text-4xl font-semibold tracking-tight text-slate-950">
+              Ola, {state.firstName}
+            </h1>
             <p className="mt-2 text-slate-600">{state.email}</p>
           </div>
           <LogoutButton />
@@ -181,11 +193,12 @@ export function DashboardClient() {
 
       {state.isBiologistAccount ? (
         <section className="grid gap-4 md:grid-cols-3">
-          <div className="rounded-[8px] border border-slate-200 bg-white p-5">
-            <p className="text-sm text-slate-500">Conclusao do perfil</p>
-            <p className="mt-2 text-3xl font-semibold text-slate-950">{state.completion}%</p>
-          </div>
-          <div className="rounded-[8px] border border-slate-200 bg-white p-5 md:col-span-2">
+          <MetricCard
+            icon={<ClipboardCheck size={21} />}
+            label="Conclusao do perfil"
+            value={`${state.completion}%`}
+          />
+          <div className="soft-card rounded-[8px] p-5 md:col-span-2">
             <p className="text-sm text-slate-500">Headline</p>
             <p className="mt-2 text-xl font-semibold text-slate-950">{state.title}</p>
           </div>
@@ -194,25 +207,26 @@ export function DashboardClient() {
 
       {state.profileExists ? (
         <section className="grid gap-4 md:grid-cols-3">
-          <div className="rounded-[8px] border border-slate-200 bg-white p-5">
-            <p className="text-sm text-slate-500">Experiencias</p>
-            <p className="mt-2 text-3xl font-semibold text-slate-950">{state.experiencesCount}</p>
-          </div>
-          <div className="rounded-[8px] border border-slate-200 bg-white p-5">
-            <p className="text-sm text-slate-500">Certificacoes</p>
-            <p className="mt-2 text-3xl font-semibold text-slate-950">
-              {state.certificationsCount}
-            </p>
-          </div>
-          <div className="rounded-[8px] border border-slate-200 bg-white p-5">
-            <p className="text-sm text-slate-500">Documentos</p>
-            <p className="mt-2 text-3xl font-semibold text-slate-950">{state.documentsCount}</p>
-          </div>
+          <MetricCard
+            icon={<BriefcaseBusiness size={21} />}
+            label="Experiencias"
+            value={state.experiencesCount}
+          />
+          <MetricCard
+            icon={<BadgeCheck size={21} />}
+            label="Certificacoes"
+            value={state.certificationsCount}
+          />
+          <MetricCard
+            icon={<FileText size={21} />}
+            label="Documentos"
+            value={state.documentsCount}
+          />
         </section>
       ) : null}
 
       {state.isBiologistAccount ? (
-        <section className="rounded-[8px] border border-slate-200 bg-white p-6">
+        <section className="soft-card rounded-[8px] p-6">
           <h2 className="text-xl font-semibold text-slate-950">
             {state.profileExists
               ? state.professionalStarted
@@ -245,7 +259,7 @@ export function DashboardClient() {
       {state.isCompanyAccount ? (
         <CompanyDashboardPanel state={state} />
       ) : !state.isBiologistAccount ? (
-        <section className="rounded-[8px] border border-slate-200 bg-white p-6">
+        <section className="soft-card rounded-[8px] p-6">
           <h2 className="text-xl font-semibold text-slate-950">Area do estudante</h2>
           <p className="mt-2 text-slate-600">
             Acompanhe vagas, favoritos e notificacoes. O perfil profissional completo sera tratado
@@ -287,8 +301,9 @@ export function DashboardClient() {
       )}
 
       {state.isAdmin ? (
-        <section className="rounded-[8px] border border-cyan-200 bg-cyan-50 p-6">
-          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-800">
+        <section className="rounded-[8px] border border-cyan-200 bg-cyan-50/90 p-6 shadow-sm">
+          <p className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.16em] text-cyan-800">
+            <Sparkles size={16} />
             Administracao
           </p>
           <h2 className="mt-2 text-xl font-semibold text-slate-950">Painel admin separado</h2>
@@ -309,7 +324,7 @@ function CompanyDashboardPanel({ state }: { state: DashboardState }) {
 
   return (
     <div className="grid gap-6">
-      <section className="rounded-[8px] border border-slate-200 bg-white p-6 shadow-sm">
+      <section className="glass-panel rounded-[8px] p-6">
         <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div className="flex flex-col gap-4 md:flex-row md:items-start">
             {company?.logoUrl ? (
@@ -342,9 +357,21 @@ function CompanyDashboardPanel({ state }: { state: DashboardState }) {
         ) : null}
 
         <div className="mt-6 grid gap-4 md:grid-cols-3">
-          <MetricCard label="Total de vagas" value={state.completion} />
-          <MetricCard label="Publicadas" value={state.certificationsCount} />
-          <MetricCard label="Rascunhos" value={state.experiencesCount} />
+          <MetricCard
+            icon={<BriefcaseBusiness size={21} />}
+            label="Total de vagas"
+            value={state.completion}
+          />
+          <MetricCard
+            icon={<BadgeCheck size={21} />}
+            label="Publicadas"
+            value={state.certificationsCount}
+          />
+          <MetricCard
+            icon={<FileText size={21} />}
+            label="Rascunhos"
+            value={state.experiencesCount}
+          />
         </div>
 
         <div className="mt-5 flex flex-wrap gap-3">
@@ -364,7 +391,7 @@ function CompanyDashboardPanel({ state }: { state: DashboardState }) {
         </div>
       </section>
 
-      <section className="rounded-[8px] border border-slate-200 bg-white p-6">
+      <section className="soft-card rounded-[8px] p-6">
         <h2 className="text-xl font-semibold text-slate-950">Proximas acoes</h2>
         <div className="mt-4 grid gap-3">
           <ChecklistItem done={Boolean(company)} text="Cadastrar dados da empresa" />
@@ -380,10 +407,21 @@ function CompanyDashboardPanel({ state }: { state: DashboardState }) {
   );
 }
 
-function MetricCard({ label, value }: { label: string; value: number }) {
+function MetricCard({
+  icon,
+  label,
+  value,
+}: {
+  icon: ReactNode;
+  label: string;
+  value: number | string;
+}) {
   return (
-    <div className="rounded-[8px] border border-slate-200 bg-slate-50 p-5">
-      <p className="text-sm text-slate-500">{label}</p>
+    <div className="soft-card rounded-[8px] p-5">
+      <div className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-cyan-50 text-cyan-800">
+        {icon}
+      </div>
+      <p className="mt-4 text-sm text-slate-500">{label}</p>
       <p className="mt-2 text-3xl font-semibold text-slate-950">{value}</p>
     </div>
   );

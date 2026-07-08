@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useState } from "react";
+import { BriefcaseBusiness, MapPin, Search, SlidersHorizontal } from "lucide-react";
 
 import { apiFetch } from "@/lib/api";
 
@@ -32,26 +33,23 @@ export function JobsClient() {
   const [filters, setFilters] = useState(emptyFilters);
   const [loading, setLoading] = useState(false);
 
-  const loadJobs = useCallback(
-    async (nextFilters: typeof emptyFilters) => {
-      setLoading(true);
-      const params = new URLSearchParams();
+  const loadJobs = useCallback(async (nextFilters: typeof emptyFilters) => {
+    setLoading(true);
+    const params = new URLSearchParams();
 
-      for (const [key, value] of Object.entries(nextFilters)) {
-        if (value.trim()) {
-          params.set(key, value.trim());
-        }
+    for (const [key, value] of Object.entries(nextFilters)) {
+      if (value.trim()) {
+        params.set(key, value.trim());
       }
+    }
 
-      apiFetch<{ jobs: Job[] }>(`/jobs${params.size ? `?${params.toString()}` : ""}`)
-        .then((response) => setJobs(response.jobs))
-        .catch((err) =>
-          setError(err instanceof Error ? err.message : "Nao foi possivel carregar as vagas."),
-        )
-        .finally(() => setLoading(false));
-    },
-    [filters],
-  );
+    apiFetch<{ jobs: Job[] }>(`/jobs${params.size ? `?${params.toString()}` : ""}`)
+      .then((response) => setJobs(response.jobs))
+      .catch((err) =>
+        setError(err instanceof Error ? err.message : "Nao foi possivel carregar as vagas."),
+      )
+      .finally(() => setLoading(false));
+  }, []);
 
   useEffect(() => {
     void loadJobs(emptyFilters);
@@ -76,9 +74,18 @@ export function JobsClient() {
   return (
     <div className="grid gap-6">
       <form
-        className="grid gap-4 rounded-[8px] border border-slate-200 bg-white p-5 md:grid-cols-3"
+        className="soft-card grid gap-4 rounded-[8px] p-5 md:grid-cols-3"
         onSubmit={handleSubmit}
       >
+        <div className="flex items-center gap-2 md:col-span-3">
+          <span className="flex h-9 w-9 items-center justify-center rounded-[8px] bg-cyan-50 text-cyan-800">
+            <SlidersHorizontal size={18} />
+          </span>
+          <div>
+            <p className="font-semibold text-slate-950">Filtros de busca</p>
+            <p className="text-sm text-slate-500">Combine criterios para reduzir a lista.</p>
+          </div>
+        </div>
         <Field
           label="Busca"
           onChange={(value) => setFilters({ ...filters, q: value })}
@@ -150,31 +157,55 @@ export function JobsClient() {
         {jobs.length ? (
           jobs.map((job) => (
             <article
-              className="rounded-[8px] border border-slate-200 bg-white p-5 shadow-sm"
+              className="soft-card rounded-[8px] p-5 transition hover:-translate-y-0.5 hover:border-cyan-200 hover:shadow-lg"
               key={job.id}
             >
-              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
-                {job.company?.name ?? "Empresa"}
-              </p>
-              <h2 className="mt-2 text-2xl font-semibold text-slate-950">{job.title}</h2>
-              <p className="mt-2 text-slate-600">
-                {job.city}/{job.state} | {job.contractType} | {job.workMode}
-              </p>
-              <Link
-                className="mt-4 inline-flex text-sm font-semibold text-cyan-800"
-                href={`/vagas/${job.id}`}
-              >
-                Ver detalhes
-              </Link>
+              <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                <div>
+                  <p className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
+                    <BriefcaseBusiness size={16} />
+                    {job.company?.name ?? "Empresa"}
+                  </p>
+                  <h2 className="mt-3 text-2xl font-semibold tracking-tight text-slate-950">
+                    {job.title}
+                  </h2>
+                  <p className="mt-3 inline-flex items-center gap-2 text-slate-600">
+                    <MapPin size={17} className="text-cyan-700" />
+                    {job.city}/{job.state}
+                  </p>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <Badge>{job.contractType}</Badge>
+                    <Badge>{job.workMode}</Badge>
+                  </div>
+                </div>
+                <Link
+                  className="inline-flex h-10 items-center justify-center rounded-[8px] bg-slate-950 px-4 text-sm font-semibold text-white"
+                  href={`/vagas/${job.id}`}
+                >
+                  Ver detalhes
+                </Link>
+              </div>
             </article>
           ))
         ) : (
-          <div className="rounded-[8px] border border-slate-200 bg-white p-6 text-slate-600">
-            Nenhuma vaga publicada ainda.
+          <div className="soft-card rounded-[8px] p-8 text-slate-600">
+            <Search className="mb-3 text-cyan-700" size={24} />
+            <p className="font-semibold text-slate-950">Nenhuma vaga encontrada.</p>
+            <p className="mt-1 text-sm text-slate-500">
+              Ajuste os filtros ou volte mais tarde para novas oportunidades.
+            </p>
           </div>
         )}
       </section>
     </div>
+  );
+}
+
+function Badge({ children }: { children: string }) {
+  return (
+    <span className="rounded-full bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-800">
+      {children}
+    </span>
   );
 }
 

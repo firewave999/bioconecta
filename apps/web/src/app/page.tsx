@@ -180,7 +180,7 @@ export default function HomePage() {
             ["Campo e escritorio", "CLT, PJ, diaria, campanha e consultoria."],
             ["Banco disponivel", "Profissionais prontos para novos projetos."],
           ].map(([title, body]) => (
-            <div key={title} className="rounded-[8px] border border-slate-200 bg-slate-50 p-5">
+            <div key={title} className="soft-card rounded-[8px] p-5">
               <p className="font-semibold text-slate-950">{title}</p>
               <p className="mt-2 text-sm leading-6 text-slate-600">{body}</p>
             </div>
@@ -207,7 +207,7 @@ export default function HomePage() {
           {recentJobs.map((job) => (
             <article
               key={job.title}
-              className="rounded-[8px] border border-slate-200 bg-white p-6 shadow-sm"
+              className="soft-card rounded-[8px] p-6 transition hover:-translate-y-0.5 hover:border-cyan-200 hover:shadow-lg"
             >
               <div className="flex items-center gap-2 text-sm text-cyan-700">
                 <BriefcaseBusiness size={16} />
@@ -241,7 +241,10 @@ export default function HomePage() {
 
           <div className="grid gap-4 md:grid-cols-2">
             {workflowSteps.map(({ body, icon: Icon, title }) => (
-              <div key={title} className="rounded-[8px] border border-white/10 bg-white/5 p-5">
+              <div
+                key={title}
+                className="rounded-[8px] border border-white/10 bg-white/[0.07] p-5 shadow-sm"
+              >
                 <Icon className="text-cyan-300" size={22} />
                 <h3 className="mt-4 font-semibold">{title}</h3>
                 <p className="mt-2 text-sm leading-6 text-slate-300">{body}</p>
@@ -275,7 +278,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="rounded-[8px] border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="soft-card rounded-[8px] p-6">
           <div className="flex items-center gap-3 border-b border-slate-200 pb-5">
             <span className="flex h-11 w-11 items-center justify-center rounded-[8px] bg-slate-950 text-cyan-300">
               <Building2 size={22} />
