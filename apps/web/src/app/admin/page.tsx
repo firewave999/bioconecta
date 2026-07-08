@@ -26,6 +26,7 @@ export default function AdminPage() {
           </p>
           <nav className="mt-5 flex flex-wrap gap-3 text-sm font-semibold text-slate-700">
             <a href="#visao-geral">Visao geral</a>
+            <a href="#pendencias">Pendencias</a>
             <a href="#empresas">Empresas</a>
             <a href="#biologos">Biologos</a>
             <a href="#vagas">Vagas</a>

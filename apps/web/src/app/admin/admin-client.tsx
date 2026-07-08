@@ -90,13 +90,19 @@ type AdminState = {
 };
 
 type AuthState = "checking" | "allowed" | "denied";
+type CompanyStatusFilter = "ALL" | Company["verificationStatus"];
+type BiologistStatusFilter = "ALL" | Biologist["verificationStatus"];
+type JobStatusFilter = "ALL" | Job["status"];
 
 export function AdminClient() {
   const [authState, setAuthState] = useState<AuthState>("checking");
   const [state, setState] = useState<AdminState | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busyAction, setBusyAction] = useState<string | null>(null);
+  const [biologistFilter, setBiologistFilter] = useState<BiologistStatusFilter>("ALL");
   const [companyNotes, setCompanyNotes] = useState<Record<string, string>>({});
+  const [companyFilter, setCompanyFilter] = useState<CompanyStatusFilter>("ALL");
+  const [jobFilter, setJobFilter] = useState<JobStatusFilter>("ALL");
 
   async function loadAdminData() {
     const token = getStoredAccessToken();
@@ -223,6 +229,24 @@ export function AdminClient() {
     return <p className="text-slate-600">Carregando painel admin...</p>;
   }
 
+  const pendingCompanies = state.companies.filter((company) =>
+    ["PENDING", "UNVERIFIED"].includes(company.verificationStatus),
+  );
+  const pendingBiologists = state.biologists.filter((biologist) =>
+    ["PENDING", "UNVERIFIED"].includes(biologist.verificationStatus),
+  );
+  const draftJobs = state.jobs.filter((job) => job.status === "DRAFT");
+  const filteredCompanies =
+    companyFilter === "ALL"
+      ? state.companies
+      : state.companies.filter((company) => company.verificationStatus === companyFilter);
+  const filteredBiologists =
+    biologistFilter === "ALL"
+      ? state.biologists
+      : state.biologists.filter((biologist) => biologist.verificationStatus === biologistFilter);
+  const filteredJobs =
+    jobFilter === "ALL" ? state.jobs : state.jobs.filter((job) => job.status === jobFilter);
+
   return (
     <div className="grid gap-6">
       <section className="grid gap-4 md:grid-cols-4" id="visao-geral">
@@ -232,10 +256,54 @@ export function AdminClient() {
         <Metric label="Vagas publicadas" value={state.overview.publishedJobsCount} />
       </section>
 
+      <section className="rounded-[8px] border border-cyan-100 bg-cyan-50 p-6" id="pendencias">
+        <SectionTitle
+          title="Fila de pendencias"
+          subtitle="Itens que normalmente precisam de decisao do administrador"
+        />
+        <div className="mt-5 grid gap-4 md:grid-cols-3">
+          <PendingCard
+            actionHref="#empresas"
+            actionLabel="Revisar empresas"
+            description="Empresas novas ou ainda nao verificadas."
+            title="Empresas"
+            value={pendingCompanies.length}
+          />
+          <PendingCard
+            actionHref="#biologos"
+            actionLabel="Revisar biologos"
+            description="Perfis profissionais aguardando verificacao."
+            title="Biologos"
+            value={pendingBiologists.length}
+          />
+          <PendingCard
+            actionHref="#vagas"
+            actionLabel="Revisar vagas"
+            description="Vagas em rascunho que podem precisar de apoio."
+            title="Vagas em rascunho"
+            value={draftJobs.length}
+          />
+        </div>
+      </section>
+
       <section className="rounded-[8px] border border-slate-200 bg-white p-6" id="empresas">
         <SectionTitle title="Empresas" subtitle={`${state.overview.companiesCount} cadastradas`} />
+        <FilterBar>
+          <FilterButton active={companyFilter === "ALL"} onClick={() => setCompanyFilter("ALL")}>
+            Todas
+          </FilterButton>
+          {(["UNVERIFIED", "PENDING", "VERIFIED", "REJECTED"] as const).map((status) => (
+            <FilterButton
+              active={companyFilter === status}
+              key={status}
+              onClick={() => setCompanyFilter(status)}
+            >
+              {status}
+            </FilterButton>
+          ))}
+        </FilterBar>
         <div className="mt-5 grid gap-3">
-          {state.companies.map((company) => (
+          {filteredCompanies.map((company) => (
             <article className="rounded-[8px] border border-slate-200 p-4" key={company.id}>
               <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                 <div>
@@ -293,6 +361,9 @@ export function AdminClient() {
               </div>
             </article>
           ))}
+          {filteredCompanies.length === 0 ? (
+            <p className="text-sm text-slate-500">Nenhuma empresa neste filtro.</p>
+          ) : null}
         </div>
       </section>
 
@@ -301,8 +372,27 @@ export function AdminClient() {
           title="Biologos"
           subtitle={`${state.overview.biologistProfilesCount} perfis cadastrados`}
         />
+        <FilterBar>
+          <FilterButton
+            active={biologistFilter === "ALL"}
+            onClick={() => setBiologistFilter("ALL")}
+          >
+            Todos
+          </FilterButton>
+          {(["UNVERIFIED", "PENDING", "VERIFIED", "REJECTED", "SUSPENDED"] as const).map(
+            (status) => (
+              <FilterButton
+                active={biologistFilter === status}
+                key={status}
+                onClick={() => setBiologistFilter(status)}
+              >
+                {status}
+              </FilterButton>
+            ),
+          )}
+        </FilterBar>
         <div className="mt-5 grid gap-3">
-          {state.biologists.map((biologist) => (
+          {filteredBiologists.map((biologist) => (
             <article className="rounded-[8px] border border-slate-200 p-4" key={biologist.id}>
               <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                 <div>
@@ -340,13 +430,30 @@ export function AdminClient() {
               </div>
             </article>
           ))}
+          {filteredBiologists.length === 0 ? (
+            <p className="text-sm text-slate-500">Nenhum biologo neste filtro.</p>
+          ) : null}
         </div>
       </section>
 
       <section className="rounded-[8px] border border-slate-200 bg-white p-6" id="vagas">
         <SectionTitle title="Vagas" subtitle={`${state.overview.jobsCount} vagas criadas`} />
+        <FilterBar>
+          <FilterButton active={jobFilter === "ALL"} onClick={() => setJobFilter("ALL")}>
+            Todas
+          </FilterButton>
+          {(["DRAFT", "PUBLISHED", "CLOSED"] as const).map((status) => (
+            <FilterButton
+              active={jobFilter === status}
+              key={status}
+              onClick={() => setJobFilter(status)}
+            >
+              {status}
+            </FilterButton>
+          ))}
+        </FilterBar>
         <div className="mt-5 grid gap-3">
-          {state.jobs.map((job) => (
+          {filteredJobs.map((job) => (
             <article className="rounded-[8px] border border-slate-200 p-4" key={job.id}>
               <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                 <div>
@@ -381,6 +488,9 @@ export function AdminClient() {
               </div>
             </article>
           ))}
+          {filteredJobs.length === 0 ? (
+            <p className="text-sm text-slate-500">Nenhuma vaga neste filtro.</p>
+          ) : null}
         </div>
       </section>
 
@@ -454,12 +564,65 @@ function Metric({ label, value }: { label: string; value: number }) {
   );
 }
 
+function PendingCard({
+  actionHref,
+  actionLabel,
+  description,
+  title,
+  value,
+}: {
+  actionHref: string;
+  actionLabel: string;
+  description: string;
+  title: string;
+  value: number;
+}) {
+  return (
+    <div className="rounded-[8px] border border-cyan-200 bg-white p-5">
+      <p className="text-sm font-semibold text-cyan-900">{title}</p>
+      <p className="mt-2 text-3xl font-semibold text-slate-950">{value}</p>
+      <p className="mt-2 text-sm text-slate-600">{description}</p>
+      <a className="mt-4 inline-flex text-sm font-semibold text-cyan-800" href={actionHref}>
+        {actionLabel}
+      </a>
+    </div>
+  );
+}
+
 function SectionTitle({ subtitle, title }: { subtitle: string; title: string }) {
   return (
     <div>
       <h2 className="text-xl font-semibold text-slate-950">{title}</h2>
       <p className="mt-1 text-sm text-slate-500">{subtitle}</p>
     </div>
+  );
+}
+
+function FilterBar({ children }: { children: ReactNode }) {
+  return <div className="mt-5 flex flex-wrap gap-2">{children}</div>;
+}
+
+function FilterButton({
+  active,
+  children,
+  onClick,
+}: {
+  active: boolean;
+  children: ReactNode;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      className={
+        active
+          ? "rounded-full bg-cyan-700 px-3 py-1.5 text-sm font-semibold text-white"
+          : "rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-slate-700"
+      }
+      onClick={onClick}
+      type="button"
+    >
+      {children}
+    </button>
   );
 }
 
