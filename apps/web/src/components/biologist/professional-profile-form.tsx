@@ -159,7 +159,7 @@ export function ProfessionalProfileForm() {
         documents.map(async (item, index) => {
           const file = documentFiles[index];
 
-          if (!file || !item.title.trim()) {
+          if (!file) {
             return item;
           }
 
@@ -168,6 +168,7 @@ export function ProfessionalProfileForm() {
           return {
             ...item,
             fileUrl: upload.url,
+            title: item.title.trim() || file.name,
           };
         }),
       );

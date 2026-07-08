@@ -307,9 +307,9 @@ export function CandidatesClient() {
                   </ProfileBlock>
                 ) : null}
 
-                {application.professional.documents.length ? (
-                  <ProfileBlock title="Documentos">
-                    {application.professional.documents.slice(0, 4).map((document) => (
+                <ProfileBlock title="Documentos">
+                  {application.professional.documents.length ? (
+                    application.professional.documents.slice(0, 4).map((document) => (
                       <a
                         className="rounded-[8px] border border-slate-200 p-3 text-sm font-semibold text-cyan-800"
                         href={document.fileUrl}
@@ -319,9 +319,11 @@ export function CandidatesClient() {
                       >
                         {document.title} ({document.type}) - {document.verificationStatus}
                       </a>
-                    ))}
-                  </ProfileBlock>
-                ) : null}
+                    ))
+                  ) : (
+                    <p className="text-sm text-slate-500">Documentos nao informados.</p>
+                  )}
+                </ProfileBlock>
               </div>
 
               <div className="mt-4 flex flex-wrap gap-2">
