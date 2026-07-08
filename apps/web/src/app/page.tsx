@@ -4,6 +4,7 @@ import {
   BriefcaseBusiness,
   Building2,
   CalendarDays,
+  CheckCircle2,
   GraduationCap,
   MapPin,
   Microscope,
@@ -50,6 +51,12 @@ const practiceAreas = [
 
 const availableProfiles = ["Mastozoologia", "Herpetologia", "Ornitologia", "Botanica"];
 
+const heroStats = [
+  ["4", "perfis tecnicos"],
+  ["6", "areas de atuacao"],
+  ["3", "modalidades de vaga"],
+];
+
 const workflowSteps: Array<{
   body: string;
   icon: LucideIcon;
@@ -79,11 +86,15 @@ const workflowSteps: Array<{
 
 export default function HomePage() {
   return (
-    <main>
-      <section className="hero-background min-h-screen text-white">
-        <header className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-5">
+    <main className="bg-[#f4fbf8]">
+      <section className="relative min-h-screen overflow-hidden bg-slate-950 text-white">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,rgba(55,213,223,0.34),transparent_24rem),radial-gradient(circle_at_18%_88%,rgba(34,197,94,0.16),transparent_22rem)]" />
+        <div className="absolute inset-y-0 right-0 hidden w-1/2 bg-[url('/images/hero-bioconecta.png')] bg-cover bg-center opacity-55 lg:block" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,#020617_0%,rgba(2,6,23,0.96)_43%,rgba(2,6,23,0.72)_68%,rgba(2,6,23,0.42)_100%)]" />
+
+        <header className="relative z-10 mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-5">
           <a className="flex items-center gap-3" href="#top" aria-label="BioConecta">
-            <span className="flex h-9 w-9 items-center justify-center rounded-[8px] bg-cyan-300 text-slate-950">
+            <span className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-cyan-300 text-slate-950 shadow-lg shadow-cyan-950/30">
               <Microscope size={20} strokeWidth={2.4} />
             </span>
             <span className="text-lg font-bold tracking-[0.08em]">BIOCONECTA</span>
@@ -108,21 +119,21 @@ export default function HomePage() {
 
         <div
           id="top"
-          className="mx-auto grid min-h-[calc(100vh-84px)] max-w-7xl items-center px-6 py-12"
+          className="relative z-10 mx-auto grid min-h-[calc(100vh-84px)] max-w-7xl items-center gap-10 px-6 py-12 lg:grid-cols-[1fr_430px]"
         >
-          <div className="max-w-3xl">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm text-cyan-100 backdrop-blur">
+          <div className="max-w-4xl">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan-200/25 bg-cyan-300/10 px-4 py-2 text-sm font-medium text-cyan-100 backdrop-blur">
               <Sparkles size={15} />
-              Plataforma profissional para a Biologia no Brasil
+              Nova base visual do BioConecta
             </div>
 
-            <h1 className="max-w-2xl text-5xl font-semibold leading-[1.02] tracking-tight md:text-7xl">
-              A oportunidade certa para quem vive a Biologia.
+            <h1 className="max-w-3xl text-5xl font-semibold leading-[1.01] tracking-tight md:text-7xl">
+              Vagas, candidatos e projetos de Biologia em um so lugar.
             </h1>
 
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-100 md:text-xl">
-              Encontre vagas, projetos, campanhas de campo e profissionais especializados em todo o
-              Brasil.
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-200 md:text-xl">
+              Uma plataforma focada em CRBio, experiencia tecnica, disponibilidade para campo e
+              contratacao profissional. Menos improviso, mais processo.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -133,19 +144,19 @@ export default function HomePage() {
                 </Link>
               </Button>
               <Button asChild variant="outline">
-                <Link href="/empresa">Sou empresa</Link>
+                <Link href="/empresa">Cadastrar empresa</Link>
               </Button>
             </div>
 
             <form
               id="busca"
               action="/vagas"
-              className="mt-10 grid max-w-3xl gap-3 rounded-[8px] border border-white/20 bg-white/12 p-3 backdrop-blur-md md:grid-cols-[1fr_1fr_auto]"
+              className="mt-10 grid max-w-4xl gap-3 rounded-[8px] border border-cyan-100/20 bg-white p-3 text-slate-950 shadow-2xl shadow-slate-950/35 md:grid-cols-[1fr_1fr_auto]"
             >
               <label className="sr-only" htmlFor="search-role">
                 Cargo ou especialidade
               </label>
-              <div className="flex items-center gap-2 rounded-[6px] bg-white px-4 py-3 text-slate-950">
+              <div className="flex items-center gap-2 rounded-[6px] bg-slate-50 px-4 py-3 text-slate-950 ring-1 ring-slate-200">
                 <Search size={18} className="text-slate-500" />
                 <input
                   id="search-role"
@@ -157,7 +168,7 @@ export default function HomePage() {
               <label className="sr-only" htmlFor="search-location">
                 Cidade ou estado
               </label>
-              <div className="flex items-center gap-2 rounded-[6px] bg-white px-4 py-3 text-slate-950">
+              <div className="flex items-center gap-2 rounded-[6px] bg-slate-50 px-4 py-3 text-slate-950 ring-1 ring-slate-200">
                 <MapPin size={18} className="text-slate-500" />
                 <input
                   id="search-location"
@@ -168,11 +179,61 @@ export default function HomePage() {
               </div>
               <Button type="submit">Buscar oportunidades</Button>
             </form>
+
+            <div className="mt-8 grid max-w-2xl grid-cols-3 gap-3">
+              {heroStats.map(([value, label]) => (
+                <div
+                  key={label}
+                  className="rounded-[8px] border border-white/10 bg-white/[0.08] p-4 backdrop-blur"
+                >
+                  <p className="text-2xl font-semibold text-cyan-200">{value}</p>
+                  <p className="mt-1 text-xs uppercase tracking-[0.14em] text-slate-300">{label}</p>
+                </div>
+              ))}
+            </div>
           </div>
+
+          <aside className="rounded-[8px] border border-white/12 bg-white/[0.09] p-4 shadow-2xl shadow-slate-950/40 backdrop-blur-xl">
+            <div className="rounded-[8px] bg-white p-5 text-slate-950">
+              <div className="flex items-center justify-between border-b border-slate-200 pb-4">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-cyan-700">
+                    Painel ativo
+                  </p>
+                  <h2 className="mt-1 text-xl font-semibold">Oportunidades em destaque</h2>
+                </div>
+                <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+                  Online
+                </span>
+              </div>
+
+              <div className="mt-5 space-y-3">
+                {recentJobs.map((job) => (
+                  <div key={job.title} className="rounded-[8px] border border-slate-200 p-4">
+                    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-cyan-700">
+                      <BriefcaseBusiness size={14} />
+                      {job.mode}
+                    </div>
+                    <p className="mt-2 font-semibold">{job.title}</p>
+                    <p className="mt-1 text-sm text-slate-500">{job.location}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-5 rounded-[8px] bg-slate-950 p-4 text-white">
+                {["Perfil tecnico", "Documentos", "Contato com candidatos"].map((item) => (
+                  <p key={item} className="flex items-center gap-2 py-1.5 text-sm text-slate-200">
+                    <CheckCircle2 size={16} className="text-cyan-300" />
+                    {item}
+                  </p>
+                ))}
+              </div>
+            </div>
+          </aside>
         </div>
       </section>
 
-      <section className="border-b border-slate-200 bg-white py-12">
+      <section className="border-b border-emerald-100 bg-[#e9f8f3] py-12">
         <div className="mx-auto grid max-w-7xl gap-4 px-6 md:grid-cols-4">
           {[
             ["Perfis verificaveis", "CRBio, documentos e experiencia tecnica."],
@@ -180,7 +241,10 @@ export default function HomePage() {
             ["Campo e escritorio", "CLT, PJ, diaria, campanha e consultoria."],
             ["Banco disponivel", "Profissionais prontos para novos projetos."],
           ].map(([title, body]) => (
-            <div key={title} className="soft-card rounded-[8px] p-5">
+            <div
+              key={title}
+              className="rounded-[8px] border border-emerald-100 bg-white p-5 shadow-sm"
+            >
               <p className="font-semibold text-slate-950">{title}</p>
               <p className="mt-2 text-sm leading-6 text-slate-600">{body}</p>
             </div>

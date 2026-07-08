@@ -18,6 +18,7 @@ const buttonVariants = cva(
       },
       variant: {
         ghost: "hover:bg-slate-100",
+        light: "border border-slate-200 bg-white shadow-sm hover:bg-slate-50",
         outline: "border border-white/30 bg-white/10 shadow-sm backdrop-blur hover:bg-white/20",
         primary: "bg-cyan-400 shadow-sm shadow-cyan-950/10 hover:bg-cyan-300",
         secondary: "bg-slate-950 hover:bg-slate-800",
@@ -28,6 +29,7 @@ const buttonVariants = cva(
 
 const buttonTextColor = {
   ghost: "#334155",
+  light: "#0f172a",
   outline: "#ffffff",
   primary: "#101820",
   secondary: "#ffffff",
