@@ -11,7 +11,7 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
 
 import { AuthGuard } from "../auth/auth.guard.js";
-import type { UploadedImageFile, UploadKind } from "./uploads.service.js";
+import type { UploadedUploadFile, UploadKind } from "./uploads.service.js";
 import { UploadsService } from "./uploads.service.js";
 
 const uploadKinds = ["biologist", "company"];
@@ -32,11 +32,24 @@ export class UploadsController {
       },
     }),
   )
-  uploadImage(@Param("kind") kind: string, @UploadedFile() file: UploadedImageFile | undefined) {
+  uploadImage(@Param("kind") kind: string, @UploadedFile() file: UploadedUploadFile | undefined) {
     if (!uploadKinds.includes(kind)) {
       throw new BadRequestException("Tipo de upload invalido.");
     }
 
     return this.uploadsService.saveImage(file, kind as UploadKind);
+  }
+
+  @Post("biologist/document")
+  @ApiConsumes("multipart/form-data")
+  @UseInterceptors(
+    FileInterceptor("file", {
+      limits: {
+        fileSize: 5 * 1024 * 1024,
+      },
+    }),
+  )
+  uploadBiologistDocument(@UploadedFile() file: UploadedUploadFile | undefined) {
+    return this.uploadsService.saveBiologistDocument(file);
   }
 }

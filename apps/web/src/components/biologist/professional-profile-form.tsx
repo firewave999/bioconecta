@@ -4,7 +4,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
-import { apiFetch, getStoredAccessToken } from "@/lib/api";
+import { apiFetch, apiUploadBiologistDocument, getStoredAccessToken } from "@/lib/api";
 
 type NamedItem = {
   name: string;
@@ -87,6 +87,7 @@ export function ProfessionalProfileForm() {
     { ...emptyCertification },
   ]);
   const [documents, setDocuments] = useState<DocumentItem[]>([{ ...emptyDocument }]);
+  const [documentFiles, setDocumentFiles] = useState<Record<number, File | null>>({});
   const [completion, setCompletion] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -154,6 +155,23 @@ export function ProfessionalProfileForm() {
     }
 
     try {
+      const documentsWithUploads = await Promise.all(
+        documents.map(async (item, index) => {
+          const file = documentFiles[index];
+
+          if (!file || !item.title.trim()) {
+            return item;
+          }
+
+          const upload = await apiUploadBiologistDocument(file, token);
+
+          return {
+            ...item,
+            fileUrl: upload.url,
+          };
+        }),
+      );
+
       const response = await apiFetch<ProfessionalResponse, Record<string, unknown>>(
         "/biologist-profile/me/professional",
         {
@@ -166,7 +184,7 @@ export function ProfessionalProfileForm() {
                 issuerName: item.issuerName.trim() || undefined,
                 name: item.name,
               })),
-            documents: documents
+            documents: documentsWithUploads
               .filter((item) => item.title.trim() && item.fileUrl.trim())
               .map((item) => ({
                 fileUrl: item.fileUrl,
@@ -391,8 +409,33 @@ export function ProfessionalProfileForm() {
               type="url"
               value={document.fileUrl}
             />
+            <label className="grid gap-2 text-sm font-medium text-slate-700 md:col-span-3">
+              Enviar arquivo
+              <input
+                accept="application/pdf,image/jpeg,image/png"
+                className="rounded-[8px] border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700"
+                onChange={(event) =>
+                  setDocumentFiles((current) => ({
+                    ...current,
+                    [index]: event.target.files?.[0] ?? null,
+                  }))
+                }
+                type="file"
+              />
+              <span className="text-xs text-slate-500">
+                PDF, JPG ou PNG ate 5 MB. Se enviar arquivo, a URL sera preenchida automaticamente
+                ao salvar.
+              </span>
+            </label>
             <RemoveButton
-              onClick={() => removeItem(documents, setDocuments, index, emptyDocument)}
+              onClick={() => {
+                removeItem(documents, setDocuments, index, emptyDocument);
+                setDocumentFiles((current) => {
+                  const next = { ...current };
+                  delete next[index];
+                  return next;
+                });
+              }}
             />
           </div>
         ))}
