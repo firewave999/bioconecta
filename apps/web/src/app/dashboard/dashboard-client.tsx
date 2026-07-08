@@ -26,6 +26,7 @@ type DashboardState = {
 type CompanySummary = {
   city: string;
   cnpj: string;
+  logoUrl: string | null;
   name: string;
   state: string;
   verificationNotes: string | null;
@@ -310,18 +311,27 @@ function CompanyDashboardPanel({ state }: { state: DashboardState }) {
     <div className="grid gap-6">
       <section className="rounded-[8px] border border-slate-200 bg-white p-6 shadow-sm">
         <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
-              Painel da empresa
-            </p>
-            <h2 className="mt-2 text-2xl font-semibold text-slate-950">
-              {company?.name ?? "Complete o cadastro da empresa"}
-            </h2>
-            <p className="mt-2 text-slate-600">
-              {company
-                ? `${company.city}/${company.state} - CNPJ ${formatCnpj(company.cnpj)}`
-                : "Cadastre os dados juridicos antes de publicar vagas."}
-            </p>
+          <div className="flex flex-col gap-4 md:flex-row md:items-start">
+            {company?.logoUrl ? (
+              <img
+                alt={`Logo ${company.name}`}
+                className="h-20 w-20 rounded-[8px] border border-slate-200 bg-white object-cover"
+                src={company.logoUrl}
+              />
+            ) : null}
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
+                Painel da empresa
+              </p>
+              <h2 className="mt-2 text-2xl font-semibold text-slate-950">
+                {company?.name ?? "Complete o cadastro da empresa"}
+              </h2>
+              <p className="mt-2 text-slate-600">
+                {company
+                  ? `${company.city}/${company.state} - CNPJ ${formatCnpj(company.cnpj)}`
+                  : "Cadastre os dados juridicos antes de publicar vagas."}
+              </p>
+            </div>
           </div>
           <StatusBadge status={company?.verificationStatus ?? "PENDING_PROFILE"} />
         </div>

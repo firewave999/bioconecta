@@ -10,6 +10,7 @@ import { apiFetch, getStoredAccessToken } from "@/lib/api";
 
 type Candidate = {
   biologistProfile: {
+    avatarUrl: string | null;
     city: string;
     fullName: string;
     headline: string | null;
@@ -129,17 +130,26 @@ export function CandidatesClient() {
               key={application.id}
             >
               <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-                <div>
-                  <h2 className="text-xl font-semibold text-slate-950">
-                    {application.biologistProfile.fullName}
-                  </h2>
-                  <p className="mt-1 text-slate-600">
-                    {application.biologistProfile.headline ?? "Sem headline"} |{" "}
-                    {application.biologistProfile.city}/{application.biologistProfile.state}
-                  </p>
-                  <p className="mt-2 text-sm font-semibold text-cyan-800">
-                    Match: {application.matchScore}%
-                  </p>
+                <div className="flex flex-col gap-3 md:flex-row md:items-start">
+                  {application.biologistProfile.avatarUrl ? (
+                    <img
+                      alt={`Foto de ${application.biologistProfile.fullName}`}
+                      className="h-16 w-16 rounded-full border border-slate-200 bg-white object-cover"
+                      src={application.biologistProfile.avatarUrl}
+                    />
+                  ) : null}
+                  <div>
+                    <h2 className="text-xl font-semibold text-slate-950">
+                      {application.biologistProfile.fullName}
+                    </h2>
+                    <p className="mt-1 text-slate-600">
+                      {application.biologistProfile.headline ?? "Sem headline"} |{" "}
+                      {application.biologistProfile.city}/{application.biologistProfile.state}
+                    </p>
+                    <p className="mt-2 text-sm font-semibold text-cyan-800">
+                      Match: {application.matchScore}%
+                    </p>
+                  </div>
                 </div>
                 <span className="rounded-full bg-slate-100 px-3 py-1 text-sm font-semibold text-slate-700">
                   {application.status}

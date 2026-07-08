@@ -27,6 +27,7 @@ function envFromConfig(configService: ConfigService<Env, true>): Env {
     POSTGRES_PORT: configService.get("POSTGRES_PORT", { infer: true }),
     POSTGRES_USER: configService.get("POSTGRES_USER", { infer: true }),
     REDIS_URL: configService.get("REDIS_URL", { infer: true }),
+    UPLOADS_DIR: configService.get("UPLOADS_DIR", { infer: true }),
   };
 }
 

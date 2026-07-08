@@ -49,6 +49,9 @@ services:
       APP_API_PORT: 4000
       DATABASE_URL: postgresql://${POSTGRES_USER:-bioconecta}:${POSTGRES_PASSWORD}@bioconecta-postgres:5432/${POSTGRES_DB:-bioconecta_prod}
       REDIS_URL: redis://bioconecta-redis:6379
+      UPLOADS_DIR: /app/uploads
+    volumes:
+      - bioconecta_uploads:/app/uploads
     depends_on:
       bioconecta-postgres:
         condition: service_healthy
@@ -86,3 +89,5 @@ volumes:
     name: bioconecta_postgres_data
   bioconecta_redis_data:
     name: bioconecta_redis_data
+  bioconecta_uploads:
+    name: bioconecta_uploads

@@ -37,6 +37,9 @@ export class Company {
   @Column({ type: "varchar", length: 160, nullable: true })
   website!: string | null;
 
+  @Column({ name: "logo_url", type: "varchar", length: 500, nullable: true })
+  logoUrl!: string | null;
+
   @Column({ type: "varchar", length: 2 })
   state!: string;
 

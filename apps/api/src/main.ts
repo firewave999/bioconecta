@@ -4,6 +4,7 @@ import { appConfig } from "@bioconecta/config";
 import { ValidationPipe } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
+import { NestExpressApplication } from "@nestjs/platform-express";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import helmet from "helmet";
 
@@ -18,15 +19,19 @@ function parseCorsOrigins(origin: string): string[] {
 }
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bufferLogs: true,
   });
 
   const configService = app.get<ConfigService<Env, true>>(ConfigService);
   const port = configService.get("APP_API_PORT", { infer: true });
+  const uploadsDir = configService.get("UPLOADS_DIR", { infer: true });
   const webUrl = configService.get("APP_WEB_URL", { infer: true });
 
   app.setGlobalPrefix(appConfig.apiPrefix.replace(/^\//, ""));
+  app.useStaticAssets(uploadsDir, {
+    prefix: "/uploads",
+  });
   app.use(helmet());
   app.enableCors({
     credentials: true,

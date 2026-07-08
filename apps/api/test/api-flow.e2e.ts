@@ -50,6 +50,8 @@ describe("BioConecta API E2E", () => {
       email: `empresa.e2e.${suffix}@bioconecta.local`,
       role: "COMPANY",
     });
+    const biologistAvatarUrl = await uploadImage(biologist.accessToken, "biologist");
+    const companyLogoUrl = await uploadImage(company.accessToken, "company");
 
     await request(app.getHttpServer())
       .put("/api/v1/biologist-profile/me")
@@ -57,6 +59,7 @@ describe("BioConecta API E2E", () => {
       .send({
         acceptsTravel: true,
         availabilityStatus: "AVAILABLE_NOW",
+        avatarUrl: biologistAvatarUrl,
         bio: "Atuacao em monitoramento de fauna.",
         birthDate: "1990-01-01",
         city: "Sao Paulo",
@@ -103,6 +106,7 @@ describe("BioConecta API E2E", () => {
         city: "Sao Paulo",
         cnpj: `${suffix}`.slice(-14).padStart(14, "9"),
         description: "Consultoria ambiental E2E.",
+        logoUrl: companyLogoUrl,
         name: "Eco E2E",
         size: "SMALL",
         state: "SP",
@@ -298,7 +302,25 @@ describe("BioConecta API E2E", () => {
       accessToken: loginResponse.body.tokens.accessToken as string,
     };
   }
+
+  async function uploadImage(accessToken: string, kind: "biologist" | "company") {
+    const response = await request(app.getHttpServer())
+      .post(`/api/v1/uploads/${kind}/image`)
+      .set("Authorization", `Bearer ${accessToken}`)
+      .attach("file", Buffer.from(testPngBase64, "base64"), {
+        contentType: "image/png",
+        filename: `${kind}.png`,
+      })
+      .expect(201);
+
+    expect(response.body.url).toContain(`/uploads/${kind}/`);
+
+    return response.body.url as string;
+  }
 });
+
+const testPngBase64 =
+  "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII=";
 
 function createJobPayload(overrides: Partial<ReturnType<typeof createJobPayloadBase>> = {}) {
   return {

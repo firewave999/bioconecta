@@ -13,6 +13,11 @@ export class UpsertCompanyDto {
   @IsUrl({ require_protocol: true })
   website?: string;
 
+  @IsOptional()
+  @IsUrl({ require_protocol: true, require_tld: false })
+  @MaxLength(500)
+  logoUrl?: string;
+
   @IsString()
   @Length(2, 2)
   state!: string;

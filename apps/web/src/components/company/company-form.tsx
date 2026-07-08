@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
-import { apiFetch, getStoredAccessToken } from "@/lib/api";
+import { apiFetch, apiUploadImage, getStoredAccessToken } from "@/lib/api";
 
 const COMPANY_ROLES = ["COMPANY", "RECRUITER"];
 
@@ -13,6 +13,7 @@ type Company = {
   city: string;
   cnpj: string;
   description: string | null;
+  logoUrl: string | null;
   name: string;
   size: "SOLO" | "SMALL" | "MEDIUM" | "LARGE";
   state: string;
@@ -33,6 +34,7 @@ export function CompanyForm() {
   const [error, setError] = useState<string | null>(null);
   const [initialLoading, setInitialLoading] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [logoUrl, setLogoUrl] = useState("");
 
   useEffect(() => {
     const token = getStoredAccessToken();
@@ -52,6 +54,7 @@ export function CompanyForm() {
 
         const response = await apiFetch<{ company: Company | null }>("/companies/me", { token });
         setCompany(response.company);
+        setLogoUrl(response.company?.logoUrl ?? "");
       })
       .catch((err) =>
         setError(err instanceof Error ? err.message : "Nao foi possivel carregar a empresa."),
@@ -79,6 +82,8 @@ export function CompanyForm() {
 
     const form = new FormData(event.currentTarget);
     const cnpj = onlyDigits(String(form.get("cnpj") ?? ""));
+    const logoEntry = form.get("logo");
+    const logoFile = logoEntry instanceof File ? logoEntry : null;
 
     if (cnpj.length !== 14) {
       setLoading(false);
@@ -87,11 +92,20 @@ export function CompanyForm() {
     }
 
     try {
+      let nextLogoUrl = logoUrl;
+
+      if (logoFile && logoFile.size > 0) {
+        const upload = await apiUploadImage("company", logoFile, token);
+        nextLogoUrl = upload.url;
+        setLogoUrl(upload.url);
+      }
+
       await apiFetch<{ company: Company }, Record<string, unknown>>("/companies/me", {
         body: {
           city: form.get("city"),
           cnpj,
           description: form.get("description"),
+          logoUrl: nextLogoUrl || undefined,
           name: form.get("name"),
           size: form.get("size"),
           state: form.get("state"),
@@ -180,6 +194,24 @@ export function CompanyForm() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
+        <label className="grid gap-2 text-sm font-medium text-slate-700 md:col-span-2">
+          Logo da empresa
+          <div className="flex flex-col gap-3 rounded-[8px] border border-slate-200 bg-slate-50 p-4 md:flex-row md:items-center">
+            {logoUrl ? (
+              <img
+                alt="Logo atual da empresa"
+                className="h-20 w-20 rounded-[8px] border border-slate-200 bg-white object-cover"
+                src={logoUrl}
+              />
+            ) : null}
+            <input
+              accept="image/jpeg,image/png,image/webp"
+              className="text-sm text-slate-700"
+              name="logo"
+              type="file"
+            />
+          </div>
+        </label>
         <Field defaultValue={company?.name} label="Nome da empresa" name="name" required />
         <Field
           defaultValue={company?.cnpj ? formatCnpj(company.cnpj) : ""}

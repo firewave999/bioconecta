@@ -4,7 +4,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
-import { apiFetch, getStoredAccessToken } from "@/lib/api";
+import { apiFetch, apiUploadImage, getStoredAccessToken } from "@/lib/api";
 
 type ProfileResponse = {
   completion: number;
@@ -15,6 +15,7 @@ type BiologistProfile = {
   acceptsTravel: boolean;
   availabilityStatus: string;
   availableFrom: string | null;
+  avatarUrl: string | null;
   bio: string | null;
   birthDate: string;
   city: string;
@@ -39,6 +40,7 @@ type Props = {
 export function BiologistProfileForm({ mode }: Props) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const [avatarUrl, setAvatarUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [profile, setProfile] = useState<BiologistProfile | null>(null);
 
@@ -53,7 +55,10 @@ export function BiologistProfileForm({ mode }: Props) {
     apiFetch<ProfileResponse>("/biologist-profile/me", {
       token,
     })
-      .then((response) => setProfile(response.profile))
+      .then((response) => {
+        setProfile(response.profile);
+        setAvatarUrl(response.profile?.avatarUrl ?? "");
+      })
       .catch(() => {
         if (mode === "edit") {
           setError("Nao foi possivel carregar seu perfil.");
@@ -74,13 +79,24 @@ export function BiologistProfileForm({ mode }: Props) {
     }
 
     const form = new FormData(event.currentTarget);
+    const avatarEntry = form.get("avatar");
+    const avatarFile = avatarEntry instanceof File ? avatarEntry : null;
 
     try {
+      let nextAvatarUrl = avatarUrl;
+
+      if (avatarFile && avatarFile.size > 0) {
+        const upload = await apiUploadImage("biologist", avatarFile, token);
+        nextAvatarUrl = upload.url;
+        setAvatarUrl(upload.url);
+      }
+
       await apiFetch<ProfileResponse, Record<string, unknown>>("/biologist-profile/me", {
         body: {
           acceptsTravel: form.get("acceptsTravel") === "on",
           availabilityStatus: form.get("availabilityStatus"),
           availableFrom: form.get("availableFrom") || undefined,
+          avatarUrl: nextAvatarUrl || undefined,
           bio: form.get("bio"),
           birthDate: form.get("birthDate"),
           city: form.get("city"),
@@ -126,6 +142,24 @@ export function BiologistProfileForm({ mode }: Props) {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
+        <label className="grid gap-2 text-sm font-medium text-slate-700 md:col-span-2">
+          Foto do perfil
+          <div className="flex flex-col gap-3 rounded-[8px] border border-slate-200 bg-slate-50 p-4 md:flex-row md:items-center">
+            {avatarUrl ? (
+              <img
+                alt="Foto atual do perfil"
+                className="h-20 w-20 rounded-full border border-slate-200 bg-white object-cover"
+                src={avatarUrl}
+              />
+            ) : null}
+            <input
+              accept="image/jpeg,image/png,image/webp"
+              className="text-sm text-slate-700"
+              name="avatar"
+              type="file"
+            />
+          </div>
+        </label>
         <Field defaultValue={profile?.fullName} label="Nome completo" name="fullName" required />
         <Field defaultValue={profile?.cpf} label="CPF" name="cpf" required />
         <Field

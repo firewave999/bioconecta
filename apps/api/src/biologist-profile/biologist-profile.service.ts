@@ -225,6 +225,7 @@ export class BiologistProfileService {
       acceptsTravel: dto.acceptsTravel,
       availabilityStatus: dto.availabilityStatus,
       availableFrom: dto.availableFrom || null,
+      avatarUrl: dto.avatarUrl?.trim() || null,
       bio: dto.bio?.trim() || null,
       birthDate: dto.birthDate,
       city: dto.city.trim(),

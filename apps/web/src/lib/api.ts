@@ -57,6 +57,27 @@ export async function apiFetch<
   return payload as TResponse;
 }
 
+export async function apiUploadImage(kind: "biologist" | "company", file: File, token: string) {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await fetch(`${apiUrl}/uploads/${kind}/image`, {
+    body: formData,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    method: "POST",
+  });
+
+  const payload = (await response.json().catch(() => ({}))) as unknown;
+
+  if (!response.ok) {
+    throw new ApiError(getErrorMessage(payload), response.status);
+  }
+
+  return payload as { url: string };
+}
+
 export function getStoredAccessToken() {
   return typeof window === "undefined" ? null : localStorage.getItem("bioconecta.accessToken");
 }

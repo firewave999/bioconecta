@@ -5,6 +5,7 @@ import {
   IsISO8601,
   IsOptional,
   IsString,
+  IsUrl,
   Length,
   Max,
   MaxLength,
@@ -51,6 +52,11 @@ export class UpsertBiologistProfileDto {
   @IsString()
   @MaxLength(180)
   headline?: string;
+
+  @IsOptional()
+  @IsUrl({ require_protocol: true, require_tld: false })
+  @MaxLength(500)
+  avatarUrl?: string;
 
   @IsOptional()
   @IsString()

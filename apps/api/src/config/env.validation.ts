@@ -17,6 +17,7 @@ const envSchema = z.object({
   POSTGRES_PORT: z.coerce.number().int().positive().default(5432),
   POSTGRES_USER: z.string().min(1).default("bioconecta"),
   REDIS_URL: z.string().min(1).default("redis://localhost:6379"),
+  UPLOADS_DIR: z.string().min(1).default("uploads"),
 });
 
 export type Env = z.infer<typeof envSchema>;

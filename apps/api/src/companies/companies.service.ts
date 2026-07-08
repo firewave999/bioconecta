@@ -34,6 +34,7 @@ export class CompaniesService {
       city: dto.city.trim(),
       cnpj: dto.cnpj.replace(/\D/g, ""),
       description: dto.description?.trim() || null,
+      logoUrl: dto.logoUrl?.trim() || null,
       name: dto.name.trim(),
       ownerUserId: userId,
       size: dto.size,

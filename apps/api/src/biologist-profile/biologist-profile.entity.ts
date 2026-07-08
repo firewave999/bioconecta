@@ -57,6 +57,9 @@ export class BiologistProfile {
   @Column({ type: "varchar", length: 180, nullable: true })
   headline!: string | null;
 
+  @Column({ name: "avatar_url", type: "varchar", length: 500, nullable: true })
+  avatarUrl!: string | null;
+
   @Column({ type: "text", nullable: true })
   bio!: string | null;
 
