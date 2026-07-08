@@ -68,6 +68,7 @@ services:
       dockerfile: infra/Dockerfile.web
       args:
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+        NEXT_PUBLIC_SITE_URL: ${APP_WEB_URL}
     container_name: bioconecta-web
     restart: unless-stopped
     env_file:

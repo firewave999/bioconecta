@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
+import { siteUrl } from "@/lib/site-url";
+
 import "./globals.css";
 
 const inter = Inter({
@@ -12,7 +14,10 @@ const inter = Inter({
 export const metadata: Metadata = {
   description:
     "Encontre vagas, projetos, campanhas de campo e profissionais especializados em Biologia no Brasil.",
-  metadataBase: new URL("http://localhost:3000"),
+  alternates: {
+    canonical: "/",
+  },
+  metadataBase: new URL(siteUrl),
   openGraph: {
     description:
       "A plataforma nacional para conectar biologos, estudantes e empresas as oportunidades certas.",

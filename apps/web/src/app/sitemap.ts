@@ -1,12 +1,16 @@
 import type { MetadataRoute } from "next";
 
+import { absoluteUrl } from "@/lib/site-url";
+
+const publicRoutes = ["/", "/vagas", "/login", "/cadastro", "/empresa"];
+
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [
-    {
-      changeFrequency: "weekly",
-      lastModified: new Date(),
-      priority: 1,
-      url: "http://localhost:3000/",
-    },
-  ];
+  const lastModified = new Date();
+
+  return publicRoutes.map((route) => ({
+    changeFrequency: "weekly",
+    lastModified,
+    priority: route === "/" ? 1 : 0.7,
+    url: absoluteUrl(route),
+  }));
 }
