@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
 import { apiFetch, getStoredAccessToken } from "@/lib/api";
 
 type Notification = {
@@ -150,9 +151,10 @@ export function NotificationsClient() {
           </article>
         ))
       ) : (
-        <div className="rounded-[8px] border border-slate-200 bg-white p-6 text-slate-600">
-          Nenhuma notificacao por enquanto.
-        </div>
+        <EmptyState
+          description="Avisos de candidatura, retorno de empresa e atualizacoes importantes aparecerao aqui."
+          title="Nenhuma notificacao por enquanto"
+        />
       )}
     </section>
   );

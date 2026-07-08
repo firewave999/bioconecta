@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
 import { apiFetch, getStoredAccessToken } from "@/lib/api";
 
 type SavedJob = {
@@ -42,9 +43,14 @@ export function FavoritesClient() {
     return (
       <div className="rounded-[8px] border border-red-200 bg-red-50 p-5 text-red-700">
         <p>{error}</p>
-        <Button asChild className="mt-4">
-          <Link href="/login">Ir para login</Link>
-        </Button>
+        <div className="mt-4 flex flex-wrap gap-3">
+          <Button asChild>
+            <Link href="/dashboard">Voltar ao dashboard</Link>
+          </Button>
+          <Button asChild variant="secondary">
+            <Link href="/login">Ir para login</Link>
+          </Button>
+        </div>
       </div>
     );
   }
@@ -68,9 +74,12 @@ export function FavoritesClient() {
           </article>
         ))
       ) : (
-        <div className="rounded-[8px] border border-slate-200 bg-white p-6 text-slate-600">
-          Nenhuma vaga salva ainda.
-        </div>
+        <EmptyState
+          actionHref="/vagas"
+          actionLabel="Buscar vagas"
+          description="Salve vagas para comparar oportunidades e voltar nelas depois."
+          title="Nenhuma vaga salva ainda"
+        />
       )}
     </section>
   );
