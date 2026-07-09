@@ -1,5 +1,4 @@
 import {
-  ArrowRight,
   BadgeCheck,
   BriefcaseBusiness,
   Building2,
@@ -17,6 +16,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
+import { HomeAuthActions } from "@/components/home/home-auth-actions";
 import { Button } from "@/components/ui/button";
 
 const recentJobs = [
@@ -112,9 +112,7 @@ export default function HomePage() {
             </a>
           </nav>
 
-          <Button asChild size="sm" variant="outline">
-            <Link href="/login">Entrar</Link>
-          </Button>
+          <HomeAuthActions context="header" />
         </header>
 
         <div
@@ -136,17 +134,7 @@ export default function HomePage() {
               contratacao profissional. Menos improviso, mais processo.
             </p>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Button asChild>
-                <Link href="/cadastro">
-                  Sou biologo
-                  <ArrowRight size={18} />
-                </Link>
-              </Button>
-              <Button asChild variant="outline">
-                <Link href="/empresa">Cadastrar empresa</Link>
-              </Button>
-            </div>
+            <HomeAuthActions context="hero" />
 
             <form
               id="busca"
@@ -381,9 +369,7 @@ export default function HomePage() {
               matching.
             </p>
           </div>
-          <Button asChild variant="secondary">
-            <Link href="/empresa">Cadastrar empresa</Link>
-          </Button>
+          <HomeAuthActions context="footer" />
         </div>
       </section>
     </main>
