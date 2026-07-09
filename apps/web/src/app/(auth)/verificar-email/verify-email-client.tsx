@@ -44,17 +44,36 @@ export function VerifyEmailClient() {
         <p className="text-sm text-slate-600">Verificando e-mail...</p>
       ) : verified ? (
         <div className="grid gap-4 rounded-[8px] border border-cyan-200 bg-cyan-50 p-4 text-sm text-cyan-900">
-          <p>E-mail verificado com sucesso.</p>
-          <Button asChild variant="secondary">
-            <Link href="/dashboard">Ir para dashboard</Link>
-          </Button>
+          <div>
+            <p className="font-semibold">E-mail verificado com sucesso.</p>
+            <p className="mt-1 text-cyan-800">
+              As acoes da conta foram liberadas. Se voce ja estava com o dashboard aberto,
+              recarregue a pagina para atualizar o aviso de verificacao.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Button asChild>
+              <Link href="/dashboard">Ir para dashboard</Link>
+            </Button>
+            <Button asChild variant="light">
+              <Link href="/login">Entrar novamente</Link>
+            </Button>
+          </div>
         </div>
       ) : (
         <div className="grid gap-4 rounded-[8px] border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-          <p>{error ?? "Nao foi possivel verificar este e-mail."}</p>
-          <Button asChild variant="secondary">
-            <Link href="/login">Voltar ao login</Link>
-          </Button>
+          <div>
+            <p className="font-semibold">Nao foi possivel verificar este e-mail.</p>
+            <p className="mt-1">{error ?? "O link pode estar expirado ou ja ter sido usado."}</p>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Button asChild>
+              <Link href="/dashboard">Ir para dashboard e reenviar</Link>
+            </Button>
+            <Button asChild variant="light">
+              <Link href="/login">Voltar ao login</Link>
+            </Button>
+          </div>
         </div>
       )}
     </section>
