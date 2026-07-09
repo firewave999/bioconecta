@@ -2,6 +2,7 @@ import { Body, Controller, Get, Param, Post, Put, Query, Req, UseGuards } from "
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from "@nestjs/swagger";
 
 import { AuthGuard } from "../auth/auth.guard.js";
+import { EmailVerifiedGuard } from "../auth/email-verified.guard.js";
 import type { AuthenticatedRequest } from "../auth/types.js";
 import { ListJobsQueryDto } from "./dto/list-jobs-query.dto.js";
 import { UpsertJobDto } from "./dto/upsert-job.dto.js";
@@ -42,7 +43,7 @@ export class JobsController {
 
   @Post()
   @ApiBearerAuth()
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, EmailVerifiedGuard)
   @ApiOkResponse({ description: "Vaga criada." })
   createMine(@Req() request: AuthenticatedRequest, @Body() dto: UpsertJobDto) {
     return this.jobsService.createMine(request.user.sub, dto);
@@ -50,7 +51,7 @@ export class JobsController {
 
   @Put(":id")
   @ApiBearerAuth()
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, EmailVerifiedGuard)
   @ApiOkResponse({ description: "Vaga atualizada." })
   updateMine(
     @Req() request: AuthenticatedRequest,

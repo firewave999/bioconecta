@@ -28,13 +28,14 @@ export class MailService {
     await this.send({
       htmlContent: this.layout({
         body: `
-          <p>Recebemos seu cadastro no BioConecta.</p>
-          <p>Confirme seu e-mail para manter sua conta segura e liberar os proximos passos da plataforma.</p>
+          <p>Ola, ${input.name}.</p>
+          <p>Recebemos seu cadastro no BioConecta. Confirme seu e-mail para liberar cadastro de perfil, candidaturas, vagas e demais acoes da plataforma.</p>
           <p style="margin: 28px 0;">
             <a href="${verifyUrl}" style="${buttonStyle}">Verificar e-mail</a>
           </p>
           <p>Se o botao nao funcionar, acesse este link:</p>
           <p style="word-break: break-all; color: #0e7490;">${verifyUrl}</p>
+          <p style="margin-top:24px;font-size:13px;color:#64748b;">Por seguranca, ignore este e-mail se voce nao criou uma conta no BioConecta.</p>
         `,
         title: "Confirme seu e-mail",
       }),
@@ -49,13 +50,15 @@ export class MailService {
     await this.send({
       htmlContent: this.layout({
         body: `
-          <p>Recebemos uma solicitacao para redefinir a senha da sua conta.</p>
-          <p>Use o botao abaixo para criar uma nova senha. Se voce nao pediu isso, ignore este e-mail.</p>
+          <p>Ola, ${input.name}.</p>
+          <p>Recebemos uma solicitacao para redefinir a senha da sua conta no BioConecta.</p>
+          <p>Use o botao abaixo para criar uma nova senha. O link expira em breve por seguranca.</p>
           <p style="margin: 28px 0;">
             <a href="${resetUrl}" style="${buttonStyle}">Redefinir senha</a>
           </p>
           <p>Se o botao nao funcionar, acesse este link:</p>
           <p style="word-break: break-all; color: #0e7490;">${resetUrl}</p>
+          <p style="margin-top:24px;font-size:13px;color:#64748b;">Se voce nao pediu isso, nenhuma acao e necessaria.</p>
         `,
         title: "Redefinicao de senha",
       }),
@@ -101,14 +104,18 @@ export class MailService {
 
   private layout(input: { body: string; title: string }) {
     return `
-      <div style="margin:0;padding:0;background:#f3fbf8;font-family:Arial,sans-serif;color:#0f172a;">
+      <div style="margin:0;padding:0;background:#eef7f3;font-family:Arial,sans-serif;color:#0f172a;">
         <div style="max-width:620px;margin:0 auto;padding:32px 20px;">
-          <div style="background:#ffffff;border:1px solid #cbe2db;border-radius:8px;padding:28px;">
-            <p style="margin:0 0 16px;color:#0e7490;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;">BioConecta</p>
+          <div style="background:#ffffff;border:1px solid #cbe2db;border-radius:8px;overflow:hidden;">
+            <div style="background:#0f3d3e;padding:18px 28px;">
+              <p style="margin:0;color:#d7fbfd;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;">BioConecta</p>
+            </div>
+            <div style="padding:28px;">
             <h1 style="margin:0 0 18px;font-size:28px;line-height:1.2;color:#0f172a;">${input.title}</h1>
             <div style="font-size:16px;line-height:1.6;color:#334155;">${input.body}</div>
+            </div>
           </div>
-          <p style="margin:16px 0 0;text-align:center;font-size:12px;color:#64748b;">BioConecta - Plataforma profissional para a Biologia.</p>
+          <p style="margin:16px 0 0;text-align:center;font-size:12px;color:#64748b;">BioConecta - Plataforma profissional para a Biologia no Brasil.</p>
         </div>
       </div>
     `;

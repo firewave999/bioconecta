@@ -2,6 +2,7 @@ import { Body, Controller, Get, Put, Req, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from "@nestjs/swagger";
 
 import { AuthGuard } from "../auth/auth.guard.js";
+import { EmailVerifiedGuard } from "../auth/email-verified.guard.js";
 import type { AuthenticatedRequest } from "../auth/types.js";
 import { CompaniesService } from "./companies.service.js";
 import { UpsertCompanyDto } from "./dto/upsert-company.dto.js";
@@ -20,6 +21,7 @@ export class CompaniesController {
   }
 
   @Put("me")
+  @UseGuards(EmailVerifiedGuard)
   @ApiOkResponse({ description: "Empresa criada ou atualizada." })
   upsertMine(@Req() request: AuthenticatedRequest, @Body() dto: UpsertCompanyDto) {
     return this.companiesService.upsertMine(request.user.sub, dto);

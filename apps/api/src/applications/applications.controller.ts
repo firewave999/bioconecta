@@ -2,6 +2,7 @@ import { Body, Controller, Get, Param, Post, Put, Req, UseGuards } from "@nestjs
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from "@nestjs/swagger";
 
 import { AuthGuard } from "../auth/auth.guard.js";
+import { EmailVerifiedGuard } from "../auth/email-verified.guard.js";
 import type { AuthenticatedRequest } from "../auth/types.js";
 import { ApplicationsService } from "./applications.service.js";
 import { CreateApplicationDto } from "./dto/create-application.dto.js";
@@ -27,6 +28,7 @@ export class ApplicationsController {
   }
 
   @Post("jobs/:jobId")
+  @UseGuards(EmailVerifiedGuard)
   @ApiOkResponse({ description: "Candidatura criada." })
   apply(
     @Req() request: AuthenticatedRequest,
@@ -43,6 +45,7 @@ export class ApplicationsController {
   }
 
   @Put(":id/status")
+  @UseGuards(EmailVerifiedGuard)
   @ApiOkResponse({ description: "Status da candidatura atualizado." })
   updateStatus(
     @Req() request: AuthenticatedRequest,

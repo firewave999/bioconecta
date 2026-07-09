@@ -4,6 +4,7 @@ import { FormEvent, useState } from "react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { EmailVerificationNotice } from "@/components/auth/email-verification-notice";
 import { apiRequest } from "@/lib/api";
 
 type AuthTokens = {
@@ -170,6 +171,7 @@ export function RegisterForm() {
                 Enviamos um link de verificacao para seu e-mail. Confira sua caixa de entrada antes
                 de continuar.
               </p>
+              <EmailVerificationNotice email={result.user.email} />
               <Button asChild>
                 <Link href={getNextPath(registeredRole)}>{getNextLabel(registeredRole)}</Link>
               </Button>

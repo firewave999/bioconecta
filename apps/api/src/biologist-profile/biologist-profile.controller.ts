@@ -2,6 +2,7 @@ import { Body, Controller, Get, Put, Req, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from "@nestjs/swagger";
 
 import { AuthGuard } from "../auth/auth.guard.js";
+import { EmailVerifiedGuard } from "../auth/email-verified.guard.js";
 import type { AuthenticatedRequest } from "../auth/types.js";
 import { BiologistProfileService } from "./biologist-profile.service.js";
 import { UpsertProfessionalProfileDto } from "./dto/upsert-professional-profile.dto.js";
@@ -21,6 +22,7 @@ export class BiologistProfileController {
   }
 
   @Put("me")
+  @UseGuards(EmailVerifiedGuard)
   @ApiOkResponse({ description: "Perfil do biologo salvo." })
   upsertMine(@Req() request: AuthenticatedRequest, @Body() dto: UpsertBiologistProfileDto) {
     return this.biologistProfileService.upsertMine(request.user.sub, dto);
@@ -33,6 +35,7 @@ export class BiologistProfileController {
   }
 
   @Put("me/professional")
+  @UseGuards(EmailVerifiedGuard)
   @ApiOkResponse({ description: "Perfil profissional expandido salvo." })
   upsertProfessionalMine(
     @Req() request: AuthenticatedRequest,

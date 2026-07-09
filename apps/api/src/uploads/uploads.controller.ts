@@ -11,6 +11,7 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
 
 import { AuthGuard } from "../auth/auth.guard.js";
+import { EmailVerifiedGuard } from "../auth/email-verified.guard.js";
 import type { UploadedUploadFile, UploadKind } from "./uploads.service.js";
 import { UploadsService } from "./uploads.service.js";
 
@@ -18,7 +19,7 @@ const uploadKinds = ["biologist", "company"];
 
 @ApiTags("uploads")
 @ApiBearerAuth()
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, EmailVerifiedGuard)
 @Controller("uploads")
 export class UploadsController {
   constructor(private readonly uploadsService: UploadsService) {}

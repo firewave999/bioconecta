@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 
 import { LogoutButton } from "@/components/auth/logout-button";
+import { EmailVerificationNotice } from "@/components/auth/email-verification-notice";
 import { Button } from "@/components/ui/button";
 import { apiFetch, getStoredAccessToken } from "@/lib/api";
 
@@ -22,6 +23,7 @@ type DashboardState = {
   completion: number;
   documentsCount: number;
   email: string;
+  emailVerifiedAt: string | null;
   experiencesCount: number;
   firstName: string;
   isAdmin: boolean;
@@ -60,9 +62,9 @@ export function DashboardClient() {
       return;
     }
 
-    apiFetch<{ user: { email: string; firstName: string; roles: string[] } }>("/auth/me", {
-      token,
-    })
+    apiFetch<{
+      user: { email: string; emailVerifiedAt: string | null; firstName: string; roles: string[] };
+    }>("/auth/me", { token })
       .then(async (me) => {
         const isCompanyAccount =
           me.user.roles.includes("COMPANY") || me.user.roles.includes("RECRUITER");
@@ -85,6 +87,7 @@ export function DashboardClient() {
             completion: jobsResponse.jobs.length,
             documentsCount: closedJobs.length,
             email: me.user.email,
+            emailVerifiedAt: me.user.emailVerifiedAt,
             experiencesCount: draftJobs.length,
             firstName: me.user.firstName,
             isAdmin: me.user.roles.includes("ADMIN"),
@@ -104,6 +107,7 @@ export function DashboardClient() {
             completion: 0,
             documentsCount: 0,
             email: me.user.email,
+            emailVerifiedAt: me.user.emailVerifiedAt,
             experiencesCount: 0,
             firstName: me.user.firstName,
             isAdmin: me.user.roles.includes("ADMIN"),
@@ -143,6 +147,7 @@ export function DashboardClient() {
           completion: profile.completion,
           documentsCount: profile.professional.documents.length,
           email: me.user.email,
+          emailVerifiedAt: me.user.emailVerifiedAt,
           experiencesCount: profile.professional.experiences.length,
           firstName: me.user.firstName,
           isAdmin: me.user.roles.includes("ADMIN"),
@@ -190,6 +195,8 @@ export function DashboardClient() {
           <LogoutButton />
         </div>
       </section>
+
+      {!state.emailVerifiedAt ? <EmailVerificationNotice email={state.email} /> : null}
 
       {state.isBiologistAccount ? (
         <section className="grid gap-4 md:grid-cols-3">
