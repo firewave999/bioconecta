@@ -1,0 +1,10 @@
+[Unit]
+Description=Run BioConecta PostgreSQL backup daily
+
+[Timer]
+OnCalendar=*-*-* 03:20:00
+Persistent=true
+Unit=bioconecta-backup.service
+
+[Install]
+WantedBy=timers.target

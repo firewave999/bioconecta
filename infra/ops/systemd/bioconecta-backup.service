@@ -1,0 +1,8 @@
+[Unit]
+Description=BioConecta daily PostgreSQL backup
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/opt/bioconecta/infra/ops/bioconecta-backup.sh

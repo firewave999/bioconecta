@@ -1,0 +1,8 @@
+[Unit]
+Description=BioConecta HTTP health check
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/opt/bioconecta/infra/ops/bioconecta-healthcheck.sh
