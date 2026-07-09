@@ -234,17 +234,29 @@ export function DashboardClient() {
 
       {state.isBiologistAccount ? (
         <section className="soft-card rounded-[8px] p-6">
-          <h2 className="text-xl font-semibold text-slate-950">
-            {state.profileExists
-              ? state.professionalStarted
-                ? "Seu perfil profissional esta avancando."
-                : "Complete seu perfil profissional."
-              : "Complete seu onboarding."}
-          </h2>
-          <p className="mt-2 text-slate-600">
-            Adicione documentos, areas de atuacao, grupos taxonomicos, competencias, experiencias e
-            certificacoes.
-          </p>
+          <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+            <div>
+              <h2 className="text-xl font-semibold text-slate-950">
+                {state.profileExists
+                  ? state.professionalStarted
+                    ? "Seu perfil profissional esta avancando."
+                    : "Complete seu perfil profissional."
+                  : "Complete seu onboarding."}
+              </h2>
+              <p className="mt-2 text-slate-600">
+                Quanto mais completo o perfil, melhor a leitura de match nas vagas e mais confianca
+                para a empresa entrar em contato.
+              </p>
+            </div>
+            <span className="w-fit rounded-full bg-cyan-50 px-3 py-1 text-sm font-semibold text-cyan-800">
+              {getBiologistStage(state)}
+            </span>
+          </div>
+          <div className="mt-5 grid gap-3 md:grid-cols-3">
+            <ChecklistItem done={Boolean(state.emailVerifiedAt)} text="E-mail verificado" />
+            <ChecklistItem done={state.profileExists} text="Dados basicos preenchidos" />
+            <ChecklistItem done={state.professionalStarted} text="Especialidades e documentos" />
+          </div>
           <div className="mt-5 flex flex-wrap gap-3">
             <Button asChild>
               <Link href={state.profileExists ? "/perfil/editar" : "/onboarding/biologo"}>
@@ -469,6 +481,26 @@ function getCompanyStatusLabel(status: string) {
   };
 
   return labels[status] ?? status;
+}
+
+function getBiologistStage(state: DashboardState) {
+  if (!state.emailVerifiedAt) {
+    return "Validar e-mail";
+  }
+
+  if (!state.profileExists) {
+    return "Onboarding pendente";
+  }
+
+  if (!state.professionalStarted) {
+    return "Perfil profissional pendente";
+  }
+
+  if (state.completion < 80) {
+    return "Perfil em evolucao";
+  }
+
+  return "Pronto para candidaturas";
 }
 
 function formatCnpj(value: string) {

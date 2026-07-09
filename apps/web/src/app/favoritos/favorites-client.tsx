@@ -60,17 +60,33 @@ export function FavoritesClient() {
       {savedJobs.length ? (
         savedJobs.map((savedJob) => (
           <article className="soft-card rounded-[8px] p-5" key={savedJob.id}>
-            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
-              {savedJob.job.company?.name ?? "Empresa"}
+            <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
+                  {savedJob.job.company?.name ?? "Empresa"}
+                </p>
+                <h2 className="mt-2 text-xl font-semibold text-slate-950">{savedJob.job.title}</h2>
+                <p className="mt-2 text-slate-600">
+                  {savedJob.job.city}/{savedJob.job.state} | {savedJob.job.contractType} |{" "}
+                  {savedJob.job.workMode}
+                </p>
+              </div>
+              <span className="w-fit rounded-full bg-slate-100 px-3 py-1 text-sm font-semibold text-slate-700">
+                Salva
+              </span>
+            </div>
+            <p className="mt-4 rounded-[8px] border border-slate-200 bg-slate-50 p-3 text-sm text-slate-600">
+              Compare requisitos, ajuste seu perfil profissional e candidate-se quando estiver
+              pronto.
             </p>
-            <h2 className="mt-2 text-xl font-semibold text-slate-950">{savedJob.job.title}</h2>
-            <p className="mt-2 text-slate-600">
-              {savedJob.job.city}/{savedJob.job.state} | {savedJob.job.contractType} |{" "}
-              {savedJob.job.workMode}
-            </p>
-            <Button asChild className="mt-4" size="sm" variant="secondary">
-              <Link href={`/vagas/${savedJob.job.id}`}>Ver vaga</Link>
-            </Button>
+            <div className="mt-4 flex flex-wrap gap-3">
+              <Button asChild size="sm" variant="secondary">
+                <Link href={`/vagas/${savedJob.job.id}`}>Ver vaga</Link>
+              </Button>
+              <Button asChild size="sm" variant="secondary">
+                <Link href="/perfil/profissional">Melhorar perfil</Link>
+              </Button>
+            </div>
           </article>
         ))
       ) : (

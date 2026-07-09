@@ -165,6 +165,16 @@ export function JobForm({ jobId }: JobFormProps) {
         <h1 className="mt-2 text-3xl font-semibold text-slate-950">
           {isEditing ? "Editar vaga" : "Criar vaga para biologos"}
         </h1>
+        <p className="mt-2 text-slate-600">
+          Uma vaga completa precisa explicar atividade, local, modelo, remuneracao e requisitos
+          tecnicos. Isso melhora o match e reduz candidaturas fora do perfil.
+        </p>
+        <div className="mt-4 grid gap-3 md:grid-cols-4">
+          <GuideItem text="Titulo objetivo" />
+          <GuideItem text="Descricao operacional" />
+          <GuideItem text="Requisitos tecnicos" />
+          <GuideItem text={canPublish ? "Pode publicar" : "Salvar como rascunho"} />
+        </div>
         {!canPublish ? (
           <div className="mt-4 rounded-[8px] border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
             Sua empresa ainda nao esta verificada
@@ -184,6 +194,7 @@ export function JobForm({ jobId }: JobFormProps) {
           className="field-input min-h-32 rounded-[8px] px-3 py-3"
           defaultValue={job?.description}
           name="description"
+          placeholder="Descreva atividades, rotina, entregas esperadas, tipo de ambiente e criterios de selecao."
           required
         />
       </label>
@@ -276,6 +287,9 @@ export function JobForm({ jobId }: JobFormProps) {
         <Button disabled={loading} type="submit">
           {loading ? "Salvando..." : isEditing ? "Salvar vaga" : "Criar vaga"}
         </Button>
+        <Button asChild type="button" variant="secondary">
+          <Link href="/empresa/vagas">Voltar para vagas</Link>
+        </Button>
         {isEditing && job?.status !== "CLOSED" ? (
           <Button disabled={loading} onClick={handleCloseJob} type="button" variant="secondary">
             Fechar vaga
@@ -283,6 +297,14 @@ export function JobForm({ jobId }: JobFormProps) {
         ) : null}
       </div>
     </form>
+  );
+}
+
+function GuideItem({ text }: { text: string }) {
+  return (
+    <div className="rounded-[8px] border border-slate-200 bg-slate-50 p-3 text-sm font-medium text-slate-700">
+      {text}
+    </div>
   );
 }
 

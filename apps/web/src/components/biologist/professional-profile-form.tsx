@@ -232,8 +232,26 @@ export function ProfessionalProfileForm() {
           Especialidades, documentos e historico
         </h1>
         {completion !== null ? (
-          <p className="mt-2 text-slate-600">Conclusao atual: {completion}%</p>
+          <div className="mt-4 rounded-[8px] border border-cyan-100 bg-cyan-50/50 p-4">
+            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+              <p className="font-semibold text-slate-950">Conclusao atual: {completion}%</p>
+              <span className="w-fit rounded-full bg-white px-3 py-1 text-sm font-semibold text-cyan-800">
+                {getCompletionLabel(completion)}
+              </span>
+            </div>
+            <div className="mt-3 h-2 overflow-hidden rounded-full bg-white">
+              <div
+                className="h-full rounded-full bg-cyan-600"
+                style={{ width: `${Math.min(completion, 100)}%` }}
+              />
+            </div>
+          </div>
         ) : null}
+        <div className="mt-4 grid gap-3 md:grid-cols-3">
+          <Hint title="Match" text="Areas, grupos e competencias alimentam a compatibilidade." />
+          <Hint title="Credibilidade" text="Experiencias e certificacoes ajudam a empresa decidir." />
+          <Hint title="Validacao" text="Documentos podem ser enviados por upload ou URL externa." />
+        </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
@@ -527,6 +545,27 @@ function SectionTitle({ title }: { title: string }) {
   return (
     <h2 className="border-t border-slate-200 pt-6 text-xl font-semibold text-slate-950">{title}</h2>
   );
+}
+
+function Hint({ text, title }: { text: string; title: string }) {
+  return (
+    <div className="rounded-[8px] border border-slate-200 bg-slate-50 p-4">
+      <p className="text-sm font-semibold text-slate-950">{title}</p>
+      <p className="mt-1 text-sm text-slate-600">{text}</p>
+    </div>
+  );
+}
+
+function getCompletionLabel(completion: number) {
+  if (completion >= 80) {
+    return "Forte";
+  }
+
+  if (completion >= 50) {
+    return "Intermediario";
+  }
+
+  return "Precisa completar";
 }
 
 function RemoveButton({ onClick }: { onClick: () => void }) {

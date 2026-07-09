@@ -145,15 +145,19 @@ export function JobDetailClient() {
         <p className="mt-3 text-slate-600">
           {formatSalary(job.salaryMinCents, job.salaryMaxCents)}
         </p>
-        <Button
-          className="mt-5"
-          disabled={favoriteLoading}
-          onClick={toggleFavorite}
-          type="button"
-          variant="secondary"
-        >
-          {saved ? "Remover dos favoritos" : "Salvar vaga"}
-        </Button>
+        <div className="mt-5 flex flex-wrap gap-3">
+          <Button
+            disabled={favoriteLoading}
+            onClick={toggleFavorite}
+            type="button"
+            variant="secondary"
+          >
+            {saved ? "Remover dos favoritos" : "Salvar vaga"}
+          </Button>
+          <Button asChild variant="secondary">
+            <Link href="/vagas">Voltar para vagas</Link>
+          </Button>
+        </div>
       </section>
 
       <section className="soft-card rounded-[8px] p-6">
@@ -169,10 +173,15 @@ export function JobDetailClient() {
 
       <section className="soft-card rounded-[8px] p-6">
         <h2 className="text-xl font-semibold text-slate-950">Candidatura</h2>
+        <div className="mt-4 grid gap-3 md:grid-cols-3">
+          <CheckItem text="Revise os requisitos" />
+          <CheckItem text="Confira seu perfil profissional" />
+          <CheckItem text="Envie uma mensagem objetiva" />
+        </div>
         {application ? (
           <div className="mt-4 rounded-[8px] bg-cyan-50 p-4 text-cyan-900">
             <p className="font-semibold">Voce ja se candidatou.</p>
-            <p className="mt-1">Status: {application.status}</p>
+            <p className="mt-1">Status: {getApplicationStatusLabel(application.status)}</p>
             <p className="mt-1">Compatibilidade inicial: {application.matchScore}%</p>
             {application.matchReasons.length ? (
               <ul className="mt-3 list-inside list-disc text-sm">
@@ -192,6 +201,7 @@ export function JobDetailClient() {
               <textarea
                 className="field-input min-h-28 rounded-[8px] px-3 py-3"
                 onChange={(event) => setCoverMessage(event.target.value)}
+                placeholder="Explique em poucas linhas sua experiencia relacionada a esta vaga, disponibilidade e forma de contato."
                 value={coverMessage}
               />
             </label>
@@ -204,6 +214,14 @@ export function JobDetailClient() {
           </form>
         )}
       </section>
+    </div>
+  );
+}
+
+function CheckItem({ text }: { text: string }) {
+  return (
+    <div className="rounded-[8px] border border-slate-200 bg-slate-50 p-3 text-sm font-medium text-slate-700">
+      {text}
     </div>
   );
 }
@@ -234,4 +252,19 @@ function formatSalary(min: number | null, max: number | null) {
   }
 
   return formatter.format(((min ?? max) as number) / 100);
+}
+
+function getApplicationStatusLabel(status: string) {
+  const labels: Record<string, string> = {
+    APPLIED: "Inscrito",
+    HIRED: "Contratado",
+    INTERVIEW: "Entrevista",
+    OFFER: "Oferta",
+    REJECTED: "Rejeitado",
+    SHORTLISTED: "Selecionado",
+    UNDER_REVIEW: "Em analise",
+    WITHDRAWN: "Retirado",
+  };
+
+  return labels[status] ?? status;
 }

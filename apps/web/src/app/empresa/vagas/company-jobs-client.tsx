@@ -102,9 +102,12 @@ export function CompanyJobsClient() {
                   </p>
                 </div>
                 <span className="rounded-full bg-slate-100 px-3 py-1 text-sm font-semibold text-slate-700">
-                  {job.status}
+                  {getJobStatusLabel(job.status)}
                 </span>
               </div>
+              <p className="mt-4 rounded-[8px] border border-slate-200 bg-slate-50 p-3 text-sm text-slate-600">
+                {getJobActionText(job.status)}
+              </p>
               <div className="mt-4 flex flex-wrap gap-3">
                 <Button asChild size="sm">
                   <Link href={`/empresa/vagas/${job.id}`}>Editar vaga</Link>
@@ -151,4 +154,24 @@ function getCompanyStatusLabel(status: string) {
   };
 
   return labels[status] ?? status;
+}
+
+function getJobStatusLabel(status: string) {
+  const labels: Record<string, string> = {
+    CLOSED: "Fechada",
+    DRAFT: "Rascunho",
+    PUBLISHED: "Publicada",
+  };
+
+  return labels[status] ?? status;
+}
+
+function getJobActionText(status: string) {
+  const actions: Record<string, string> = {
+    CLOSED: "Vaga encerrada. Mantenha o historico de candidatos para consulta.",
+    DRAFT: "Revise os requisitos e publique quando a empresa estiver verificada.",
+    PUBLISHED: "Acompanhe candidatos e mova o status conforme o processo seletivo avancar.",
+  };
+
+  return actions[status] ?? "Revise a vaga e acompanhe candidatos.";
 }

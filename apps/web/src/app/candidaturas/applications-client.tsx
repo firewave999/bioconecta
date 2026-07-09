@@ -60,17 +60,33 @@ export function ApplicationsClient() {
       {applications.length ? (
         applications.map((application) => (
           <article className="soft-card rounded-[8px] p-5" key={application.id}>
-            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
-              {application.job.company?.name ?? "Empresa"}
+            <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
+                  {application.job.company?.name ?? "Empresa"}
+                </p>
+                <h2 className="mt-2 text-xl font-semibold text-slate-950">
+                  {application.job.title}
+                </h2>
+                <p className="mt-2 text-slate-600">
+                  {application.job.city}/{application.job.state} | Match: {application.matchScore}%
+                </p>
+              </div>
+              <span className="w-fit rounded-full bg-cyan-50 px-3 py-1 text-sm font-semibold text-cyan-800">
+                {getStatusLabel(application.status)}
+              </span>
+            </div>
+            <p className="mt-4 rounded-[8px] border border-slate-200 bg-slate-50 p-3 text-sm text-slate-600">
+              {getNextAction(application.status)}
             </p>
-            <h2 className="mt-2 text-xl font-semibold text-slate-950">{application.job.title}</h2>
-            <p className="mt-2 text-slate-600">
-              {application.job.city}/{application.job.state} | Status: {application.status} | Match:{" "}
-              {application.matchScore}%
-            </p>
-            <Button asChild className="mt-4" size="sm" variant="secondary">
-              <Link href={`/vagas/${application.job.id}`}>Ver vaga</Link>
-            </Button>
+            <div className="mt-4 flex flex-wrap gap-3">
+              <Button asChild size="sm" variant="secondary">
+                <Link href={`/vagas/${application.job.id}`}>Ver vaga</Link>
+              </Button>
+              <Button asChild size="sm" variant="secondary">
+                <Link href="/vagas">Buscar mais vagas</Link>
+              </Button>
+            </div>
           </article>
         ))
       ) : (
@@ -83,4 +99,34 @@ export function ApplicationsClient() {
       )}
     </section>
   );
+}
+
+function getStatusLabel(status: string) {
+  const labels: Record<string, string> = {
+    APPLIED: "Inscrito",
+    HIRED: "Contratado",
+    INTERVIEW: "Entrevista",
+    OFFER: "Oferta",
+    REJECTED: "Rejeitado",
+    SHORTLISTED: "Selecionado",
+    UNDER_REVIEW: "Em analise",
+    WITHDRAWN: "Retirado",
+  };
+
+  return labels[status] ?? status;
+}
+
+function getNextAction(status: string) {
+  const actions: Record<string, string> = {
+    APPLIED: "Candidatura enviada. Aguarde a empresa mover o status ou entrar em contato.",
+    HIRED: "Processo finalizado como contratado.",
+    INTERVIEW: "Prepare disponibilidade, documentos e pontos de experiencia para a conversa.",
+    OFFER: "Oferta em andamento. Acompanhe o retorno da empresa.",
+    REJECTED: "Processo encerrado para esta vaga. Continue buscando oportunidades compativeis.",
+    SHORTLISTED: "Seu perfil foi selecionado. Fique atento aos contatos informados no cadastro.",
+    UNDER_REVIEW: "Empresa esta analisando seu perfil, documentos e mensagem.",
+    WITHDRAWN: "Candidatura retirada.",
+  };
+
+  return actions[status] ?? "Acompanhe o status e mantenha seu perfil atualizado.";
 }

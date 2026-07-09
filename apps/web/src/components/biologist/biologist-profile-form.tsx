@@ -136,6 +136,15 @@ export function BiologistProfileForm({ mode }: Props) {
             ? "Complete seu perfil de biologo"
             : "Atualize seu perfil profissional"}
         </h1>
+        <p className="mt-2 text-slate-600">
+          Esses dados formam sua ficha principal para empresas. Foto, headline e disponibilidade
+          deixam o contato mais confiavel.
+        </p>
+        <div className="mt-4 grid gap-3 md:grid-cols-3">
+          <GuidanceCard title="Identificacao" text="Nome, CPF, CRBio e cidade." />
+          <GuidanceCard title="Presenca" text="Foto e headline objetiva." />
+          <GuidanceCard title="Operacao" text="Viagem, CNH, veiculo, CNPJ e nota." />
+        </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
@@ -265,6 +274,15 @@ export function BiologistProfileForm({ mode }: Props) {
         {loading ? "Salvando..." : "Salvar perfil"}
       </Button>
     </form>
+  );
+}
+
+function GuidanceCard({ text, title }: { text: string; title: string }) {
+  return (
+    <div className="rounded-[8px] border border-cyan-100 bg-cyan-50/50 p-4">
+      <p className="text-sm font-semibold text-cyan-950">{title}</p>
+      <p className="mt-1 text-sm text-slate-600">{text}</p>
+    </div>
   );
 }
 

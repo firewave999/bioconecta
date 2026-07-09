@@ -186,6 +186,12 @@ export function CompanyForm() {
             Preencha os dados juridicos para liberar a gestao de vagas da empresa.
           </p>
         )}
+        <div className="mt-4 grid gap-3 md:grid-cols-4">
+          <StepCard done={Boolean(company)} text="Dados juridicos" />
+          <StepCard done={Boolean(company?.logoUrl || logoUrl)} text="Logo da empresa" />
+          <StepCard done={company?.verificationStatus === "VERIFIED"} text="Validacao admin" />
+          <StepCard done={false} text="Criar vagas" />
+        </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
@@ -260,10 +266,30 @@ export function CompanyForm() {
 
       {error ? <p className="rounded-[8px] bg-red-50 p-3 text-sm text-red-700">{error}</p> : null}
 
-      <Button disabled={loading} type="submit">
-        {loading ? "Salvando..." : "Salvar empresa"}
-      </Button>
+      <div className="flex flex-wrap gap-3">
+        <Button disabled={loading} type="submit">
+          {loading ? "Salvando..." : "Salvar empresa"}
+        </Button>
+        <Button asChild type="button" variant="secondary">
+          <Link href="/dashboard">Voltar ao dashboard</Link>
+        </Button>
+      </div>
     </form>
+  );
+}
+
+function StepCard({ done, text }: { done: boolean; text: string }) {
+  return (
+    <div className="rounded-[8px] border border-slate-200 bg-slate-50 p-3">
+      <span
+        className={`rounded-full px-2 py-0.5 text-xs font-semibold ${
+          done ? "bg-cyan-100 text-cyan-800" : "bg-white text-slate-500"
+        }`}
+      >
+        {done ? "OK" : "Pendente"}
+      </span>
+      <p className="mt-2 text-sm font-medium text-slate-700">{text}</p>
+    </div>
   );
 }
 
