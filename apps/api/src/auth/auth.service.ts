@@ -5,6 +5,7 @@ import {
   ConflictException,
   ForbiddenException,
   Injectable,
+  Logger,
   UnauthorizedException,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
@@ -14,6 +15,7 @@ import { compare, hash } from "bcryptjs";
 import { IsNull, Repository } from "typeorm";
 
 import { Env } from "../config/env.validation.js";
+import { maskEmail, safeJson } from "../common/logging/safe-log.js";
 import { MailService } from "../mail/mail.service.js";
 import { User } from "../users/user.entity.js";
 import { LoginDto } from "./dto/login.dto.js";
@@ -36,6 +38,8 @@ type TokenPair = {
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
@@ -88,6 +92,13 @@ export class AuthService {
       name: user.firstName,
       token: verificationToken,
     });
+    this.logger.log(
+      safeJson({
+        event: "auth_register",
+        roles: user.roles,
+        userId: user.id,
+      }),
+    );
 
     return {
       devVerificationToken: this.shouldExposeDevTokens() ? verificationToken : undefined,
@@ -104,12 +115,33 @@ export class AuthService {
     });
 
     if (!user || !(await compare(dto.password, user.passwordHash))) {
+      this.logger.warn(
+        safeJson({
+          email: maskEmail(dto.email.trim().toLowerCase()),
+          event: "auth_login_failed",
+          reason: "invalid_credentials",
+        }),
+      );
       throw new UnauthorizedException("E-mail ou senha invalidos.");
     }
 
     if (user.blockedAt) {
+      this.logger.warn(
+        safeJson({
+          event: "auth_login_failed",
+          reason: "blocked_user",
+          userId: user.id,
+        }),
+      );
       throw new ForbiddenException("Usuario bloqueado.");
     }
+
+    this.logger.log(
+      safeJson({
+        event: "auth_login",
+        userId: user.id,
+      }),
+    );
 
     return {
       tokens: await this.createSession(user, context),
@@ -122,6 +154,13 @@ export class AuthService {
     const user = await this.usersRepository.findOneByOrFail({ id: session.userId });
 
     if (user.blockedAt) {
+      this.logger.warn(
+        safeJson({
+          event: "auth_refresh_failed",
+          reason: "blocked_user",
+          userId: user.id,
+        }),
+      );
       throw new ForbiddenException("Usuario bloqueado.");
     }
 
@@ -134,6 +173,13 @@ export class AuthService {
     session.userAgent = context.userAgent ?? session.userAgent;
     session.ipAddress = context.ipAddress ?? session.ipAddress;
     await this.sessionsRepository.save(session);
+    this.logger.log(
+      safeJson({
+        event: "auth_refresh",
+        sessionId: session.id,
+        userId: user.id,
+      }),
+    );
 
     return {
       tokens: {
@@ -149,6 +195,13 @@ export class AuthService {
     const session = await this.getSessionFromRefreshToken(refreshToken);
     session.revokedAt = new Date();
     await this.sessionsRepository.save(session);
+    this.logger.log(
+      safeJson({
+        event: "auth_logout",
+        sessionId: session.id,
+        userId: session.userId,
+      }),
+    );
 
     return {
       success: true,
@@ -164,6 +217,12 @@ export class AuthService {
       {
         revokedAt: new Date(),
       },
+    );
+    this.logger.log(
+      safeJson({
+        event: "auth_logout_all",
+        userId,
+      }),
     );
 
     return {
@@ -191,6 +250,12 @@ export class AuthService {
 
     await this.emailTokensRepository.save(verification);
     await this.usersRepository.save(verification.user);
+    this.logger.log(
+      safeJson({
+        event: "auth_email_verified",
+        userId: verification.user.id,
+      }),
+    );
 
     return {
       user: this.toPublicUser(verification.user),
@@ -217,6 +282,12 @@ export class AuthService {
       name: user.firstName,
       token,
     });
+    this.logger.log(
+      safeJson({
+        event: "auth_verification_resent",
+        userId: user.id,
+      }),
+    );
 
     return {
       success: true,
@@ -242,6 +313,12 @@ export class AuthService {
       name: user.firstName,
       token,
     });
+    this.logger.log(
+      safeJson({
+        event: "auth_password_reset_requested",
+        userId: user.id,
+      }),
+    );
 
     return {
       success: true,
@@ -275,6 +352,12 @@ export class AuthService {
       {
         revokedAt: new Date(),
       },
+    );
+    this.logger.log(
+      safeJson({
+        event: "auth_password_reset_completed",
+        userId: user.id,
+      }),
     );
 
     return {

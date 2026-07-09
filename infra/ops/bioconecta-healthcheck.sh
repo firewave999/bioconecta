@@ -5,11 +5,10 @@ API_HEALTH_URL="${API_HEALTH_URL:-https://api-bioconecta.garagemjdm.com.br/api/v
 WEB_HEALTH_URL="${WEB_HEALTH_URL:-https://bioconecta.garagemjdm.com.br/}"
 LOG_FILE="${LOG_FILE:-/var/log/bioconecta-health.log}"
 
-timestamp="$(date -Iseconds)"
-
 check_url() {
   name="$1"
   url="$2"
+  timestamp="$(date -Iseconds)"
 
   if curl -fsS --max-time 20 "$url" >/dev/null; then
     echo "$timestamp OK $name $url" >> "$LOG_FILE"

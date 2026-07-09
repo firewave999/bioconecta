@@ -2,6 +2,7 @@ import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
 import { Env } from "../config/env.validation.js";
+import { maskEmail, safeJson } from "../common/logging/safe-log.js";
 
 type BrevoPayload = {
   htmlContent: string;
@@ -73,7 +74,14 @@ export class MailService {
     const fromName = this.configService.get("MAIL_FROM_NAME", { infer: true });
 
     if (!apiKey || !fromEmail) {
-      this.logger.warn("Brevo nao configurado. E-mail nao enviado.");
+      this.logger.warn(
+        safeJson({
+          event: "mail_skipped",
+          reason: "brevo_not_configured",
+          subject: input.subject,
+          to: input.to.map((recipient) => maskEmail(recipient.email)),
+        }),
+      );
       return;
     }
 
@@ -97,9 +105,26 @@ export class MailService {
 
     if (!response.ok) {
       const body = await response.text().catch(() => "");
-      this.logger.error(`Falha ao enviar e-mail pela Brevo: ${response.status} ${body}`);
+      this.logger.error(
+        safeJson({
+          brevoBody: body.slice(0, 500),
+          event: "mail_failed",
+          status: response.status,
+          subject: input.subject,
+          to: input.to.map((recipient) => maskEmail(recipient.email)),
+        }),
+      );
       throw new Error("Falha ao enviar e-mail.");
     }
+
+    this.logger.log(
+      safeJson({
+        event: "mail_sent",
+        status: response.status,
+        subject: input.subject,
+        to: input.to.map((recipient) => maskEmail(recipient.email)),
+      }),
+    );
   }
 
   private layout(input: { body: string; title: string }) {

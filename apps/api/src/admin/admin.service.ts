@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
@@ -7,6 +7,7 @@ import { BiologistProfile } from "../biologist-profile/biologist-profile.entity.
 import { Company } from "../companies/company.entity.js";
 import { Job } from "../jobs/job.entity.js";
 import { User } from "../users/user.entity.js";
+import { safeJson } from "../common/logging/safe-log.js";
 import { AdminAuditLog, AdminAuditAction, AdminAuditTargetType } from "./admin-audit-log.entity.js";
 import { UpdateBiologistVerificationStatusDto } from "./dto/update-biologist-verification-status.dto.js";
 import { UpdateCompanyVerificationStatusDto } from "./dto/update-company-verification-status.dto.js";
@@ -14,6 +15,8 @@ import { UpdateJobStatusDto } from "./dto/update-job-status.dto.js";
 
 @Injectable()
 export class AdminService {
+  private readonly logger = new Logger(AdminService.name);
+
   constructor(
     @InjectRepository(AdminAuditLog)
     private readonly auditLogsRepository: Repository<AdminAuditLog>,
@@ -238,6 +241,15 @@ export class AdminService {
 
     const auditLog = this.auditLogsRepository.create(input);
     await this.auditLogsRepository.save(auditLog);
+    this.logger.log(
+      safeJson({
+        action: input.action,
+        actorUserId: input.actorUserId,
+        event: "admin_audit",
+        targetId: input.targetId,
+        targetType: input.targetType,
+      }),
+    );
   }
 }
 
