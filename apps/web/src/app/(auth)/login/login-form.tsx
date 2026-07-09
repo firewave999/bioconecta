@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
-import { apiRequest } from "@/lib/api";
+import { apiRequest, storeTokens } from "@/lib/api";
 
 type LoginResponse = {
   tokens: {
@@ -38,8 +38,7 @@ export function LoginForm() {
         password: form.get("password"),
       });
 
-      localStorage.setItem("bioconecta.accessToken", response.tokens.accessToken);
-      localStorage.setItem("bioconecta.refreshToken", response.tokens.refreshToken);
+      storeTokens(response.tokens);
       setSuccess(`Login realizado para ${response.user.email}.`);
       router.push("/dashboard");
     } catch (err) {

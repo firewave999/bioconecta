@@ -5,7 +5,7 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { EmailVerificationNotice } from "@/components/auth/email-verification-notice";
-import { apiRequest } from "@/lib/api";
+import { apiRequest, storeTokens } from "@/lib/api";
 
 type AuthTokens = {
   accessToken: string;
@@ -55,8 +55,7 @@ export function RegisterForm() {
         },
       );
 
-      localStorage.setItem("bioconecta.accessToken", response.tokens.accessToken);
-      localStorage.setItem("bioconecta.refreshToken", response.tokens.refreshToken);
+      storeTokens(response.tokens);
       setRegisteredRole(role);
       setResult(response);
       setVerificationToken(response.devVerificationToken ?? "");
