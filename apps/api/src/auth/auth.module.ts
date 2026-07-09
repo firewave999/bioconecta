@@ -15,7 +15,7 @@ import { Session } from "./entities/session.entity.js";
 
 @Module({
   controllers: [AuthController],
-  exports: [AuthGuard, EmailVerifiedGuard, JwtModule],
+  exports: [AuthGuard, EmailVerifiedGuard, JwtModule, TypeOrmModule],
   imports: [
     JwtModule.register({}),
     MailModule,
