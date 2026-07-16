@@ -1,7 +1,15 @@
 .auth-shell {
   min-height: 100vh;
   background:
-    radial-gradient(circle at 16% 8%, rgba(55, 213, 223, 0.26), transparent 28rem),
-    radial-gradient(circle at 88% 18%, rgba(34, 197, 94, 0.12), transparent 26rem),
-    linear-gradient(135deg, #020617 0%, #082f35 46%, #f3fbf8 46.2%, #f8fcfb 100%);
+    linear-gradient(rgba(23, 212, 228, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(23, 212, 228, 0.07) 1px, transparent 1px),
+    radial-gradient(circle at 16% 8%, rgba(23, 212, 228, 0.28), transparent 28rem),
+    radial-gradient(circle at 88% 18%, rgba(16, 185, 129, 0.13), transparent 26rem),
+    linear-gradient(135deg, #020709 0%, #05272d 46%, #effaf7 46.15%, #f8fcfb 100%);
+  background-size:
+    52px 52px,
+    52px 52px,
+    auto,
+    auto,
+    auto;
 }

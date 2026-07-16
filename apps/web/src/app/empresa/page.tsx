@@ -10,12 +10,12 @@ export default function CompanyPage() {
   return (
     <main className="page-shell">
       <div className="mx-auto max-w-5xl px-6 py-10">
-        <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="glass-panel flex flex-wrap items-center justify-between gap-4 rounded-[8px] px-4 py-3">
           <Link className="text-sm font-semibold text-cyan-800" href="/dashboard">
             Voltar ao dashboard
           </Link>
-          <Link className="text-sm font-semibold text-slate-700" href="/">
-            BioConecta
+          <Link className="text-sm font-bold tracking-[0.12em] text-slate-900" href="/">
+            BIOCONECTA
           </Link>
         </div>
         <div className="mt-8">

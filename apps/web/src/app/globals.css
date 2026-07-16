@@ -1,15 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f7faf8;
-  --foreground: #101820;
-  --muted: #60717a;
+  --background: #f3faf7;
+  --foreground: #071114;
+  --muted: #596c74;
   --surface: #ffffff;
-  --border: #dbe7e2;
-  --brand: #0f3d3e;
-  --brand-strong: #092b2d;
-  --accent: #37d5df;
-  --accent-soft: #d7fbfd;
+  --border: #cfe1dc;
+  --brand: #063b40;
+  --brand-strong: #031f24;
+  --accent: #17d4e4;
+  --accent-soft: #dffbfc;
+  --ink: #030712;
+  --emerald: #10b981;
 }
 
 @theme inline {
@@ -38,6 +40,7 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-inter), system-ui, sans-serif;
+  text-rendering: geometricPrecision;
 }
 
 a {
@@ -64,55 +67,156 @@ a {
 
 .app-shell {
   background:
-    radial-gradient(circle at 12% 0%, rgba(55, 213, 223, 0.16), transparent 30rem),
-    radial-gradient(circle at 88% 10%, rgba(15, 61, 62, 0.1), transparent 28rem),
-    linear-gradient(180deg, #f7faf8 0%, #eef6f3 100%);
+    linear-gradient(rgba(6, 59, 64, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6, 59, 64, 0.045) 1px, transparent 1px),
+    radial-gradient(circle at 12% 0%, rgba(23, 212, 228, 0.22), transparent 30rem),
+    radial-gradient(circle at 88% 10%, rgba(16, 185, 129, 0.12), transparent 28rem),
+    linear-gradient(180deg, #f5fbf8 0%, #eaf5f1 100%);
+  background-size:
+    44px 44px,
+    44px 44px,
+    auto,
+    auto,
+    auto;
 }
 
 .glass-panel {
-  border: 1px solid rgba(203, 226, 219, 0.86);
-  background: rgba(255, 255, 255, 0.82);
-  box-shadow: 0 18px 50px rgba(15, 61, 62, 0.08);
-  backdrop-filter: blur(18px);
+  border: 1px solid rgba(196, 224, 218, 0.74);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.93), rgba(245, 253, 251, 0.76)),
+    rgba(255, 255, 255, 0.78);
+  box-shadow:
+    0 24px 70px rgba(3, 31, 36, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(22px);
 }
 
 .soft-card {
-  border: 1px solid rgba(203, 226, 219, 0.9);
-  background: #ffffff;
-  box-shadow: 0 10px 28px rgba(15, 61, 62, 0.06);
+  border: 1px solid rgba(201, 225, 219, 0.88);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(250, 254, 252, 0.94)), #ffffff;
+  box-shadow:
+    0 18px 52px rgba(3, 31, 36, 0.09),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
 }
 
 .page-shell {
   min-height: 100vh;
   background:
-    radial-gradient(circle at 12% 0%, rgba(55, 213, 223, 0.18), transparent 30rem),
-    radial-gradient(circle at 92% 8%, rgba(34, 197, 94, 0.1), transparent 26rem),
-    linear-gradient(180deg, #f7faf8 0%, #edf7f3 100%);
+    linear-gradient(rgba(6, 59, 64, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6, 59, 64, 0.04) 1px, transparent 1px),
+    radial-gradient(circle at 12% 0%, rgba(23, 212, 228, 0.2), transparent 30rem),
+    radial-gradient(circle at 92% 8%, rgba(16, 185, 129, 0.12), transparent 26rem),
+    linear-gradient(180deg, #f6fbf8 0%, #eaf6f1 100%);
+  background-size:
+    44px 44px,
+    44px 44px,
+    auto,
+    auto,
+    auto;
 }
 
 .page-header {
-  border: 1px solid rgba(203, 226, 219, 0.9);
-  background: rgba(255, 255, 255, 0.86);
-  box-shadow: 0 18px 50px rgba(15, 61, 62, 0.08);
-  backdrop-filter: blur(18px);
+  border: 1px solid rgba(196, 224, 218, 0.82);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(240, 251, 248, 0.82)),
+    rgba(255, 255, 255, 0.84);
+  box-shadow:
+    0 24px 70px rgba(3, 31, 36, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(22px);
 }
 
 .form-card {
-  border: 1px solid rgba(203, 226, 219, 0.9);
+  border: 1px solid rgba(196, 224, 218, 0.9);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.96), #ffffff),
-    #ffffff;
-  box-shadow: 0 18px 48px rgba(15, 61, 62, 0.08);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 253, 251, 0.96)), #ffffff;
+  box-shadow:
+    0 24px 72px rgba(3, 31, 36, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
 }
 
 .field-input {
-  border: 1px solid #cbded8;
-  background: #fbfefd;
+  border: 1px solid #bed5d0;
+  background: rgba(255, 255, 255, 0.88);
   color: #0f172a;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
 }
 
 .field-input:focus {
   border-color: #0891b2;
   box-shadow: 0 0 0 3px rgba(55, 213, 223, 0.18);
   outline: none;
+}
+
+.premium-shell {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(rgba(23, 212, 228, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(23, 212, 228, 0.07) 1px, transparent 1px),
+    radial-gradient(circle at 72% 14%, rgba(23, 212, 228, 0.28), transparent 28rem),
+    radial-gradient(circle at 20% 86%, rgba(16, 185, 129, 0.16), transparent 24rem),
+    linear-gradient(135deg, #020709 0%, #05272d 46%, #eefaf7 46.15%, #f8fcfb 100%);
+  background-size:
+    52px 52px,
+    52px 52px,
+    auto,
+    auto,
+    auto;
+}
+
+.premium-shell::before {
+  pointer-events: none;
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(115deg, rgba(255, 255, 255, 0.08), transparent 34%),
+    radial-gradient(
+      circle at 52% 50%,
+      transparent 0 36%,
+      rgba(255, 255, 255, 0.08) 36.2%,
+      transparent 36.7%
+    );
+  opacity: 0.8;
+}
+
+.premium-nav {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(2, 8, 11, 0.42);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(20px);
+}
+
+.premium-card {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.055)),
+    rgba(2, 8, 11, 0.48);
+  box-shadow:
+    0 30px 90px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(24px);
+}
+
+.premium-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid rgba(103, 232, 249, 0.28);
+  border-radius: 999px;
+  background: rgba(8, 145, 178, 0.16);
+  padding: 0.5rem 0.85rem;
+  color: #cffafe;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  backdrop-filter: blur(16px);
+}
+
+.premium-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(23, 212, 228, 0.4), transparent);
 }

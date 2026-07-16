@@ -74,11 +74,11 @@ export function JobsClient() {
   return (
     <div className="grid gap-6">
       <form
-        className="soft-card grid gap-4 rounded-[8px] p-5 md:grid-cols-3"
+        className="soft-card grid gap-4 rounded-[8px] p-6 md:grid-cols-3"
         onSubmit={handleSubmit}
       >
         <div className="flex items-center gap-2 md:col-span-3">
-          <span className="flex h-9 w-9 items-center justify-center rounded-[8px] bg-cyan-50 text-cyan-800">
+          <span className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-cyan-50 text-cyan-800 shadow-inner">
             <SlidersHorizontal size={18} />
           </span>
           <div>
@@ -138,13 +138,13 @@ export function JobsClient() {
         />
         <div className="flex gap-3 md:col-span-3">
           <button
-            className="h-11 rounded-[8px] bg-cyan-400 px-5 text-sm font-semibold text-slate-950"
+            className="h-11 rounded-[8px] bg-[linear-gradient(135deg,#1ee4f2,#16d0df_48%,#7dd3fc)] px-5 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-950/15 transition hover:-translate-y-0.5"
             type="submit"
           >
             {loading ? "Buscando..." : "Filtrar vagas"}
           </button>
           <button
-            className="h-11 rounded-[8px] bg-slate-100 px-5 text-sm font-semibold text-slate-700"
+            className="h-11 rounded-[8px] border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-50"
             onClick={clearFilters}
             type="button"
           >
@@ -157,9 +157,10 @@ export function JobsClient() {
         {jobs.length ? (
           jobs.map((job) => (
             <article
-              className="soft-card rounded-[8px] p-5 transition hover:-translate-y-0.5 hover:border-cyan-200 hover:shadow-lg"
+              className="soft-card group relative overflow-hidden rounded-[8px] p-6 transition hover:-translate-y-1 hover:border-cyan-200 hover:shadow-2xl hover:shadow-cyan-950/10"
               key={job.id}
             >
+              <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-cyan-400 via-emerald-300 to-transparent opacity-80" />
               <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                 <div>
                   <p className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
@@ -179,7 +180,7 @@ export function JobsClient() {
                   </div>
                 </div>
                 <Link
-                  className="inline-flex h-10 items-center justify-center rounded-[8px] bg-slate-950 px-4 text-sm font-semibold text-white"
+                  className="inline-flex h-10 items-center justify-center rounded-[8px] bg-[linear-gradient(135deg,#020617,#0f2930)] px-4 text-sm font-semibold text-white shadow-lg shadow-slate-950/20 transition group-hover:-translate-y-0.5"
                   href={`/vagas/${job.id}`}
                 >
                   Ver detalhes
@@ -203,7 +204,7 @@ export function JobsClient() {
 
 function Badge({ children }: { children: string }) {
   return (
-    <span className="rounded-full bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-800">
+    <span className="rounded-full border border-cyan-100 bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-800">
       {children}
     </span>
   );
@@ -226,7 +227,7 @@ function Field({
     <label className="grid gap-2 text-sm font-medium text-slate-700">
       {label}
       <input
-        className="h-11 rounded-[8px] border border-slate-300 px-3 text-slate-950 outline-none focus:border-cyan-500"
+        className="h-11 rounded-[8px] border border-slate-300 bg-white/90 px-3 text-slate-950 shadow-inner outline-none transition focus:border-cyan-500 focus:shadow-[0_0_0_3px_rgba(23,212,228,0.16)]"
         maxLength={maxLength}
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
@@ -251,7 +252,7 @@ function Select({
     <label className="grid gap-2 text-sm font-medium text-slate-700">
       {label}
       <select
-        className="h-11 rounded-[8px] border border-slate-300 bg-white px-3 text-slate-950 outline-none focus:border-cyan-500"
+        className="h-11 rounded-[8px] border border-slate-300 bg-white/90 px-3 text-slate-950 shadow-inner outline-none transition focus:border-cyan-500 focus:shadow-[0_0_0_3px_rgba(23,212,228,0.16)]"
         onChange={(event) => onChange(event.target.value)}
         value={value}
       >

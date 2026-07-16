@@ -86,33 +86,34 @@ const workflowSteps: Array<{
 
 export default function HomePage() {
   return (
-    <main className="bg-[#f4fbf8]">
-      <section className="relative min-h-screen overflow-hidden bg-slate-950 text-white">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,rgba(55,213,223,0.34),transparent_24rem),radial-gradient(circle_at_18%_88%,rgba(34,197,94,0.16),transparent_22rem)]" />
-        <div className="absolute inset-y-0 right-0 hidden w-1/2 bg-[url('/images/hero-bioconecta.png')] bg-cover bg-center opacity-55 lg:block" />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,#020617_0%,rgba(2,6,23,0.96)_43%,rgba(2,6,23,0.72)_68%,rgba(2,6,23,0.42)_100%)]" />
+    <main className="bg-[#f5fbf8]">
+      <section className="premium-shell min-h-screen text-white">
+        <div className="absolute inset-y-0 right-0 hidden w-[52%] bg-[url('/images/hero-bioconecta.png')] bg-cover bg-center opacity-45 mix-blend-screen lg:block" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(2,7,9,0.98)_0%,rgba(2,7,9,0.9)_42%,rgba(2,7,9,0.48)_68%,rgba(2,7,9,0.22)_100%)]" />
 
-        <header className="relative z-10 mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-5">
-          <a className="flex items-center gap-3" href="#top" aria-label="BioConecta">
-            <span className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-cyan-300 text-slate-950 shadow-lg shadow-cyan-950/30">
-              <Microscope size={20} strokeWidth={2.4} />
-            </span>
-            <span className="text-lg font-bold tracking-[0.08em]">BIOCONECTA</span>
-          </a>
+        <header className="relative z-10 mx-auto flex w-full max-w-7xl px-6 pt-5">
+          <div className="premium-nav flex w-full items-center justify-between rounded-[8px] px-4 py-3">
+            <a className="flex items-center gap-3" href="#top" aria-label="BioConecta">
+              <span className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-cyan-300 text-slate-950 shadow-lg shadow-cyan-950/30 ring-1 ring-white/30">
+                <Microscope size={20} strokeWidth={2.4} />
+              </span>
+              <span className="text-lg font-bold tracking-[0.08em]">BIOCONECTA</span>
+            </a>
 
-          <nav className="hidden items-center gap-7 text-sm text-white/78 md:flex">
-            <a className="hover:text-white" href="#vagas-recentes">
-              Vagas
-            </a>
-            <a className="hover:text-white" href="#como-funciona">
-              Como funciona
-            </a>
-            <a className="hover:text-white" href="#empresas">
-              Para empresas
-            </a>
-          </nav>
+            <nav className="hidden items-center gap-7 text-sm text-white/78 md:flex">
+              <a className="hover:text-white" href="#vagas-recentes">
+                Vagas
+              </a>
+              <a className="hover:text-white" href="#como-funciona">
+                Como funciona
+              </a>
+              <a className="hover:text-white" href="#empresas">
+                Para empresas
+              </a>
+            </nav>
 
-          <HomeAuthActions context="header" />
+            <HomeAuthActions context="header" />
+          </div>
         </header>
 
         <div
@@ -120,18 +121,18 @@ export default function HomePage() {
           className="relative z-10 mx-auto grid min-h-[calc(100vh-84px)] max-w-7xl items-center gap-10 px-6 py-12 lg:grid-cols-[1fr_430px]"
         >
           <div className="max-w-4xl">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan-200/25 bg-cyan-300/10 px-4 py-2 text-sm font-medium text-cyan-100 backdrop-blur">
+            <div className="premium-kicker mb-6">
               <Sparkles size={15} />
-              Nova base visual do BioConecta
+              Infraestrutura profissional para biologia
             </div>
 
             <h1 className="max-w-3xl text-5xl font-semibold leading-[1.01] tracking-tight md:text-7xl">
-              Vagas, candidatos e projetos de Biologia em um so lugar.
+              O hub premium para contratar talentos da Biologia.
             </h1>
 
             <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-200 md:text-xl">
-              Uma plataforma focada em CRBio, experiencia tecnica, disponibilidade para campo e
-              contratacao profissional. Menos improviso, mais processo.
+              Perfis tecnicos, documentos, CRBio, disponibilidade de campo, matching e contato
+              direto em um fluxo unico para empresas e biologos.
             </p>
 
             <HomeAuthActions context="hero" />
@@ -139,7 +140,7 @@ export default function HomePage() {
             <form
               id="busca"
               action="/vagas"
-              className="mt-10 grid max-w-4xl gap-3 rounded-[8px] border border-cyan-100/20 bg-white p-3 text-slate-950 shadow-2xl shadow-slate-950/35 md:grid-cols-[1fr_1fr_auto]"
+              className="mt-10 grid max-w-4xl gap-3 rounded-[8px] border border-white/16 bg-white/[0.92] p-3 text-slate-950 shadow-2xl shadow-slate-950/35 backdrop-blur md:grid-cols-[1fr_1fr_auto]"
             >
               <label className="sr-only" htmlFor="search-role">
                 Cargo ou especialidade
@@ -172,7 +173,7 @@ export default function HomePage() {
               {heroStats.map(([value, label]) => (
                 <div
                   key={label}
-                  className="rounded-[8px] border border-white/10 bg-white/[0.08] p-4 backdrop-blur"
+                  className="rounded-[8px] border border-white/12 bg-white/[0.09] p-4 shadow-lg shadow-black/10 backdrop-blur"
                 >
                   <p className="text-2xl font-semibold text-cyan-200">{value}</p>
                   <p className="mt-1 text-xs uppercase tracking-[0.14em] text-slate-300">{label}</p>
@@ -181,8 +182,8 @@ export default function HomePage() {
             </div>
           </div>
 
-          <aside className="rounded-[8px] border border-white/12 bg-white/[0.09] p-4 shadow-2xl shadow-slate-950/40 backdrop-blur-xl">
-            <div className="rounded-[8px] bg-white p-5 text-slate-950">
+          <aside className="premium-card p-4">
+            <div className="rounded-[8px] bg-white/[0.96] p-5 text-slate-950 shadow-2xl shadow-black/20">
               <div className="flex items-center justify-between border-b border-slate-200 pb-4">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.16em] text-cyan-700">
@@ -197,7 +198,10 @@ export default function HomePage() {
 
               <div className="mt-5 space-y-3">
                 {recentJobs.map((job) => (
-                  <div key={job.title} className="rounded-[8px] border border-slate-200 p-4">
+                  <div
+                    key={job.title}
+                    className="rounded-[8px] border border-slate-200 bg-gradient-to-br from-white to-cyan-50/35 p-4 shadow-sm"
+                  >
                     <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-cyan-700">
                       <BriefcaseBusiness size={14} />
                       {job.mode}
@@ -208,7 +212,7 @@ export default function HomePage() {
                 ))}
               </div>
 
-              <div className="mt-5 rounded-[8px] bg-slate-950 p-4 text-white">
+              <div className="mt-5 rounded-[8px] bg-[linear-gradient(135deg,#020617,#063b40)] p-4 text-white shadow-xl shadow-slate-950/25">
                 {["Perfil tecnico", "Documentos", "Contato com candidatos"].map((item) => (
                   <p key={item} className="flex items-center gap-2 py-1.5 text-sm text-slate-200">
                     <CheckCircle2 size={16} className="text-cyan-300" />
@@ -231,7 +235,7 @@ export default function HomePage() {
           ].map(([title, body]) => (
             <div
               key={title}
-              className="rounded-[8px] border border-emerald-100 bg-white p-5 shadow-sm"
+              className="soft-card rounded-[8px] p-5 transition hover:-translate-y-1 hover:border-cyan-200"
             >
               <p className="font-semibold text-slate-950">{title}</p>
               <p className="mt-2 text-sm leading-6 text-slate-600">{body}</p>
@@ -276,7 +280,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="como-funciona" className="bg-slate-950 py-20 text-white">
+      <section
+        id="como-funciona"
+        className="bg-[linear-gradient(135deg,#020617,#05272d)] py-20 text-white"
+      >
         <div className="mx-auto grid max-w-7xl gap-10 px-6 lg:grid-cols-[0.9fr_1.1fr]">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-300">
@@ -295,7 +302,7 @@ export default function HomePage() {
             {workflowSteps.map(({ body, icon: Icon, title }) => (
               <div
                 key={title}
-                className="rounded-[8px] border border-white/10 bg-white/[0.07] p-5 shadow-sm"
+                className="rounded-[8px] border border-white/10 bg-white/[0.075] p-5 shadow-xl shadow-black/10 backdrop-blur transition hover:-translate-y-1 hover:border-cyan-300/40"
               >
                 <Icon className="text-cyan-300" size={22} />
                 <h3 className="mt-4 font-semibold">{title}</h3>
