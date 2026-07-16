@@ -16,6 +16,7 @@ import { IsNull, Repository } from "typeorm";
 
 import { Env } from "../config/env.validation.js";
 import { maskEmail, safeJson } from "../common/logging/safe-log.js";
+import { Company } from "../companies/company.entity.js";
 import { MailService } from "../mail/mail.service.js";
 import { User } from "../users/user.entity.js";
 import { LoginDto } from "./dto/login.dto.js";
@@ -43,6 +44,8 @@ export class AuthService {
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
+    @InjectRepository(Company)
+    private readonly companiesRepository: Repository<Company>,
     @InjectRepository(Session)
     private readonly sessionsRepository: Repository<Session>,
     @InjectRepository(EmailVerificationToken)
@@ -71,6 +74,18 @@ export class AuthService {
       throw new ConflictException("E-mail ja cadastrado.");
     }
 
+    const companyInput = this.getCompanyRegistrationInput(dto);
+
+    if (companyInput) {
+      const existingCompany = await this.companiesRepository.findOneBy({
+        cnpj: companyInput.cnpj,
+      });
+
+      if (existingCompany) {
+        throw new ConflictException("CNPJ ja cadastrado.");
+      }
+    }
+
     const now = new Date();
     const user = this.usersRepository.create({
       email: normalizedEmail,
@@ -84,6 +99,16 @@ export class AuthService {
     });
 
     await this.usersRepository.save(user);
+
+    if (companyInput) {
+      await this.companiesRepository.save(
+        this.companiesRepository.create({
+          ...companyInput,
+          ownerUserId: user.id,
+          verificationStatus: "UNVERIFIED",
+        }),
+      );
+    }
 
     const verificationToken = await this.createEmailVerificationToken(user.id);
     const tokens = await this.createSession(user, context);
@@ -499,6 +524,35 @@ export class AuthService {
 
   private shouldExposeDevTokens() {
     return this.configService.get("NODE_ENV", { infer: true }) === "development";
+  }
+
+  private getCompanyRegistrationInput(dto: RegisterDto) {
+    if (dto.role !== "COMPANY") {
+      return null;
+    }
+
+    const cnpj = dto.companyCnpj?.replace(/\D/g, "") ?? "";
+
+    if (
+      !dto.companyName?.trim() ||
+      !cnpj ||
+      !dto.companyState?.trim() ||
+      !dto.companyCity?.trim() ||
+      !dto.companySize
+    ) {
+      throw new BadRequestException("Informe os dados iniciais da empresa.");
+    }
+
+    return {
+      city: dto.companyCity.trim(),
+      cnpj,
+      description: null,
+      logoUrl: null,
+      name: dto.companyName.trim(),
+      size: dto.companySize,
+      state: dto.companyState.trim().toUpperCase(),
+      website: null,
+    };
   }
 
   private toPublicUser(user: User): PublicUser {

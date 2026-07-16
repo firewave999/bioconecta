@@ -3,6 +3,7 @@ import { JwtModule } from "@nestjs/jwt";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
 import { User } from "../users/user.entity.js";
+import { Company } from "../companies/company.entity.js";
 import { MailModule } from "../mail/mail.module.js";
 import { RateLimitGuard } from "../rate-limit/rate-limit.guard.js";
 import { AuthController } from "./auth.controller.js";
@@ -19,7 +20,7 @@ import { Session } from "./entities/session.entity.js";
   imports: [
     JwtModule.register({}),
     MailModule,
-    TypeOrmModule.forFeature([User, Session, EmailVerificationToken, PasswordResetToken]),
+    TypeOrmModule.forFeature([User, Company, Session, EmailVerificationToken, PasswordResetToken]),
   ],
   providers: [AuthGuard, AuthService, EmailVerifiedGuard, RateLimitGuard],
 })

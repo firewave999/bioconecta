@@ -41,6 +41,17 @@ export function RegisterForm() {
     const role = selectedRole;
 
     try {
+      const companyPayload =
+        role === "COMPANY"
+          ? {
+              companyCity: form.get("companyCity"),
+              companyCnpj: form.get("companyCnpj"),
+              companyName: form.get("companyName"),
+              companySize: form.get("companySize"),
+              companyState: form.get("companyState"),
+            }
+          : {};
+
       const response = await apiRequest<RegisterResponse, Record<string, unknown>>(
         "/auth/register",
         {
@@ -52,6 +63,7 @@ export function RegisterForm() {
           password: form.get("password"),
           phone: form.get("phone"),
           role,
+          ...companyPayload,
         },
       );
 
@@ -91,8 +103,16 @@ export function RegisterForm() {
 
       <form className="grid gap-4" onSubmit={handleSubmit}>
         <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="Nome" name="firstName" required />
-          <Field label="Sobrenome" name="lastName" required />
+          <Field
+            label={selectedRole === "COMPANY" ? "Nome do responsavel" : "Nome"}
+            name="firstName"
+            required
+          />
+          <Field
+            label={selectedRole === "COMPANY" ? "Sobrenome do responsavel" : "Sobrenome"}
+            name="lastName"
+            required
+          />
         </div>
         <Field label="E-mail" name="email" required type="email" />
         <Field label="Telefone" name="phone" type="tel" />
@@ -123,6 +143,45 @@ export function RegisterForm() {
             />
           </div>
         </fieldset>
+
+        {selectedRole === "COMPANY" ? (
+          <fieldset className="grid gap-4 rounded-[8px] border border-cyan-100 bg-cyan-50/40 p-4">
+            <legend className="px-1 text-sm font-semibold text-cyan-900">
+              Dados iniciais da empresa
+            </legend>
+            <Field label="Nome da empresa" name="companyName" required />
+            <div className="grid gap-4 sm:grid-cols-3">
+              <Field
+                inputMode="numeric"
+                label="CNPJ"
+                maxLength={18}
+                name="companyCnpj"
+                placeholder="00.000.000/0000-00"
+                required
+              />
+              <Field label="UF" maxLength={2} name="companyState" placeholder="GO" required />
+              <Field label="Cidade" name="companyCity" required />
+            </div>
+            <label className="grid gap-2 text-sm font-medium text-slate-700">
+              Porte
+              <select
+                className="field-input h-11 rounded-[8px] px-3"
+                defaultValue="SMALL"
+                name="companySize"
+                required
+              >
+                <option value="SOLO">Profissional ou consultoria individual</option>
+                <option value="SMALL">Pequena empresa</option>
+                <option value="MEDIUM">Media empresa</option>
+                <option value="LARGE">Grande empresa</option>
+              </select>
+            </label>
+            <p className="text-xs text-slate-600">
+              Esses dados ja criam o cadastro da empresa. Depois voce pode completar logo, site,
+              descricao e solicitar validacao.
+            </p>
+          </fieldset>
+        ) : null}
 
         <label className="flex gap-3 text-sm text-slate-600">
           <input className="mt-1" name="acceptTerms" required type="checkbox" /> Aceito os termos de
@@ -248,21 +307,35 @@ function getNextLabel(role: string | null) {
 }
 
 function Field({
+  inputMode,
   label,
+  maxLength,
   name,
+  placeholder,
   type = "text",
   ...props
 }: {
+  inputMode?: "numeric";
   label: string;
+  maxLength?: number;
   minLength?: number;
   name: string;
+  placeholder?: string;
   required?: boolean;
   type?: string;
 }) {
   return (
     <label className="grid gap-2 text-sm font-medium text-slate-700">
       {label}
-      <input className="field-input h-11 rounded-[8px] px-3" name={name} type={type} {...props} />
+      <input
+        className="field-input h-11 rounded-[8px] px-3"
+        inputMode={inputMode}
+        maxLength={maxLength}
+        name={name}
+        placeholder={placeholder}
+        type={type}
+        {...props}
+      />
     </label>
   );
 }

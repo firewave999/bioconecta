@@ -5,8 +5,10 @@ import {
   IsIn,
   IsOptional,
   IsString,
+  Length,
   MaxLength,
   MinLength,
+  ValidateIf,
 } from "class-validator";
 
 export class RegisterDto {
@@ -40,4 +42,28 @@ export class RegisterDto {
 
   @IsBoolean()
   acceptPrivacy!: boolean;
+
+  @ValidateIf((dto: RegisterDto) => dto.role === "COMPANY")
+  @IsString()
+  @MaxLength(180)
+  companyName?: string;
+
+  @ValidateIf((dto: RegisterDto) => dto.role === "COMPANY")
+  @IsString()
+  @Length(14, 18)
+  companyCnpj?: string;
+
+  @ValidateIf((dto: RegisterDto) => dto.role === "COMPANY")
+  @IsString()
+  @Length(2, 2)
+  companyState?: string;
+
+  @ValidateIf((dto: RegisterDto) => dto.role === "COMPANY")
+  @IsString()
+  @MaxLength(120)
+  companyCity?: string;
+
+  @ValidateIf((dto: RegisterDto) => dto.role === "COMPANY")
+  @IsIn(["SOLO", "SMALL", "MEDIUM", "LARGE"])
+  companySize?: "SOLO" | "SMALL" | "MEDIUM" | "LARGE";
 }
