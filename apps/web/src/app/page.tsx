@@ -14,6 +14,7 @@ import {
   UsersRound,
   type LucideIcon,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 import { HomeAuthActions } from "@/components/home/home-auth-actions";
@@ -88,8 +89,8 @@ export default function HomePage() {
   return (
     <main className="bg-[#f5fbf8]">
       <section className="premium-shell min-h-screen text-white">
-        <div className="absolute inset-y-0 right-0 hidden w-[52%] bg-[url('/images/hero-bioconecta.png')] bg-cover bg-center opacity-45 mix-blend-screen lg:block" />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(2,7,9,0.98)_0%,rgba(2,7,9,0.9)_42%,rgba(2,7,9,0.48)_68%,rgba(2,7,9,0.22)_100%)]" />
+        <div className="absolute inset-y-0 right-0 hidden w-[58%] bg-[url('/images/bio-hero-premium.png')] bg-cover bg-center opacity-90 lg:block" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(2,7,9,0.99)_0%,rgba(2,7,9,0.93)_38%,rgba(2,7,9,0.54)_66%,rgba(2,7,9,0.14)_100%)]" />
 
         <header className="relative z-10 mx-auto flex w-full max-w-7xl px-6 pt-5">
           <div className="premium-nav flex w-full items-center justify-between rounded-[8px] px-4 py-3">
@@ -244,6 +245,55 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="mx-auto grid max-w-7xl gap-8 px-6 py-20 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+        <div>
+          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
+            Perfil validado
+          </p>
+          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 md:text-4xl">
+            A vitrine do biologo precisa mostrar tecnica, campo e confianca.
+          </h2>
+          <p className="mt-5 text-lg leading-8 text-slate-600">
+            O BioConecta organiza areas de atuacao, grupos taxonomicos, documentos, certificados e
+            experiencia real para transformar curriculo solto em perfil profissional avaliavel.
+          </p>
+          <div className="mt-8 grid gap-3 sm:grid-cols-2">
+            {[
+              ["CRBio e documentos", "Upload, historico e validacao."],
+              ["Experiencia de campo", "Campanhas, metodos e entregas."],
+              ["Matching tecnico", "Compatibilidade por requisito."],
+              ["Contato direto", "Email, telefone e WhatsApp."],
+            ].map(([title, body]) => (
+              <div key={title} className="rounded-[8px] border border-cyan-100 bg-white/80 p-4">
+                <p className="font-semibold text-slate-950">{title}</p>
+                <p className="mt-1 text-sm text-slate-600">{body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="soft-card overflow-hidden rounded-[8px] p-0">
+          <div className="relative aspect-[16/10]">
+            <Image
+              src="/images/profile-field-premium.png"
+              alt="Equipamentos de campo e painel digital de perfil profissional de biologia."
+              fill
+              className="object-cover"
+              sizes="(min-width: 1024px) 52vw, 100vw"
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_44%,rgba(2,6,23,0.78)_100%)]" />
+            <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200">
+                Perfil tecnico
+              </p>
+              <p className="mt-2 max-w-xl text-lg font-semibold">
+                Documentos, experiencia e especialidades em um fluxo preparado para contratacao.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section id="vagas-recentes" className="mx-auto max-w-7xl px-6 py-20">
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>
@@ -337,26 +387,37 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="soft-card rounded-[8px] p-6">
-          <div className="flex items-center gap-3 border-b border-slate-200 pb-5">
-            <span className="flex h-11 w-11 items-center justify-center rounded-[8px] bg-slate-950 text-cyan-300">
-              <Building2 size={22} />
-            </span>
-            <div>
-              <p className="font-semibold text-slate-950">Biologos disponiveis</p>
-              <p className="text-sm text-slate-500">Filtro inicial planejado para empresas</p>
-            </div>
+        <div className="soft-card overflow-hidden rounded-[8px] p-0">
+          <div className="relative aspect-[16/9]">
+            <Image
+              src="/images/company-hiring-premium.png"
+              alt="Equipe ambiental analisando candidatos, mapas e dados tecnicos em um painel digital."
+              fill
+              className="object-cover"
+              sizes="(min-width: 1024px) 50vw, 100vw"
+            />
           </div>
-          <div className="mt-5 grid gap-3">
-            {practiceAreas.map((area) => (
-              <div
-                key={area}
-                className="flex items-center justify-between rounded-[8px] bg-slate-50 px-4 py-3"
-              >
-                <span className="text-sm font-medium text-slate-700">{area}</span>
-                <Sprout size={17} className="text-cyan-700" />
+          <div className="p-6">
+            <div className="flex items-center gap-3 border-b border-slate-200 pb-5">
+              <span className="flex h-11 w-11 items-center justify-center rounded-[8px] bg-slate-950 text-cyan-300">
+                <Building2 size={22} />
+              </span>
+              <div>
+                <p className="font-semibold text-slate-950">Biologos disponiveis</p>
+                <p className="text-sm text-slate-500">Filtro inicial planejado para empresas</p>
               </div>
-            ))}
+            </div>
+            <div className="mt-5 grid gap-3">
+              {practiceAreas.map((area) => (
+                <div
+                  key={area}
+                  className="flex items-center justify-between rounded-[8px] bg-slate-50 px-4 py-3"
+                >
+                  <span className="text-sm font-medium text-slate-700">{area}</span>
+                  <Sprout size={17} className="text-cyan-700" />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
