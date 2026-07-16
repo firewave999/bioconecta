@@ -11,7 +11,7 @@ import {
   Min,
   ValidateNested,
 } from "class-validator";
-import { Type } from "class-transformer";
+import { Transform, Type } from "class-transformer";
 
 class ExperienceDto {
   @IsString()
@@ -77,16 +77,19 @@ class DocumentDto {
 }
 
 export class UpsertProfessionalProfileDto {
+  @Transform(({ value }) => splitListValue(value))
   @IsArray()
   @IsString({ each: true })
   @MaxLength(120, { each: true })
   practiceAreas!: string[];
 
+  @Transform(({ value }) => splitListValue(value))
   @IsArray()
   @IsString({ each: true })
   @MaxLength(120, { each: true })
   taxonomicGroups!: string[];
 
+  @Transform(({ value }) => splitListValue(value))
   @IsArray()
   @IsString({ each: true })
   @MaxLength(120, { each: true })
@@ -106,4 +109,18 @@ export class UpsertProfessionalProfileDto {
   @ValidateNested({ each: true })
   @Type(() => DocumentDto)
   documents!: DocumentDto[];
+}
+
+function splitListValue(value: unknown) {
+  const values = Array.isArray(value) ? value : [value];
+
+  return [
+    ...new Set(
+      values
+        .filter((item): item is string => typeof item === "string")
+        .flatMap((item) => item.split(/[,;\n]+/))
+        .map((item) => item.trim())
+        .filter(Boolean),
+    ),
+  ];
 }

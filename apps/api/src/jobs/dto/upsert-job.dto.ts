@@ -10,6 +10,7 @@ import {
   MaxLength,
   Min,
 } from "class-validator";
+import { Transform } from "class-transformer";
 
 export class UpsertJobDto {
   @IsString()
@@ -58,18 +59,35 @@ export class UpsertJobDto {
   @IsBoolean()
   requiresTravel!: boolean;
 
+  @Transform(({ value }) => splitListValue(value))
   @IsArray()
   @IsString({ each: true })
   @MaxLength(120, { each: true })
   requiredPracticeAreas!: string[];
 
+  @Transform(({ value }) => splitListValue(value))
   @IsArray()
   @IsString({ each: true })
   @MaxLength(120, { each: true })
   requiredTaxonomicGroups!: string[];
 
+  @Transform(({ value }) => splitListValue(value))
   @IsArray()
   @IsString({ each: true })
   @MaxLength(120, { each: true })
   requiredSkills!: string[];
+}
+
+function splitListValue(value: unknown) {
+  const values = Array.isArray(value) ? value : [value];
+
+  return [
+    ...new Set(
+      values
+        .filter((item): item is string => typeof item === "string")
+        .flatMap((item) => item.split(/[,;\n]+/))
+        .map((item) => item.trim())
+        .filter(Boolean),
+    ),
+  ];
 }
