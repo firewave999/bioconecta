@@ -427,14 +427,14 @@ export default function HomePage() {
           <div>
             <p className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.16em] text-cyan-800">
               <GraduationCap size={17} />
-              Proxima fase
+              BioConecta
             </p>
             <h2 className="mt-3 text-3xl font-semibold text-slate-950">
-              Agora a base visual esta pronta.
+              Conecte talento tecnico a oportunidades ambientais reais.
             </h2>
             <p className="mt-2 text-slate-600">
-              Agora empresas podem cadastrar perfil, publicar vagas e preparar requisitos para
-              matching.
+              Crie seu perfil, publique vagas ou encontre profissionais preparados para campo,
+              licenciamento, monitoramento e consultoria ambiental.
             </p>
           </div>
           <HomeAuthActions context="footer" />
