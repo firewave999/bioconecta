@@ -535,8 +535,12 @@ function TextArea({
       <textarea
         className="field-input min-h-28 rounded-[8px] px-3 py-3"
         onChange={(event) => onChange(event.target.value)}
+        placeholder="Separe por virgula, ponto e virgula ou quebra de linha"
         value={value}
       />
+      <span className="text-xs text-slate-500">
+        Cada item sera salvo separadamente. Evite frases muito longas em um unico item.
+      </span>
     </label>
   );
 }
@@ -594,7 +598,7 @@ function splitList(value: string) {
   return [
     ...new Set(
       value
-        .split(",")
+        .split(/[,;\n]+/)
         .map((item) => item.trim())
         .filter(Boolean),
     ),

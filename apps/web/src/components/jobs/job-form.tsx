@@ -408,7 +408,7 @@ function splitList(value: string) {
   return [
     ...new Set(
       value
-        .split(",")
+        .split(/[,;\n]+/)
         .map((item) => item.trim())
         .filter(Boolean),
     ),
