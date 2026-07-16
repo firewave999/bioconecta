@@ -251,17 +251,18 @@ export default function HomePage() {
             Perfil validado
           </p>
           <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 md:text-4xl">
-            A vitrine do biologo precisa mostrar tecnica, campo e confianca.
+            Seu perfil precisa transmitir experiencia, tecnica e confianca.
           </h2>
           <p className="mt-5 text-lg leading-8 text-slate-600">
             O BioConecta organiza areas de atuacao, grupos taxonomicos, documentos, certificados e
-            experiencia real para transformar curriculo solto em perfil profissional avaliavel.
+            historico de campo para transformar informacoes soltas em um perfil profissional claro
+            para empresas.
           </p>
           <div className="mt-8 grid gap-3 sm:grid-cols-2">
             {[
-              ["CRBio e documentos", "Upload, historico e validacao."],
-              ["Experiencia de campo", "Campanhas, metodos e entregas."],
-              ["Matching tecnico", "Compatibilidade por requisito."],
+              ["CRBio e documentos", "Registro, anexos e validacao."],
+              ["Experiencia de campo", "Campanhas, metodos e entregas tecnicas."],
+              ["Matching tecnico", "Compatibilidade por area e requisito."],
               ["Contato direto", "Email, telefone e WhatsApp."],
             ].map(([title, body]) => (
               <div key={title} className="rounded-[8px] border border-cyan-100 bg-white/80 p-4">
@@ -287,7 +288,7 @@ export default function HomePage() {
                 Perfil tecnico
               </p>
               <p className="mt-2 max-w-xl text-lg font-semibold">
-                Documentos, experiencia e especialidades em um fluxo preparado para contratacao.
+                Informacoes profissionais organizadas para acelerar a avaliacao e a contratacao.
               </p>
             </div>
           </div>
