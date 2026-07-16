@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import {
@@ -9,7 +10,9 @@ import {
   ClipboardCheck,
   FileText,
   LayoutDashboard,
+  Map,
   Sparkles,
+  UserRoundCheck,
 } from "lucide-react";
 
 import { LogoutButton } from "@/components/auth/logout-button";
@@ -175,24 +178,82 @@ export function DashboardClient() {
   }
 
   if (!state) {
-    return <p className="text-slate-600">Carregando dashboard...</p>;
+    return (
+      <div className="grid gap-6">
+        <div className="glass-panel h-72 animate-pulse rounded-[8px]" />
+        <div className="grid gap-4 md:grid-cols-3">
+          <div className="soft-card h-32 animate-pulse rounded-[8px]" />
+          <div className="soft-card h-32 animate-pulse rounded-[8px]" />
+          <div className="soft-card h-32 animate-pulse rounded-[8px]" />
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="grid gap-6">
-      <section className="glass-panel rounded-[8px] p-6">
-        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-          <div>
-            <p className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
-              <LayoutDashboard size={16} />
-              Dashboard
-            </p>
-            <h1 className="mt-3 text-4xl font-semibold tracking-tight text-slate-950">
-              Ola, {state.firstName}
-            </h1>
-            <p className="mt-2 text-slate-600">{state.email}</p>
+      <section className="glass-panel overflow-hidden rounded-[8px]">
+        <div className="grid lg:grid-cols-[1.05fr_0.95fr]">
+          <div className="p-6 md:p-8">
+            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+              <div>
+                <p className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
+                  <LayoutDashboard size={16} />
+                  Dashboard
+                </p>
+                <h1 className="mt-3 text-4xl font-semibold tracking-tight text-slate-950 md:text-5xl">
+                  Ola, {state.firstName}
+                </h1>
+                <p className="mt-3 max-w-2xl text-slate-600">{getDashboardSummary(state)}</p>
+                <p className="mt-3 text-sm text-slate-500">{state.email}</p>
+              </div>
+              <LogoutButton />
+            </div>
+
+            <div className="mt-8 grid gap-3 sm:grid-cols-3">
+              <QuickStatus
+                label="Conta"
+                value={state.emailVerifiedAt ? "Verificada" : "Pendente"}
+              />
+              <QuickStatus
+                label={state.isCompanyAccount ? "Vagas" : "Perfil"}
+                value={state.completion}
+              />
+              <QuickStatus label="Area" value={getAccountArea(state)} />
+            </div>
+
+            <div className="mt-8 flex flex-wrap gap-3">
+              {getPrimaryAction(state)}
+              <Button asChild variant="secondary">
+                <Link href="/vagas">Explorar vagas</Link>
+              </Button>
+              <Button asChild variant="secondary">
+                <Link href="/notificacoes">Notificacoes</Link>
+              </Button>
+            </div>
           </div>
-          <LogoutButton />
+
+          <div className="relative min-h-[320px] overflow-hidden bg-slate-950">
+            <Image
+              alt="Painel BioConecta com dados profissionais de biologia."
+              className="object-cover opacity-78"
+              fill
+              priority
+              sizes="(min-width: 1024px) 48vw, 100vw"
+              src={
+                state.isCompanyAccount
+                  ? "/images/company-hiring-premium.png"
+                  : "/images/profile-field-premium.png"
+              }
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.18),rgba(2,6,23,0.82))]" />
+            <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200">
+                {state.isCompanyAccount ? "Operacao empresa" : "Perfil profissional"}
+              </p>
+              <p className="mt-2 text-xl font-semibold">{state.title}</p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -205,20 +266,23 @@ export function DashboardClient() {
             label="Conclusao do perfil"
             value={`${state.completion}%`}
           />
-          <div className="soft-card rounded-[8px] p-5 md:col-span-2">
-            <p className="text-sm text-slate-500">Headline</p>
-            <p className="mt-2 text-xl font-semibold text-slate-950">{state.title}</p>
+          <MetricCard
+            icon={<BriefcaseBusiness size={21} />}
+            label="Experiencias"
+            value={state.experiencesCount}
+          />
+          <div className="soft-card rounded-[8px] p-5">
+            <div className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-cyan-50 text-cyan-800">
+              <UserRoundCheck size={21} />
+            </div>
+            <p className="mt-4 text-sm text-slate-500">Headline</p>
+            <p className="mt-2 line-clamp-2 text-xl font-semibold text-slate-950">{state.title}</p>
           </div>
         </section>
       ) : null}
 
       {state.profileExists ? (
         <section className="grid gap-4 md:grid-cols-3">
-          <MetricCard
-            icon={<BriefcaseBusiness size={21} />}
-            label="Experiencias"
-            value={state.experiencesCount}
-          />
           <MetricCard
             icon={<BadgeCheck size={21} />}
             label="Certificacoes"
@@ -229,6 +293,7 @@ export function DashboardClient() {
             label="Documentos"
             value={state.documentsCount}
           />
+          <MetricCard icon={<Map size={21} />} label="Status" value={getBiologistStage(state)} />
         </section>
       ) : null}
 
@@ -436,12 +501,26 @@ function MetricCard({
   value: number | string;
 }) {
   return (
-    <div className="soft-card rounded-[8px] p-5">
-      <div className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-cyan-50 text-cyan-800">
-        {icon}
+    <div className="soft-card rounded-[8px] p-5 transition hover:-translate-y-0.5 hover:border-cyan-200">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-cyan-50 text-cyan-800">
+          {icon}
+        </div>
+        <span className="rounded-full bg-slate-50 px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">
+          BioConecta
+        </span>
       </div>
       <p className="mt-4 text-sm text-slate-500">{label}</p>
       <p className="mt-2 text-3xl font-semibold text-slate-950">{value}</p>
+    </div>
+  );
+}
+
+function QuickStatus({ label, value }: { label: string; value: number | string }) {
+  return (
+    <div className="rounded-[8px] border border-cyan-100 bg-white/72 p-4">
+      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">{label}</p>
+      <p className="mt-2 text-lg font-semibold text-slate-950">{value}</p>
     </div>
   );
 }
@@ -501,6 +580,58 @@ function getBiologistStage(state: DashboardState) {
   }
 
   return "Pronto para candidaturas";
+}
+
+function getDashboardSummary(state: DashboardState) {
+  if (state.isCompanyAccount) {
+    return "Gerencie empresa, vagas publicadas, rascunhos e proximas acoes para receber candidatos com mais contexto.";
+  }
+
+  if (state.isBiologistAccount) {
+    return "Acompanhe seu perfil, documentos, candidaturas e oportunidades alinhadas com sua experiencia tecnica.";
+  }
+
+  return "Acompanhe oportunidades, favoritos e notificacoes da sua conta BioConecta.";
+}
+
+function getAccountArea(state: DashboardState) {
+  if (state.isCompanyAccount) {
+    return "Empresa";
+  }
+
+  if (state.isBiologistAccount) {
+    return "Biologo";
+  }
+
+  return "Estudante";
+}
+
+function getPrimaryAction(state: DashboardState) {
+  if (state.isCompanyAccount) {
+    return (
+      <Button asChild>
+        <Link href={state.company ? "/empresa/vagas" : "/empresa"}>
+          {state.company ? "Gerenciar vagas" : "Cadastrar empresa"}
+        </Link>
+      </Button>
+    );
+  }
+
+  if (state.isBiologistAccount) {
+    return (
+      <Button asChild>
+        <Link href={state.profileExists ? "/perfil/profissional" : "/onboarding/biologo"}>
+          {state.profileExists ? "Atualizar perfil" : "Completar onboarding"}
+        </Link>
+      </Button>
+    );
+  }
+
+  return (
+    <Button asChild>
+      <Link href="/vagas">Buscar oportunidades</Link>
+    </Button>
+  );
 }
 
 function formatCnpj(value: string) {
