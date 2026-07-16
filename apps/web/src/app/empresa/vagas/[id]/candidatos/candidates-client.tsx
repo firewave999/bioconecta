@@ -198,218 +198,13 @@ export function CandidatesClient() {
       <section className="grid gap-4">
         {filteredApplications.length ? (
           filteredApplications.map((application) => (
-            <article className="soft-card rounded-[8px] p-5" key={application.id}>
-              <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-                <div className="flex flex-col gap-3 md:flex-row md:items-start">
-                  {application.biologistProfile.avatarUrl ? (
-                    <img
-                      alt={`Foto de ${application.biologistProfile.fullName}`}
-                      className="h-16 w-16 rounded-full border border-slate-200 bg-white object-cover"
-                      src={application.biologistProfile.avatarUrl}
-                    />
-                  ) : null}
-                  <div>
-                    <h2 className="text-xl font-semibold text-slate-950">
-                      {application.biologistProfile.fullName}
-                    </h2>
-                    <p className="mt-1 text-slate-600">
-                      {application.biologistProfile.headline ?? "Sem headline"} |{" "}
-                      {application.biologistProfile.city}/{application.biologistProfile.state}
-                    </p>
-                    <p className="mt-2 text-sm font-semibold text-cyan-800">
-                      Match: {application.matchScore}%
-                    </p>
-                    <p className="mt-1 text-sm text-slate-500">
-                      Verificacao: {application.biologistProfile.verificationStatus}
-                    </p>
-                  </div>
-                </div>
-                <span
-                  className={`rounded-full px-3 py-1 text-sm font-semibold ${
-                    statusClassNames[application.status] ?? "bg-slate-100 text-slate-700"
-                  }`}
-                >
-                  {getStatusLabel(application.status)}
-                </span>
-              </div>
-
-              <div className="mt-4 rounded-[8px] border border-slate-200 bg-slate-50 p-4">
-                <p className="text-sm font-semibold text-slate-950">Proxima acao sugerida</p>
-                <p className="mt-1 text-sm text-slate-600">
-                  {getNextActionText(application.status, Boolean(application.biologistProfile.user.phone))}
-                </p>
-              </div>
-
-              <div className="mt-4 grid gap-3 rounded-[8px] border border-cyan-100 bg-cyan-50 p-4 md:grid-cols-[1fr_auto] md:items-center">
-                <div>
-                  <p className="text-sm font-semibold text-cyan-950">Contato do candidato</p>
-                  <p className="mt-1 text-sm text-slate-700">
-                    Email:{" "}
-                    <a
-                      className="font-medium text-cyan-800 underline-offset-2 hover:underline"
-                      href={`mailto:${application.biologistProfile.user.email}`}
-                    >
-                      {application.biologistProfile.user.email}
-                    </a>
-                  </p>
-                  {application.biologistProfile.user.phone ? (
-                    <p className="mt-1 text-sm text-slate-700">
-                      Telefone:{" "}
-                      <a
-                        className="font-medium text-cyan-800 underline-offset-2 hover:underline"
-                        href={`tel:${application.biologistProfile.user.phone}`}
-                      >
-                        {application.biologistProfile.user.phone}
-                      </a>
-                    </p>
-                  ) : (
-                    <p className="mt-1 text-sm text-slate-500">
-                      Telefone nao informado no cadastro.
-                    </p>
-                  )}
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  <Button asChild size="sm" type="button">
-                    <a href={`mailto:${application.biologistProfile.user.email}`}>Enviar email</a>
-                  </Button>
-                  {application.biologistProfile.user.phone ? (
-                    <Button asChild size="sm" type="button" variant="secondary">
-                      <a href={`tel:${application.biologistProfile.user.phone}`}>Ligar</a>
-                    </Button>
-                  ) : null}
-                </div>
-              </div>
-
-              {application.coverMessage ? (
-                <div className="mt-4 rounded-[8px] border border-cyan-100 bg-cyan-50/40 p-4">
-                  <p className="text-sm font-semibold text-slate-950">Mensagem do candidato</p>
-                  <p className="mt-1 whitespace-pre-line text-sm text-slate-600">
-                    {application.coverMessage}
-                  </p>
-                </div>
-              ) : null}
-
-              {application.matchReasons.length ? (
-                <ul className="mt-4 list-inside list-disc text-sm text-slate-600">
-                  {application.matchReasons.map((reason) => (
-                    <li key={reason}>{reason}</li>
-                  ))}
-                </ul>
-              ) : null}
-
-              <div className="mt-4 grid gap-4 border-t border-slate-200 pt-4">
-                <div className="grid gap-3 md:grid-cols-3">
-                  <TagList items={application.professional.practiceAreas} title="Areas" />
-                  <TagList
-                    items={application.professional.taxonomicGroups}
-                    title="Grupos taxonomicos"
-                  />
-                  <TagList items={application.professional.skills} title="Competencias" />
-                </div>
-
-                {application.professional.experiences.length ? (
-                  <ProfileBlock title="Experiencias">
-                    {application.professional.experiences.slice(0, 3).map((experience, index) => (
-                      <div
-                        className="rounded-[8px] border border-cyan-100 bg-white p-3"
-                        key={index}
-                      >
-                        <p className="font-semibold text-slate-950">{experience.title}</p>
-                        <p className="mt-1 text-sm text-slate-600">
-                          {experience.organizationName ?? "Organizacao nao informada"} -{" "}
-                          {experience.startYear}-
-                          {experience.isCurrent ? "atual" : (experience.endYear ?? "nao informado")}
-                        </p>
-                        {experience.description ? (
-                          <p className="mt-2 whitespace-pre-line text-sm text-slate-600">
-                            {experience.description}
-                          </p>
-                        ) : null}
-                      </div>
-                    ))}
-                  </ProfileBlock>
-                ) : null}
-
-                {application.professional.certifications.length ? (
-                  <ProfileBlock title="Certificacoes">
-                    {application.professional.certifications.slice(0, 4).map((certification) => (
-                      <div
-                        className="rounded-[8px] border border-cyan-100 bg-white p-3"
-                        key={certification.name}
-                      >
-                        <p className="font-semibold text-slate-950">{certification.name}</p>
-                        <p className="mt-1 text-sm text-slate-600">
-                          {certification.issuerName ?? "Emissor nao informado"}
-                          {certification.issuedYear ? ` - ${certification.issuedYear}` : ""}
-                        </p>
-                        {certification.credentialUrl ? (
-                          <a
-                            className="mt-2 inline-flex text-sm font-semibold text-cyan-800"
-                            href={certification.credentialUrl}
-                            rel="noreferrer"
-                            target="_blank"
-                          >
-                            Ver credencial
-                          </a>
-                        ) : null}
-                      </div>
-                    ))}
-                  </ProfileBlock>
-                ) : null}
-
-                <ProfileBlock title="Documentos">
-                  {application.professional.documents.length ? (
-                    application.professional.documents.slice(0, 4).map((document) => (
-                      <a
-                        className="rounded-[8px] border border-cyan-100 bg-white p-3 text-sm font-semibold text-cyan-800"
-                        href={document.fileUrl}
-                        key={`${document.type}-${document.title}`}
-                        rel="noreferrer"
-                        target="_blank"
-                      >
-                        {document.title} ({document.type}) - {document.verificationStatus}
-                      </a>
-                    ))
-                  ) : (
-                    <p className="text-sm text-slate-500">Documentos nao informados.</p>
-                  )}
-                </ProfileBlock>
-              </div>
-
-              <div className="mt-4 flex flex-wrap gap-2">
-                {getPrimaryStatuses(application.status).map(([value, label]) => (
-                  <Button
-                    disabled={loadingId === application.id || application.status === value}
-                    key={value}
-                    onClick={() => updateStatus(application.id, value)}
-                    size="sm"
-                    type="button"
-                    variant={application.status === value ? "primary" : "secondary"}
-                  >
-                    {label}
-                  </Button>
-                ))}
-                <details className="w-full">
-                  <summary className="cursor-pointer text-sm font-semibold text-cyan-800">
-                    Ver todos os status
-                  </summary>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {statuses.map(([value, label]) => (
-                      <Button
-                        disabled={loadingId === application.id || application.status === value}
-                        key={value}
-                        onClick={() => updateStatus(application.id, value)}
-                        size="sm"
-                        type="button"
-                        variant={application.status === value ? "primary" : "secondary"}
-                      >
-                        {label}
-                      </Button>
-                    ))}
-                  </div>
-                </details>
-              </div>
-            </article>
+            <CandidateCard
+              application={application}
+              jobTitle={jobTitle}
+              key={application.id}
+              loadingId={loadingId}
+              onUpdateStatus={updateStatus}
+            />
           ))
         ) : (
           <EmptyState
@@ -425,6 +220,241 @@ export function CandidatesClient() {
         )}
       </section>
     </div>
+  );
+}
+
+function CandidateCard({
+  application,
+  jobTitle,
+  loadingId,
+  onUpdateStatus,
+}: {
+  application: Candidate;
+  jobTitle: string;
+  loadingId: string | null;
+  onUpdateStatus: (applicationId: string, status: string) => void;
+}) {
+  const phone = application.biologistProfile.user.phone;
+  const whatsappHref = phone
+    ? getWhatsappHref({
+        candidateName: application.biologistProfile.fullName,
+        jobTitle,
+        phone,
+      })
+    : null;
+
+  return (
+    <article className="soft-card rounded-[8px] p-5">
+      <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+        <div className="flex flex-col gap-3 md:flex-row md:items-start">
+          {application.biologistProfile.avatarUrl ? (
+            <img
+              alt={`Foto de ${application.biologistProfile.fullName}`}
+              className="h-16 w-16 rounded-full border border-slate-200 bg-white object-cover"
+              src={application.biologistProfile.avatarUrl}
+            />
+          ) : null}
+          <div>
+            <h2 className="text-xl font-semibold text-slate-950">
+              {application.biologistProfile.fullName}
+            </h2>
+            <p className="mt-1 text-slate-600">
+              {application.biologistProfile.headline ?? "Sem headline"} |{" "}
+              {application.biologistProfile.city}/{application.biologistProfile.state}
+            </p>
+            <p className="mt-2 text-sm font-semibold text-cyan-800">
+              Match: {application.matchScore}%
+            </p>
+            <p className="mt-1 text-sm text-slate-500">
+              Verificacao: {application.biologistProfile.verificationStatus}
+            </p>
+          </div>
+        </div>
+        <span
+          className={`rounded-full px-3 py-1 text-sm font-semibold ${
+            statusClassNames[application.status] ?? "bg-slate-100 text-slate-700"
+          }`}
+        >
+          {getStatusLabel(application.status)}
+        </span>
+      </div>
+
+      <div className="mt-4 rounded-[8px] border border-slate-200 bg-slate-50 p-4">
+        <p className="text-sm font-semibold text-slate-950">Proxima acao sugerida</p>
+        <p className="mt-1 text-sm text-slate-600">
+          {getNextActionText(application.status, Boolean(application.biologistProfile.user.phone))}
+        </p>
+      </div>
+
+      <div className="mt-4 grid gap-3 rounded-[8px] border border-cyan-100 bg-cyan-50 p-4 md:grid-cols-[1fr_auto] md:items-center">
+        <div>
+          <p className="text-sm font-semibold text-cyan-950">Contato do candidato</p>
+          <p className="mt-1 text-sm text-slate-700">
+            Email:{" "}
+            <a
+              className="font-medium text-cyan-800 underline-offset-2 hover:underline"
+              href={`mailto:${application.biologistProfile.user.email}`}
+            >
+              {application.biologistProfile.user.email}
+            </a>
+          </p>
+          {application.biologistProfile.user.phone ? (
+            <p className="mt-1 text-sm text-slate-700">
+              Telefone:{" "}
+              <a
+                className="font-medium text-cyan-800 underline-offset-2 hover:underline"
+                href={`tel:${application.biologistProfile.user.phone}`}
+              >
+                {application.biologistProfile.user.phone}
+              </a>
+            </p>
+          ) : (
+            <p className="mt-1 text-sm text-slate-500">Telefone nao informado no cadastro.</p>
+          )}
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <Button asChild size="sm" type="button">
+            <a href={`mailto:${application.biologistProfile.user.email}`}>Enviar email</a>
+          </Button>
+          {whatsappHref ? (
+            <Button asChild size="sm" type="button" variant="light">
+              <a href={whatsappHref} rel="noreferrer" target="_blank">
+                WhatsApp
+              </a>
+            </Button>
+          ) : null}
+          {application.biologistProfile.user.phone ? (
+            <Button asChild size="sm" type="button" variant="secondary">
+              <a href={`tel:${application.biologistProfile.user.phone}`}>Ligar</a>
+            </Button>
+          ) : null}
+        </div>
+      </div>
+
+      {application.coverMessage ? (
+        <div className="mt-4 rounded-[8px] border border-cyan-100 bg-cyan-50/40 p-4">
+          <p className="text-sm font-semibold text-slate-950">Mensagem do candidato</p>
+          <p className="mt-1 whitespace-pre-line text-sm text-slate-600">
+            {application.coverMessage}
+          </p>
+        </div>
+      ) : null}
+
+      {application.matchReasons.length ? (
+        <ul className="mt-4 list-inside list-disc text-sm text-slate-600">
+          {application.matchReasons.map((reason) => (
+            <li key={reason}>{reason}</li>
+          ))}
+        </ul>
+      ) : null}
+
+      <div className="mt-4 grid gap-4 border-t border-slate-200 pt-4">
+        <div className="grid gap-3 md:grid-cols-3">
+          <TagList items={application.professional.practiceAreas} title="Areas" />
+          <TagList items={application.professional.taxonomicGroups} title="Grupos taxonomicos" />
+          <TagList items={application.professional.skills} title="Competencias" />
+        </div>
+
+        {application.professional.experiences.length ? (
+          <ProfileBlock title="Experiencias">
+            {application.professional.experiences.slice(0, 3).map((experience, index) => (
+              <div className="rounded-[8px] border border-cyan-100 bg-white p-3" key={index}>
+                <p className="font-semibold text-slate-950">{experience.title}</p>
+                <p className="mt-1 text-sm text-slate-600">
+                  {experience.organizationName ?? "Organizacao nao informada"} -{" "}
+                  {experience.startYear}-
+                  {experience.isCurrent ? "atual" : (experience.endYear ?? "nao informado")}
+                </p>
+                {experience.description ? (
+                  <p className="mt-2 whitespace-pre-line text-sm text-slate-600">
+                    {experience.description}
+                  </p>
+                ) : null}
+              </div>
+            ))}
+          </ProfileBlock>
+        ) : null}
+
+        {application.professional.certifications.length ? (
+          <ProfileBlock title="Certificacoes">
+            {application.professional.certifications.slice(0, 4).map((certification) => (
+              <div
+                className="rounded-[8px] border border-cyan-100 bg-white p-3"
+                key={certification.name}
+              >
+                <p className="font-semibold text-slate-950">{certification.name}</p>
+                <p className="mt-1 text-sm text-slate-600">
+                  {certification.issuerName ?? "Emissor nao informado"}
+                  {certification.issuedYear ? ` - ${certification.issuedYear}` : ""}
+                </p>
+                {certification.credentialUrl ? (
+                  <a
+                    className="mt-2 inline-flex text-sm font-semibold text-cyan-800"
+                    href={certification.credentialUrl}
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    Ver credencial
+                  </a>
+                ) : null}
+              </div>
+            ))}
+          </ProfileBlock>
+        ) : null}
+
+        <ProfileBlock title="Documentos">
+          {application.professional.documents.length ? (
+            application.professional.documents.slice(0, 4).map((document) => (
+              <a
+                className="rounded-[8px] border border-cyan-100 bg-white p-3 text-sm font-semibold text-cyan-800"
+                href={document.fileUrl}
+                key={`${document.type}-${document.title}`}
+                rel="noreferrer"
+                target="_blank"
+              >
+                {document.title} ({document.type}) - {document.verificationStatus}
+              </a>
+            ))
+          ) : (
+            <p className="text-sm text-slate-500">Documentos nao informados.</p>
+          )}
+        </ProfileBlock>
+      </div>
+
+      <div className="mt-4 flex flex-wrap gap-2">
+        {getPrimaryStatuses(application.status).map(([value, label]) => (
+          <Button
+            disabled={loadingId === application.id || application.status === value}
+            key={value}
+            onClick={() => onUpdateStatus(application.id, value)}
+            size="sm"
+            type="button"
+            variant={application.status === value ? "primary" : "secondary"}
+          >
+            {label}
+          </Button>
+        ))}
+        <details className="w-full">
+          <summary className="cursor-pointer text-sm font-semibold text-cyan-800">
+            Ver todos os status
+          </summary>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {statuses.map(([value, label]) => (
+              <Button
+                disabled={loadingId === application.id || application.status === value}
+                key={value}
+                onClick={() => onUpdateStatus(application.id, value)}
+                size="sm"
+                type="button"
+                variant={application.status === value ? "primary" : "secondary"}
+              >
+                {label}
+              </Button>
+            ))}
+          </div>
+        </details>
+      </div>
+    </article>
   );
 }
 
@@ -504,19 +534,58 @@ function getPrimaryStatuses(currentStatus: string): Array<[string, string]> {
 }
 
 function getNextActionText(status: string, hasPhone: boolean) {
-  const contactText = hasPhone ? "envie e-mail ou ligue para alinhar disponibilidade." : "envie e-mail para alinhar disponibilidade.";
+  const contactText = hasPhone
+    ? "envie e-mail, WhatsApp ou ligue para alinhar disponibilidade."
+    : "envie e-mail para alinhar disponibilidade.";
   const labels: Record<string, string> = {
     APPLIED: `Revise match, documentos e mensagem. Se fizer sentido, marque como Em analise e ${contactText}`,
     HIRED: "Candidato marcado como contratado. Mantenha o registro para historico da vaga.",
-    INTERVIEW: "Agende ou confirme a entrevista e avance para Oferta, Contratado ou Rejeitado conforme retorno.",
+    INTERVIEW:
+      "Agende ou confirme a entrevista e avance para Oferta, Contratado ou Rejeitado conforme retorno.",
     OFFER: "Oferta enviada. Acompanhe retorno e finalize como Contratado ou Rejeitado.",
     REJECTED: "Candidato rejeitado. Use este status para manter o funil limpo.",
     SHORTLISTED: `Candidato selecionado. Proximo passo recomendado: ${contactText}`,
-    UNDER_REVIEW: "Analise perfil, experiencias e documentos. Depois avance para Selecionado, Entrevista ou Rejeitado.",
+    UNDER_REVIEW:
+      "Analise perfil, experiencias e documentos. Depois avance para Selecionado, Entrevista ou Rejeitado.",
     WITHDRAWN: "Candidatura retirada. Nenhuma acao operacional pendente.",
   };
 
   return labels[status] ?? "Revise o candidato e atualize o status conforme a proxima etapa.";
+}
+
+function getWhatsappHref({
+  candidateName,
+  jobTitle,
+  phone,
+}: {
+  candidateName: string;
+  jobTitle: string;
+  phone: string;
+}) {
+  const normalizedPhone = normalizeBrazilPhone(phone);
+
+  if (!normalizedPhone) {
+    return null;
+  }
+
+  const message = `Ola, ${candidateName}. Tudo bem? Somos da empresa responsavel pela vaga "${jobTitle}" no BioConecta e vimos sua candidatura. Podemos conversar sobre sua disponibilidade?`;
+
+  return `https://wa.me/${normalizedPhone}?text=${encodeURIComponent(message)}`;
+}
+
+function normalizeBrazilPhone(phone: string) {
+  const digits = phone.replace(/\D/g, "");
+
+  if (!digits) {
+    return null;
+  }
+
+  const withoutInternationalPrefix = digits.startsWith("0055") ? digits.slice(2) : digits;
+  const withCountryCode = withoutInternationalPrefix.startsWith("55")
+    ? withoutInternationalPrefix
+    : `55${withoutInternationalPrefix}`;
+
+  return withCountryCode.length >= 12 && withCountryCode.length <= 13 ? withCountryCode : null;
 }
 
 function ProfileBlock({ children, title }: { children: ReactNode; title: string }) {
