@@ -202,7 +202,17 @@ export function AdminClient() {
   }
 
   if (authState === "checking" && !error) {
-    return <p className="text-slate-600">Validando acesso admin...</p>;
+    return (
+      <div className="grid gap-4">
+        <div className="soft-card h-28 animate-pulse rounded-[8px]" />
+        <div className="grid gap-4 md:grid-cols-4">
+          <div className="soft-card h-28 animate-pulse rounded-[8px]" />
+          <div className="soft-card h-28 animate-pulse rounded-[8px]" />
+          <div className="soft-card h-28 animate-pulse rounded-[8px]" />
+          <div className="soft-card h-28 animate-pulse rounded-[8px]" />
+        </div>
+      </div>
+    );
   }
 
   if (error) {
@@ -261,13 +271,7 @@ export function AdminClient() {
     ]),
   );
   const visibleJobs = state.jobs.filter((job) =>
-    matchesSearch(normalizedSearch, [
-      job.title,
-      job.company.name,
-      job.city,
-      job.state,
-      job.status,
-    ]),
+    matchesSearch(normalizedSearch, [job.title, job.company.name, job.city, job.state, job.status]),
   );
   const visibleUsers = state.users.filter((user) =>
     matchesSearch(normalizedSearch, [
@@ -310,7 +314,7 @@ export function AdminClient() {
 
   return (
     <div className="grid gap-6">
-      <section className="rounded-[8px] border border-slate-200 bg-white p-5">
+      <section className="soft-card rounded-[8px] p-5">
         <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-center">
           <label className="grid gap-2 text-sm font-medium text-slate-700">
             Buscar no painel
@@ -322,16 +326,28 @@ export function AdminClient() {
             />
           </label>
           <nav className="flex flex-wrap gap-2 text-sm font-semibold">
-            <a className="rounded-full border border-slate-200 px-3 py-2 text-slate-700" href="#pendencias">
+            <a
+              className="rounded-full border border-slate-200 px-3 py-2 text-slate-700"
+              href="#pendencias"
+            >
               Pendencias
             </a>
-            <a className="rounded-full border border-slate-200 px-3 py-2 text-slate-700" href="#empresas">
+            <a
+              className="rounded-full border border-slate-200 px-3 py-2 text-slate-700"
+              href="#empresas"
+            >
               Empresas
             </a>
-            <a className="rounded-full border border-slate-200 px-3 py-2 text-slate-700" href="#biologos">
+            <a
+              className="rounded-full border border-slate-200 px-3 py-2 text-slate-700"
+              href="#biologos"
+            >
               Biologos
             </a>
-            <a className="rounded-full border border-slate-200 px-3 py-2 text-slate-700" href="#vagas">
+            <a
+              className="rounded-full border border-slate-200 px-3 py-2 text-slate-700"
+              href="#vagas"
+            >
               Vagas
             </a>
           </nav>
@@ -345,7 +361,7 @@ export function AdminClient() {
         <Metric label="Vagas publicadas" value={state.overview.publishedJobsCount} />
       </section>
 
-      <section className="rounded-[8px] border border-cyan-100 bg-cyan-50 p-6" id="pendencias">
+      <section className="rounded-[8px] border border-cyan-100 bg-cyan-50/90 p-6" id="pendencias">
         <SectionTitle
           title="Fila de pendencias"
           subtitle="Itens que normalmente precisam de decisao do administrador"
@@ -395,7 +411,7 @@ export function AdminClient() {
         ) : null}
       </section>
 
-      <section className="rounded-[8px] border border-slate-200 bg-white p-6" id="empresas">
+      <section className="soft-card rounded-[8px] p-6" id="empresas">
         <SectionTitle title="Empresas" subtitle={`${state.overview.companiesCount} cadastradas`} />
         <FilterBar>
           <FilterButton active={companyFilter === "ALL"} onClick={() => setCompanyFilter("ALL")}>
@@ -413,7 +429,10 @@ export function AdminClient() {
         </FilterBar>
         <div className="mt-5 grid gap-3">
           {filteredCompanies.map((company) => (
-            <article className="rounded-[8px] border border-slate-200 p-4" key={company.id}>
+            <article
+              className="rounded-[8px] border border-slate-200 bg-white/82 p-4 transition hover:border-cyan-200 hover:shadow-md"
+              key={company.id}
+            >
               <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                 <div>
                   <p className="font-semibold text-slate-950">{company.name}</p>
@@ -482,7 +501,7 @@ export function AdminClient() {
         </div>
       </section>
 
-      <section className="rounded-[8px] border border-slate-200 bg-white p-6" id="biologos">
+      <section className="soft-card rounded-[8px] p-6" id="biologos">
         <SectionTitle
           title="Biologos"
           subtitle={`${state.overview.biologistProfilesCount} perfis cadastrados`}
@@ -508,7 +527,10 @@ export function AdminClient() {
         </FilterBar>
         <div className="mt-5 grid gap-3">
           {filteredBiologists.map((biologist) => (
-            <article className="rounded-[8px] border border-slate-200 p-4" key={biologist.id}>
+            <article
+              className="rounded-[8px] border border-slate-200 bg-white/82 p-4 transition hover:border-cyan-200 hover:shadow-md"
+              key={biologist.id}
+            >
               <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                 <div>
                   <p className="font-semibold text-slate-950">{biologist.fullName}</p>
@@ -557,7 +579,7 @@ export function AdminClient() {
         </div>
       </section>
 
-      <section className="rounded-[8px] border border-slate-200 bg-white p-6" id="vagas">
+      <section className="soft-card rounded-[8px] p-6" id="vagas">
         <SectionTitle title="Vagas" subtitle={`${state.overview.jobsCount} vagas criadas`} />
         <FilterBar>
           <FilterButton active={jobFilter === "ALL"} onClick={() => setJobFilter("ALL")}>
@@ -575,7 +597,10 @@ export function AdminClient() {
         </FilterBar>
         <div className="mt-5 grid gap-3">
           {filteredJobs.map((job) => (
-            <article className="rounded-[8px] border border-slate-200 p-4" key={job.id}>
+            <article
+              className="rounded-[8px] border border-slate-200 bg-white/82 p-4 transition hover:border-cyan-200 hover:shadow-md"
+              key={job.id}
+            >
               <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                 <div>
                   <p className="font-semibold text-slate-950">{job.title}</p>
@@ -618,14 +643,17 @@ export function AdminClient() {
       </section>
 
       <section className="grid gap-4 md:grid-cols-2" id="candidaturas">
-        <div className="rounded-[8px] border border-slate-200 bg-white p-6">
+        <div className="soft-card rounded-[8px] p-6">
           <SectionTitle
             title="Candidaturas recentes"
             subtitle={`${state.overview.applicationsCount} candidaturas`}
           />
           <div className="mt-5 grid gap-3">
             {state.applications.slice(0, 10).map((application) => (
-              <article className="rounded-[8px] border border-slate-200 p-4" key={application.id}>
+              <article
+                className="rounded-[8px] border border-slate-200 bg-white/82 p-4"
+                key={application.id}
+              >
                 <p className="font-semibold text-slate-950">
                   {application.biologistProfile.fullName}
                 </p>
@@ -638,11 +666,14 @@ export function AdminClient() {
           </div>
         </div>
 
-        <div className="rounded-[8px] border border-slate-200 bg-white p-6">
+        <div className="soft-card rounded-[8px] p-6">
           <SectionTitle title="Usuarios recentes" subtitle="Ultimos 100 usuarios" />
           <div className="mt-5 grid gap-3">
             {visibleUsers.slice(0, 10).map((user) => (
-              <article className="rounded-[8px] border border-slate-200 p-4" key={user.id}>
+              <article
+                className="rounded-[8px] border border-slate-200 bg-white/82 p-4"
+                key={user.id}
+              >
                 <p className="font-semibold text-slate-950">
                   {user.firstName} {user.lastName}
                 </p>
@@ -662,11 +693,11 @@ export function AdminClient() {
         </div>
       </section>
 
-      <section className="rounded-[8px] border border-slate-200 bg-white p-6" id="auditoria">
+      <section className="soft-card rounded-[8px] p-6" id="auditoria">
         <SectionTitle title="Auditoria admin" subtitle="Ultimas 100 acoes sensiveis" />
         <div className="mt-5 grid gap-3">
           {state.auditLogs.slice(0, 20).map((log) => (
-            <article className="rounded-[8px] border border-slate-200 p-4" key={log.id}>
+            <article className="rounded-[8px] border border-slate-200 bg-white/82 p-4" key={log.id}>
               <p className="font-semibold text-slate-950">{formatAuditAction(log.action)}</p>
               <p className="mt-1 text-sm text-slate-600">
                 {log.actor.email} - {log.targetType} - {new Date(log.createdAt).toLocaleString()}
@@ -688,7 +719,7 @@ export function AdminClient() {
 
 function Metric({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-[8px] border border-slate-200 bg-white p-5">
+    <div className="soft-card rounded-[8px] p-5">
       <p className="text-sm text-slate-500">{label}</p>
       <p className="mt-2 text-3xl font-semibold text-slate-950">{value}</p>
     </div>
