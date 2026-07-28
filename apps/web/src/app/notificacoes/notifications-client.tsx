@@ -100,7 +100,13 @@ export function NotificationsClient() {
   }
 
   if (!state) {
-    return <p className="text-slate-600">Carregando notificacoes...</p>;
+    return (
+      <div className="grid gap-4">
+        <div className="soft-card h-28 animate-pulse rounded-[8px]" />
+        <div className="soft-card h-32 animate-pulse rounded-[8px]" />
+        <div className="soft-card h-32 animate-pulse rounded-[8px]" />
+      </div>
+    );
   }
 
   return (
@@ -118,7 +124,7 @@ export function NotificationsClient() {
       {state.notifications.length ? (
         state.notifications.map((notification) => (
           <article
-            className={`rounded-[8px] border p-5 ${
+            className={`rounded-[8px] border p-5 transition hover:-translate-y-0.5 hover:shadow-lg ${
               notification.readAt ? "soft-card bg-white" : "border-cyan-200 bg-cyan-50"
             }`}
             key={notification.id}

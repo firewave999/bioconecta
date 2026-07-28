@@ -57,9 +57,23 @@ export function ApplicationsClient() {
 
   return (
     <section className="grid gap-4">
+      <div className="soft-card flex flex-col gap-3 rounded-[8px] p-5 md:flex-row md:items-center md:justify-between">
+        <div>
+          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
+            Pipeline pessoal
+          </p>
+          <p className="mt-1 text-3xl font-semibold text-slate-950">{applications.length}</p>
+        </div>
+        <Button asChild variant="secondary">
+          <Link href="/vagas">Buscar novas vagas</Link>
+        </Button>
+      </div>
       {applications.length ? (
         applications.map((application) => (
-          <article className="soft-card rounded-[8px] p-5" key={application.id}>
+          <article
+            className="soft-card rounded-[8px] p-5 transition hover:-translate-y-0.5 hover:border-cyan-200 hover:shadow-lg"
+            key={application.id}
+          >
             <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
               <div>
                 <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
@@ -72,7 +86,9 @@ export function ApplicationsClient() {
                   {application.job.city}/{application.job.state} | Match: {application.matchScore}%
                 </p>
               </div>
-              <span className="w-fit rounded-full bg-cyan-50 px-3 py-1 text-sm font-semibold text-cyan-800">
+              <span
+                className={`w-fit rounded-full px-3 py-1 text-sm font-semibold ${getStatusClass(application.status)}`}
+              >
                 {getStatusLabel(application.status)}
               </span>
             </div>
@@ -114,6 +130,21 @@ function getStatusLabel(status: string) {
   };
 
   return labels[status] ?? status;
+}
+
+function getStatusClass(status: string) {
+  const classes: Record<string, string> = {
+    APPLIED: "bg-slate-100 text-slate-700",
+    HIRED: "bg-emerald-100 text-emerald-800",
+    INTERVIEW: "bg-cyan-100 text-cyan-800",
+    OFFER: "bg-indigo-100 text-indigo-800",
+    REJECTED: "bg-red-100 text-red-700",
+    SHORTLISTED: "bg-amber-100 text-amber-800",
+    UNDER_REVIEW: "bg-blue-100 text-blue-800",
+    WITHDRAWN: "bg-slate-100 text-slate-500",
+  };
+
+  return classes[status] ?? "bg-cyan-50 text-cyan-800";
 }
 
 function getNextAction(status: string) {

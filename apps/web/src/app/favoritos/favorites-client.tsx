@@ -57,9 +57,23 @@ export function FavoritesClient() {
 
   return (
     <section className="grid gap-4">
+      <div className="soft-card flex flex-col gap-3 rounded-[8px] p-5 md:flex-row md:items-center md:justify-between">
+        <div>
+          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
+            Oportunidades salvas
+          </p>
+          <p className="mt-1 text-3xl font-semibold text-slate-950">{savedJobs.length}</p>
+        </div>
+        <Button asChild variant="secondary">
+          <Link href="/vagas">Comparar outras vagas</Link>
+        </Button>
+      </div>
       {savedJobs.length ? (
         savedJobs.map((savedJob) => (
-          <article className="soft-card rounded-[8px] p-5" key={savedJob.id}>
+          <article
+            className="soft-card rounded-[8px] p-5 transition hover:-translate-y-0.5 hover:border-cyan-200 hover:shadow-lg"
+            key={savedJob.id}
+          >
             <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
               <div>
                 <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
@@ -67,8 +81,9 @@ export function FavoritesClient() {
                 </p>
                 <h2 className="mt-2 text-xl font-semibold text-slate-950">{savedJob.job.title}</h2>
                 <p className="mt-2 text-slate-600">
-                  {savedJob.job.city}/{savedJob.job.state} | {savedJob.job.contractType} |{" "}
-                  {savedJob.job.workMode}
+                  {savedJob.job.city}/{savedJob.job.state} |{" "}
+                  {formatContractType(savedJob.job.contractType)} |{" "}
+                  {formatWorkMode(savedJob.job.workMode)}
                 </p>
               </div>
               <span className="w-fit rounded-full bg-slate-100 px-3 py-1 text-sm font-semibold text-slate-700">
@@ -99,4 +114,27 @@ export function FavoritesClient() {
       )}
     </section>
   );
+}
+
+function formatContractType(value: string) {
+  const labels: Record<string, string> = {
+    CLT: "CLT",
+    FREELANCE: "Freelance",
+    INTERNSHIP: "Estagio",
+    PJ: "PJ",
+    TEMPORARY: "Temporario",
+  };
+
+  return labels[value] ?? value;
+}
+
+function formatWorkMode(value: string) {
+  const labels: Record<string, string> = {
+    FIELD: "Campo",
+    HYBRID: "Hibrido",
+    ON_SITE: "Presencial",
+    REMOTE: "Remoto",
+  };
+
+  return labels[value] ?? value;
 }
