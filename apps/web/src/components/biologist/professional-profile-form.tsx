@@ -223,38 +223,55 @@ export function ProfessionalProfileForm() {
   }
 
   return (
-    <form className="form-card grid gap-6 rounded-[8px] p-6" onSubmit={handleSubmit}>
-      <div>
+    <form className="grid gap-6" onSubmit={handleSubmit}>
+      <section className="form-card rounded-[8px] p-6 md:p-8">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
           Perfil profissional
         </p>
         <h1 className="mt-2 text-3xl font-semibold text-slate-950">
           Especialidades, documentos e historico
         </h1>
-        {completion !== null ? (
-          <div className="mt-4 rounded-[8px] border border-cyan-100 bg-cyan-50/50 p-4">
-            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-              <p className="font-semibold text-slate-950">Conclusao atual: {completion}%</p>
-              <span className="w-fit rounded-full bg-white px-3 py-1 text-sm font-semibold text-cyan-800">
-                {getCompletionLabel(completion)}
-              </span>
-            </div>
-            <div className="mt-3 h-2 overflow-hidden rounded-full bg-white">
-              <div
-                className="h-full rounded-full bg-cyan-600"
-                style={{ width: `${Math.min(completion, 100)}%` }}
-              />
-            </div>
+        <p className="mt-2 max-w-3xl text-slate-600">
+          Use esta area para registrar especialidades, historico de campo, certificacoes e anexos
+          que ajudam a empresa avaliar seu perfil com seguranca.
+        </p>
+        <div className="mt-5 grid gap-4 lg:grid-cols-[1fr_320px]">
+          <div className="grid gap-3 md:grid-cols-3">
+            <Hint title="Match" text="Areas, grupos e competencias alimentam a compatibilidade." />
+            <Hint
+              title="Credibilidade"
+              text="Experiencias e certificacoes ajudam a empresa decidir."
+            />
+            <Hint
+              title="Validacao"
+              text="Documentos podem ser enviados por upload ou URL externa."
+            />
           </div>
-        ) : null}
-        <div className="mt-4 grid gap-3 md:grid-cols-3">
-          <Hint title="Match" text="Areas, grupos e competencias alimentam a compatibilidade." />
-          <Hint title="Credibilidade" text="Experiencias e certificacoes ajudam a empresa decidir." />
-          <Hint title="Validacao" text="Documentos podem ser enviados por upload ou URL externa." />
+          {completion !== null ? (
+            <div className="rounded-[8px] border border-cyan-100 bg-cyan-50/70 p-4">
+              <div className="flex flex-col gap-2">
+                <p className="text-sm font-semibold uppercase tracking-[0.14em] text-cyan-800">
+                  Conclusao atual
+                </p>
+                <div className="flex items-end justify-between gap-3">
+                  <p className="text-3xl font-semibold text-slate-950">{completion}%</p>
+                  <span className="w-fit rounded-full bg-white px-3 py-1 text-sm font-semibold text-cyan-800">
+                    {getCompletionLabel(completion)}
+                  </span>
+                </div>
+              </div>
+              <div className="mt-4 h-2 overflow-hidden rounded-full bg-white">
+                <div
+                  className="h-full rounded-full bg-cyan-600"
+                  style={{ width: `${Math.min(completion, 100)}%` }}
+                />
+              </div>
+            </div>
+          ) : null}
         </div>
-      </div>
+      </section>
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <section className="form-card grid gap-4 rounded-[8px] p-6 md:grid-cols-3 md:p-8">
         <TextArea label="Areas de atuacao" onChange={setPracticeAreas} value={practiceAreas} />
         <TextArea
           label="Grupos taxonomicos"
@@ -262,13 +279,13 @@ export function ProfessionalProfileForm() {
           value={taxonomicGroups}
         />
         <TextArea label="Competencias tecnicas" onChange={setSkills} value={skills} />
-      </div>
+      </section>
 
       <SectionTitle title="Experiencias" />
-      <div className="grid gap-4">
+      <section className="form-card grid gap-4 rounded-[8px] p-6 md:p-8">
         {experiences.map((experience, index) => (
           <div
-            className="grid gap-4 rounded-[8px] border border-cyan-100 bg-cyan-50/40 p-4"
+            className="grid gap-4 rounded-[8px] border border-cyan-100 bg-cyan-50/45 p-4"
             key={index}
           >
             <div className="grid gap-4 md:grid-cols-2">
@@ -334,10 +351,10 @@ export function ProfessionalProfileForm() {
         >
           Adicionar experiencia
         </Button>
-      </div>
+      </section>
 
       <SectionTitle title="Certificacoes" />
-      <div className="grid gap-4">
+      <section className="form-card grid gap-4 rounded-[8px] p-6 md:p-8">
         {certifications.map((certification, index) => (
           <div
             className="grid gap-4 rounded-[8px] border border-cyan-100 bg-cyan-50/40 p-4 md:grid-cols-2"
@@ -387,10 +404,10 @@ export function ProfessionalProfileForm() {
         >
           Adicionar certificacao
         </Button>
-      </div>
+      </section>
 
       <SectionTitle title="Documentos" />
-      <div className="grid gap-4">
+      <section className="form-card grid gap-4 rounded-[8px] p-6 md:p-8">
         {documents.map((document, index) => (
           <div
             className="grid gap-4 rounded-[8px] border border-cyan-100 bg-cyan-50/40 p-4 md:grid-cols-3"
@@ -453,13 +470,15 @@ export function ProfessionalProfileForm() {
         >
           Adicionar documento
         </Button>
-      </div>
+      </section>
 
       {error ? <p className="rounded-[8px] bg-red-50 p-3 text-sm text-red-700">{error}</p> : null}
 
-      <Button disabled={loading} type="submit">
-        {loading ? "Salvando..." : "Salvar perfil profissional"}
-      </Button>
+      <div className="sticky bottom-4 z-20 flex justify-end rounded-[8px] border border-cyan-100 bg-white/90 p-3 shadow-2xl shadow-slate-950/10 backdrop-blur">
+        <Button disabled={loading} type="submit">
+          {loading ? "Salvando..." : "Salvar perfil profissional"}
+        </Button>
+      </div>
     </form>
   );
 }
@@ -547,7 +566,10 @@ function TextArea({
 
 function SectionTitle({ title }: { title: string }) {
   return (
-    <h2 className="border-t border-slate-200 pt-6 text-xl font-semibold text-slate-950">{title}</h2>
+    <div>
+      <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">Etapa</p>
+      <h2 className="mt-1 text-2xl font-semibold text-slate-950">{title}</h2>
+    </div>
   );
 }
 

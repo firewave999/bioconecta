@@ -126,8 +126,8 @@ export function BiologistProfileForm({ mode }: Props) {
   }
 
   return (
-    <form className="form-card grid gap-5 rounded-[8px] p-6" onSubmit={handleSubmit}>
-      <div>
+    <form className="grid gap-6" onSubmit={handleSubmit}>
+      <section className="form-card rounded-[8px] p-6 md:p-8">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
           {mode === "onboarding" ? "Onboarding" : "Editar perfil"}
         </p>
@@ -145,9 +145,9 @@ export function BiologistProfileForm({ mode }: Props) {
           <GuidanceCard title="Presenca" text="Foto e headline objetiva." />
           <GuidanceCard title="Operacao" text="Viagem, CNH, veiculo, CNPJ e nota." />
         </div>
-      </div>
+      </section>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <section className="form-card grid gap-4 rounded-[8px] p-6 md:grid-cols-2 md:p-8">
         <label className="grid gap-2 text-sm font-medium text-slate-700 md:col-span-2">
           Foto do perfil
           <div className="flex flex-col gap-3 rounded-[8px] border border-cyan-100 bg-cyan-50/40 p-4 md:flex-row md:items-center">
@@ -196,34 +196,44 @@ export function BiologistProfileForm({ mode }: Props) {
         />
         <Field defaultValue={profile?.state} label="Estado" maxLength={2} name="state" required />
         <Field defaultValue={profile?.city} label="Cidade" name="city" required />
-      </div>
+      </section>
 
-      <label className="grid gap-2 text-sm font-medium text-slate-700">
-        Situacao do registro
-        <select
-          className="field-input h-11 rounded-[8px] px-3"
-          defaultValue={profile?.registrationStatus ?? "UNKNOWN"}
-          name="registrationStatus"
-        >
-          <option value="ACTIVE">Ativo</option>
-          <option value="PENDING">Pendente</option>
-          <option value="INACTIVE">Inativo</option>
-          <option value="UNKNOWN">Nao informado</option>
-        </select>
-      </label>
+      <section className="form-card grid gap-4 rounded-[8px] p-6 md:p-8">
+        <h2 className="text-xl font-semibold text-slate-950">Presenca profissional</h2>
+        <label className="grid gap-2 text-sm font-medium text-slate-700">
+          Situacao do registro
+          <select
+            className="field-input h-11 rounded-[8px] px-3"
+            defaultValue={profile?.registrationStatus ?? "UNKNOWN"}
+            name="registrationStatus"
+          >
+            <option value="ACTIVE">Ativo</option>
+            <option value="PENDING">Pendente</option>
+            <option value="INACTIVE">Inativo</option>
+            <option value="UNKNOWN">Nao informado</option>
+          </select>
+        </label>
 
-      <Field defaultValue={profile?.headline ?? ""} label="Headline profissional" name="headline" />
-
-      <label className="grid gap-2 text-sm font-medium text-slate-700">
-        Biografia
-        <textarea
-          className="field-input min-h-28 rounded-[8px] px-3 py-3"
-          defaultValue={profile?.bio ?? ""}
-          name="bio"
+        <Field
+          defaultValue={profile?.headline ?? ""}
+          label="Headline profissional"
+          name="headline"
         />
-      </label>
 
-      <div className="grid gap-4 md:grid-cols-2">
+        <label className="grid gap-2 text-sm font-medium text-slate-700">
+          Biografia
+          <textarea
+            className="field-input min-h-28 rounded-[8px] px-3 py-3"
+            defaultValue={profile?.bio ?? ""}
+            name="bio"
+          />
+        </label>
+      </section>
+
+      <section className="form-card grid gap-4 rounded-[8px] p-6 md:grid-cols-2 md:p-8">
+        <h2 className="text-xl font-semibold text-slate-950 md:col-span-2">
+          Disponibilidade e operacao
+        </h2>
         <label className="grid gap-2 text-sm font-medium text-slate-700">
           Disponibilidade
           <select
@@ -242,9 +252,9 @@ export function BiologistProfileForm({ mode }: Props) {
           name="availableFrom"
           type="date"
         />
-      </div>
+      </section>
 
-      <div className="grid gap-3 md:grid-cols-2">
+      <section className="form-card grid gap-3 rounded-[8px] p-6 md:grid-cols-2 md:p-8">
         <Check
           defaultChecked={profile?.acceptsTravel}
           label="Aceita viagens"
@@ -266,13 +276,15 @@ export function BiologistProfileForm({ mode }: Props) {
           label="Emite nota fiscal"
           name="issuesInvoice"
         />
-      </div>
+      </section>
 
       {error ? <p className="rounded-[8px] bg-red-50 p-3 text-sm text-red-700">{error}</p> : null}
 
-      <Button disabled={loading} type="submit">
-        {loading ? "Salvando..." : "Salvar perfil"}
-      </Button>
+      <div className="sticky bottom-4 z-20 flex justify-end rounded-[8px] border border-cyan-100 bg-white/90 p-3 shadow-2xl shadow-slate-950/10 backdrop-blur">
+        <Button disabled={loading} type="submit">
+          {loading ? "Salvando..." : "Salvar perfil"}
+        </Button>
+      </div>
     </form>
   );
 }
