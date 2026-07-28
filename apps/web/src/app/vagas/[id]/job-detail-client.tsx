@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
+import type { ReactNode } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { BadgeCheck, BriefcaseBusiness, MapPin, WalletCards } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { apiFetch, getStoredAccessToken } from "@/lib/api";
@@ -129,34 +131,68 @@ export function JobDetailClient() {
   }
 
   if (!job) {
-    return <p className="text-slate-600">Carregando vaga...</p>;
+    return (
+      <div className="grid gap-6">
+        <div className="page-header h-72 animate-pulse rounded-[8px]" />
+        <div className="grid gap-4 md:grid-cols-3">
+          <div className="soft-card h-32 animate-pulse rounded-[8px]" />
+          <div className="soft-card h-32 animate-pulse rounded-[8px]" />
+          <div className="soft-card h-32 animate-pulse rounded-[8px]" />
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="grid gap-6">
-      <section className="page-header rounded-[8px] p-6">
-        <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
-          {job.company?.name ?? "Empresa"}
-        </p>
-        <h1 className="mt-2 text-4xl font-semibold text-slate-950">{job.title}</h1>
-        <p className="mt-3 text-slate-600">
-          {job.city}/{job.state} | {job.contractType} | {job.workMode}
-        </p>
-        <p className="mt-3 text-slate-600">
-          {formatSalary(job.salaryMinCents, job.salaryMaxCents)}
-        </p>
-        <div className="mt-5 flex flex-wrap gap-3">
-          <Button
-            disabled={favoriteLoading}
-            onClick={toggleFavorite}
-            type="button"
-            variant="secondary"
-          >
-            {saved ? "Remover dos favoritos" : "Salvar vaga"}
-          </Button>
-          <Button asChild variant="secondary">
-            <Link href="/vagas">Voltar para vagas</Link>
-          </Button>
+      <section className="page-header overflow-hidden rounded-[8px]">
+        <div className="grid lg:grid-cols-[1fr_320px]">
+          <div className="p-6 md:p-8">
+            <p className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
+              <BriefcaseBusiness size={16} />
+              {job.company?.name ?? "Empresa"}
+            </p>
+            <h1 className="mt-3 max-w-4xl text-4xl font-semibold tracking-tight text-slate-950 md:text-5xl">
+              {job.title}
+            </h1>
+            <div className="mt-5 flex flex-wrap gap-2">
+              <Badge>{formatContractType(job.contractType)}</Badge>
+              <Badge>{formatWorkMode(job.workMode)}</Badge>
+              <Badge>
+                {job.city}/{job.state}
+              </Badge>
+            </div>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Button
+                disabled={favoriteLoading}
+                onClick={toggleFavorite}
+                type="button"
+                variant="secondary"
+              >
+                {saved ? "Remover dos favoritos" : "Salvar vaga"}
+              </Button>
+              <Button asChild variant="light">
+                <Link href="/vagas">Voltar para vagas</Link>
+              </Button>
+            </div>
+          </div>
+          <aside className="border-t border-cyan-100 bg-cyan-50/60 p-6 lg:border-l lg:border-t-0">
+            <SummaryItem
+              icon={<MapPin size={18} />}
+              label="Local"
+              value={`${job.city}/${job.state}`}
+            />
+            <SummaryItem
+              icon={<WalletCards size={18} />}
+              label="Remuneracao"
+              value={formatSalary(job.salaryMinCents, job.salaryMaxCents)}
+            />
+            <SummaryItem
+              icon={<BadgeCheck size={18} />}
+              label="Modalidade"
+              value={`${formatContractType(job.contractType)} · ${formatWorkMode(job.workMode)}`}
+            />
+          </aside>
         </div>
       </section>
 
@@ -226,14 +262,38 @@ function CheckItem({ text }: { text: string }) {
   );
 }
 
+function SummaryItem({ icon, label, value }: { icon: ReactNode; label: string; value: string }) {
+  return (
+    <div className="border-b border-cyan-100 py-4 first:pt-0 last:border-b-0 last:pb-0">
+      <p className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.14em] text-cyan-800">
+        {icon}
+        {label}
+      </p>
+      <p className="mt-2 font-semibold text-slate-950">{value}</p>
+    </div>
+  );
+}
+
 function RequirementCard({ title, values }: { title: string; values: string[] }) {
   return (
     <div className="soft-card rounded-[8px] p-5">
       <h2 className="font-semibold text-slate-950">{title}</h2>
-      <p className="mt-2 text-sm text-slate-600">
-        {values.length ? values.join(", ") : "Nao informado"}
-      </p>
+      <div className="mt-3 flex flex-wrap gap-2">
+        {values.length ? (
+          values.map((value) => <Badge key={value}>{value}</Badge>)
+        ) : (
+          <Badge>Nao informado</Badge>
+        )}
+      </div>
     </div>
+  );
+}
+
+function Badge({ children }: { children: ReactNode }) {
+  return (
+    <span className="rounded-full border border-cyan-100 bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-800">
+      {children}
+    </span>
   );
 }
 
@@ -267,4 +327,27 @@ function getApplicationStatusLabel(status: string) {
   };
 
   return labels[status] ?? status;
+}
+
+function formatContractType(value: string) {
+  const labels: Record<string, string> = {
+    CLT: "CLT",
+    FREELANCE: "Freelance",
+    INTERNSHIP: "Estagio",
+    PJ: "PJ",
+    TEMPORARY: "Temporario",
+  };
+
+  return labels[value] ?? value;
+}
+
+function formatWorkMode(value: string) {
+  const labels: Record<string, string> = {
+    FIELD: "Campo",
+    HYBRID: "Hibrido",
+    ON_SITE: "Presencial",
+    REMOTE: "Remoto",
+  };
+
+  return labels[value] ?? value;
 }

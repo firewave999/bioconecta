@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import { BriefcaseBusiness, MapPin, Search, SlidersHorizontal } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import { apiFetch } from "@/lib/api";
 
 type Job = {
@@ -74,7 +75,7 @@ export function JobsClient() {
   return (
     <div className="grid gap-6">
       <form
-        className="soft-card grid gap-4 rounded-[8px] p-6 md:grid-cols-3"
+        className="soft-card grid gap-4 rounded-[8px] p-6 md:grid-cols-3 md:p-8"
         onSubmit={handleSubmit}
       >
         <div className="flex items-center gap-2 md:col-span-3">
@@ -137,23 +138,22 @@ export function JobsClient() {
           value={filters.requirement}
         />
         <div className="flex gap-3 md:col-span-3">
-          <button
-            className="h-11 rounded-[8px] bg-[linear-gradient(135deg,#1ee4f2,#16d0df_48%,#7dd3fc)] px-5 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-950/15 transition hover:-translate-y-0.5"
-            type="submit"
-          >
+          <Button disabled={loading} type="submit">
             {loading ? "Buscando..." : "Filtrar vagas"}
-          </button>
-          <button
-            className="h-11 rounded-[8px] border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-50"
-            onClick={clearFilters}
-            type="button"
-          >
+          </Button>
+          <Button onClick={clearFilters} type="button" variant="light">
             Limpar
-          </button>
+          </Button>
         </div>
       </form>
 
       <section className="grid gap-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
+            {loading ? "Atualizando oportunidades" : `${jobs.length} vaga(s) encontrada(s)`}
+          </p>
+          <p className="text-sm text-slate-500">Clique em detalhes para analisar requisitos.</p>
+        </div>
         {jobs.length ? (
           jobs.map((job) => (
             <article
@@ -175,16 +175,13 @@ export function JobsClient() {
                     {job.city}/{job.state}
                   </p>
                   <div className="mt-4 flex flex-wrap gap-2">
-                    <Badge>{job.contractType}</Badge>
-                    <Badge>{job.workMode}</Badge>
+                    <Badge>{formatContractType(job.contractType)}</Badge>
+                    <Badge>{formatWorkMode(job.workMode)}</Badge>
                   </div>
                 </div>
-                <Link
-                  className="inline-flex h-10 items-center justify-center rounded-[8px] bg-[linear-gradient(135deg,#020617,#0f2930)] px-4 text-sm font-semibold text-white shadow-lg shadow-slate-950/20 transition group-hover:-translate-y-0.5"
-                  href={`/vagas/${job.id}`}
-                >
-                  Ver detalhes
-                </Link>
+                <Button asChild variant="secondary">
+                  <Link href={`/vagas/${job.id}`}>Ver detalhes</Link>
+                </Button>
               </div>
             </article>
           ))
@@ -208,6 +205,29 @@ function Badge({ children }: { children: string }) {
       {children}
     </span>
   );
+}
+
+function formatContractType(value: string) {
+  const labels: Record<string, string> = {
+    CLT: "CLT",
+    FREELANCE: "Freelance",
+    INTERNSHIP: "Estagio",
+    PJ: "PJ",
+    TEMPORARY: "Temporario",
+  };
+
+  return labels[value] ?? value;
+}
+
+function formatWorkMode(value: string) {
+  const labels: Record<string, string> = {
+    FIELD: "Campo",
+    HYBRID: "Hibrido",
+    ON_SITE: "Presencial",
+    REMOTE: "Remoto",
+  };
+
+  return labels[value] ?? value;
 }
 
 function Field({
