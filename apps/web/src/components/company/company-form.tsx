@@ -166,8 +166,8 @@ export function CompanyForm() {
   }
 
   return (
-    <form className="form-card grid gap-5 rounded-[8px] p-6" onSubmit={handleSubmit}>
-      <div>
+    <form className="grid gap-6" onSubmit={handleSubmit}>
+      <section className="form-card rounded-[8px] p-6 md:p-8">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">Empresa</p>
         <h1 className="mt-2 text-3xl font-semibold text-slate-950">Dados da empresa</h1>
         {company ? (
@@ -192,9 +192,9 @@ export function CompanyForm() {
           <StepCard done={company?.verificationStatus === "VERIFIED"} text="Validacao admin" />
           <StepCard done={false} text="Criar vagas" />
         </div>
-      </div>
+      </section>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <section className="form-card grid gap-4 rounded-[8px] p-6 md:grid-cols-2 md:p-8">
         <label className="grid gap-2 text-sm font-medium text-slate-700 md:col-span-2">
           Logo da empresa
           <div className="flex flex-col gap-3 rounded-[8px] border border-cyan-100 bg-cyan-50/40 p-4 md:flex-row md:items-center">
@@ -252,21 +252,24 @@ export function CompanyForm() {
             <option value="LARGE">Grande empresa</option>
           </select>
         </label>
-      </div>
+      </section>
 
-      <label className="grid gap-2 text-sm font-medium text-slate-700">
-        Descricao
-        <textarea
-          className="field-input min-h-28 rounded-[8px] px-3 py-3"
-          defaultValue={company?.description ?? ""}
-          name="description"
-          placeholder="Descreva a empresa, areas de atuacao e tipos de oportunidades oferecidas."
-        />
-      </label>
+      <section className="form-card grid gap-4 rounded-[8px] p-6 md:p-8">
+        <h2 className="text-xl font-semibold text-slate-950">Apresentacao institucional</h2>
+        <label className="grid gap-2 text-sm font-medium text-slate-700">
+          Descricao
+          <textarea
+            className="field-input min-h-28 rounded-[8px] px-3 py-3"
+            defaultValue={company?.description ?? ""}
+            name="description"
+            placeholder="Descreva a empresa, areas de atuacao e tipos de oportunidades oferecidas."
+          />
+        </label>
+      </section>
 
       {error ? <p className="rounded-[8px] bg-red-50 p-3 text-sm text-red-700">{error}</p> : null}
 
-      <div className="flex flex-wrap gap-3">
+      <div className="sticky bottom-4 z-20 flex flex-wrap justify-end gap-3 rounded-[8px] border border-cyan-100 bg-white/90 p-3 shadow-2xl shadow-slate-950/10 backdrop-blur">
         <Button disabled={loading} type="submit">
           {loading ? "Salvando..." : "Salvar empresa"}
         </Button>

@@ -1,5 +1,4 @@
-import Link from "next/link";
-
+import { CompanyWorkspaceHeader } from "@/components/company/company-workspace-header";
 import { EditJobClient } from "./edit-job-client";
 
 export const metadata = {
@@ -9,18 +8,13 @@ export const metadata = {
 export default function EditJobPage() {
   return (
     <main className="page-shell">
-      <div className="mx-auto max-w-6xl px-6 py-10">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <Link className="text-sm font-semibold text-cyan-800" href="/empresa/vagas">
-            Voltar para vagas
-          </Link>
-          <Link className="text-sm font-semibold text-slate-700" href="/dashboard">
-            Dashboard
-          </Link>
-        </div>
-        <div className="mt-8">
-          <EditJobClient />
-        </div>
+      <div className="mx-auto grid max-w-7xl gap-8 px-6 py-10">
+        <CompanyWorkspaceHeader
+          active="jobs"
+          eyebrow="Editar vaga"
+          title="Ajuste os requisitos da vaga."
+        />
+        <EditJobClient />
       </div>
     </main>
   );

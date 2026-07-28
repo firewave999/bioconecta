@@ -159,8 +159,8 @@ export function JobForm({ jobId }: JobFormProps) {
   }
 
   return (
-    <form className="form-card grid gap-5 rounded-[8px] p-6" onSubmit={handleSubmit}>
-      <div>
+    <form className="grid gap-6" onSubmit={handleSubmit}>
+      <section className="form-card rounded-[8px] p-6 md:p-8">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">Vaga</p>
         <h1 className="mt-2 text-3xl font-semibold text-slate-950">
           {isEditing ? "Editar vaga" : "Criar vaga para biologos"}
@@ -185,21 +185,27 @@ export function JobForm({ jobId }: JobFormProps) {
             </Button>
           </div>
         ) : null}
-      </div>
+      </section>
 
-      <Field defaultValue={job?.title} label="Titulo" name="title" required />
-      <label className="grid gap-2 text-sm font-medium text-slate-700">
-        Descricao da vaga
-        <textarea
-          className="field-input min-h-32 rounded-[8px] px-3 py-3"
-          defaultValue={job?.description}
-          name="description"
-          placeholder="Descreva atividades, rotina, entregas esperadas, tipo de ambiente e criterios de selecao."
-          required
-        />
-      </label>
+      <section className="form-card grid gap-4 rounded-[8px] p-6 md:p-8">
+        <h2 className="text-xl font-semibold text-slate-950">Resumo da oportunidade</h2>
+        <Field defaultValue={job?.title} label="Titulo" name="title" required />
+        <label className="grid gap-2 text-sm font-medium text-slate-700">
+          Descricao da vaga
+          <textarea
+            className="field-input min-h-32 rounded-[8px] px-3 py-3"
+            defaultValue={job?.description}
+            name="description"
+            placeholder="Descreva atividades, rotina, entregas esperadas, tipo de ambiente e criterios de selecao."
+            required
+          />
+        </label>
+      </section>
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <section className="form-card grid gap-4 rounded-[8px] p-6 md:grid-cols-3 md:p-8">
+        <h2 className="text-xl font-semibold text-slate-950 md:col-span-3">
+          Contrato, local e remuneracao
+        </h2>
         <Select
           label="Status"
           name="status"
@@ -247,9 +253,9 @@ export function JobForm({ jobId }: JobFormProps) {
           name="salaryMax"
           type="number"
         />
-      </div>
+      </section>
 
-      <div className="grid gap-3 md:grid-cols-3">
+      <section className="form-card grid gap-3 rounded-[8px] p-6 md:grid-cols-3 md:p-8">
         <Check
           defaultChecked={job?.requiresCrbio ?? true}
           label="Exige CRBio"
@@ -261,9 +267,12 @@ export function JobForm({ jobId }: JobFormProps) {
           name="acceptsStudents"
         />
         <Check defaultChecked={job?.requiresTravel} label="Exige viagem" name="requiresTravel" />
-      </div>
+      </section>
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <section className="form-card grid gap-4 rounded-[8px] p-6 md:grid-cols-3 md:p-8">
+        <h2 className="text-xl font-semibold text-slate-950 md:col-span-3">
+          Requisitos para matching
+        </h2>
         <TextArea
           defaultValue={job?.requiredPracticeAreas.join(", ")}
           label="Areas exigidas"
@@ -279,11 +288,11 @@ export function JobForm({ jobId }: JobFormProps) {
           label="Competencias"
           name="requiredSkills"
         />
-      </div>
+      </section>
 
       {error ? <p className="rounded-[8px] bg-red-50 p-3 text-sm text-red-700">{error}</p> : null}
 
-      <div className="flex flex-wrap gap-3">
+      <div className="sticky bottom-4 z-20 flex flex-wrap justify-end gap-3 rounded-[8px] border border-cyan-100 bg-white/90 p-3 shadow-2xl shadow-slate-950/10 backdrop-blur">
         <Button disabled={loading} type="submit">
           {loading ? "Salvando..." : isEditing ? "Salvar vaga" : "Criar vaga"}
         </Button>

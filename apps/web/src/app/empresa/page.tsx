@@ -1,6 +1,5 @@
-import Link from "next/link";
-
 import { CompanyForm } from "@/components/company/company-form";
+import { CompanyWorkspaceHeader } from "@/components/company/company-workspace-header";
 
 export const metadata = {
   title: "Empresa",
@@ -9,18 +8,13 @@ export const metadata = {
 export default function CompanyPage() {
   return (
     <main className="page-shell">
-      <div className="mx-auto max-w-5xl px-6 py-10">
-        <div className="glass-panel flex flex-wrap items-center justify-between gap-4 rounded-[8px] px-4 py-3">
-          <Link className="text-sm font-semibold text-cyan-800" href="/dashboard">
-            Voltar ao dashboard
-          </Link>
-          <Link className="text-sm font-bold tracking-[0.12em] text-slate-900" href="/">
-            BIOCONECTA
-          </Link>
-        </div>
-        <div className="mt-8">
-          <CompanyForm />
-        </div>
+      <div className="mx-auto grid max-w-7xl gap-8 px-6 py-10">
+        <CompanyWorkspaceHeader
+          active="company"
+          eyebrow="Empresa"
+          title="Configure sua operacao de recrutamento."
+        />
+        <CompanyForm />
       </div>
     </main>
   );
