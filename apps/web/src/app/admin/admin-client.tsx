@@ -549,6 +549,9 @@ export function AdminClient() {
                   ) : null}
                 </div>
                 <div className="flex flex-wrap gap-2">
+                  <Button asChild size="sm" variant="light">
+                    <Link href={`/admin/biologos/${biologist.id}`}>Ver perfil</Link>
+                  </Button>
                   <ActionButton
                     busy={busyAction === `biologist-${biologist.id}-VERIFIED`}
                     onClick={() => updateBiologistStatus(biologist.id, "VERIFIED")}

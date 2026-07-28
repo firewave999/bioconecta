@@ -28,6 +28,7 @@ import { TaxonomicGroup } from "./entities/taxonomic-group.entity.js";
       User,
     ]),
   ],
+  exports: [BiologistProfileService],
   providers: [BiologistProfileService],
 })
 export class BiologistProfileModule {}

@@ -3,6 +3,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 
 import { Application } from "../applications/application.entity.js";
 import { AuthModule } from "../auth/auth.module.js";
+import { BiologistProfileModule } from "../biologist-profile/biologist-profile.module.js";
 import { BiologistProfile } from "../biologist-profile/biologist-profile.entity.js";
 import { Company } from "../companies/company.entity.js";
 import { Job } from "../jobs/job.entity.js";
@@ -16,6 +17,7 @@ import { AdminService } from "./admin.service.js";
   controllers: [AdminController],
   imports: [
     AuthModule,
+    BiologistProfileModule,
     TypeOrmModule.forFeature([AdminAuditLog, Application, BiologistProfile, Company, Job, User]),
   ],
   providers: [AdminGuard, AdminService],

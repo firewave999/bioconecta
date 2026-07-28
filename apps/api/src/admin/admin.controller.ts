@@ -36,6 +36,11 @@ export class AdminController {
     return this.adminService.listBiologists();
   }
 
+  @Get("biologists/:id")
+  getBiologistProfile(@Param("id") id: string) {
+    return this.adminService.getBiologistProfile(id);
+  }
+
   @Get("jobs")
   listJobs() {
     return this.adminService.listJobs();

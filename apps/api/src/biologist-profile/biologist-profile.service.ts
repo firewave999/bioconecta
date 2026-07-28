@@ -93,6 +93,25 @@ export class BiologistProfileService {
     };
   }
 
+  async getByProfileId(profileId: string) {
+    const profile = await this.profilesRepository.findOne({
+      relations: { user: true },
+      where: { id: profileId },
+    });
+
+    if (!profile) {
+      throw new NotFoundException("Biologo nao encontrado.");
+    }
+
+    const professional = await this.getProfessionalByProfileId(profile.id);
+
+    return {
+      completion: this.calculateCompletion(profile, professional),
+      professional,
+      profile,
+    };
+  }
+
   async upsertProfessionalMine(userId: string, dto: UpsertProfessionalProfileDto) {
     const profile = await this.getRequiredProfile(userId);
     const practiceAreaNames = this.normalizeNames(dto.practiceAreas);

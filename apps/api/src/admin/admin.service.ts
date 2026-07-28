@@ -4,6 +4,7 @@ import { Repository } from "typeorm";
 
 import { Application } from "../applications/application.entity.js";
 import { BiologistProfile } from "../biologist-profile/biologist-profile.entity.js";
+import { BiologistProfileService } from "../biologist-profile/biologist-profile.service.js";
 import { Company } from "../companies/company.entity.js";
 import { Job } from "../jobs/job.entity.js";
 import { User } from "../users/user.entity.js";
@@ -30,6 +31,7 @@ export class AdminService {
     private readonly jobsRepository: Repository<Job>,
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
+    private readonly biologistProfileService: BiologistProfileService,
   ) {}
 
   async getOverview() {
@@ -98,6 +100,18 @@ export class AdminService {
       ...profile,
       user: toAdminUser(profile.user),
     }));
+  }
+
+  async getBiologistProfile(id: string) {
+    const response = await this.biologistProfileService.getByProfileId(id);
+
+    return {
+      ...response,
+      profile: {
+        ...response.profile,
+        user: toAdminUser(response.profile.user),
+      },
+    };
   }
 
   async listJobs() {
