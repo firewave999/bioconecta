@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import type { ReactNode } from "react";
 import { useCallback, useEffect, useState } from "react";
 
+import { VerificationBadge } from "@/components/biologist/verification-badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { apiFetch, getStoredAccessToken } from "@/lib/api";
@@ -265,9 +266,9 @@ function CandidateCard({
             <p className="mt-2 text-sm font-semibold text-cyan-800">
               Match: {application.matchScore}%
             </p>
-            <p className="mt-1 text-sm text-slate-500">
-              Verificacao: {application.biologistProfile.verificationStatus}
-            </p>
+            <div className="mt-2">
+              <VerificationBadge status={application.biologistProfile.verificationStatus} />
+            </div>
           </div>
         </div>
         <span

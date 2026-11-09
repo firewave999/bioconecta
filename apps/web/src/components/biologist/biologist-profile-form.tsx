@@ -37,12 +37,35 @@ type Props = {
   mode: "edit" | "onboarding";
 };
 
+// Próxima ação concreta, usando só os campos que este formulário edita.
+// Os itens do perfil profissional (áreas, documentos) ficam na tela própria.
+function getNextStep(completion: number, avatarUrl: string, profile: BiologistProfile | null) {
+  if (completion >= 100) {
+    return "perfil completo. Mantenha a disponibilidade atualizada.";
+  }
+
+  if (!avatarUrl) {
+    return "adicione uma foto profissional.";
+  }
+
+  if (!profile?.headline) {
+    return "escreva uma headline objetiva sobre sua especialidade.";
+  }
+
+  if (!profile?.bio) {
+    return "conte sua experiência de campo na bio.";
+  }
+
+  return "anexe documentos e experiências no seu perfil profissional.";
+}
+
 export function BiologistProfileForm({ mode }: Props) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [avatarUrl, setAvatarUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [profile, setProfile] = useState<BiologistProfile | null>(null);
+  const [completion, setCompletion] = useState<number | null>(null);
 
   useEffect(() => {
     const token = getStoredAccessToken();
@@ -58,6 +81,7 @@ export function BiologistProfileForm({ mode }: Props) {
       .then((response) => {
         setProfile(response.profile);
         setAvatarUrl(response.profile?.avatarUrl ?? "");
+        setCompletion(response.completion);
       })
       .catch(() => {
         if (mode === "edit") {
@@ -146,6 +170,28 @@ export function BiologistProfileForm({ mode }: Props) {
           <GuidanceCard title="Operacao" text="Viagem, CNH, veiculo, CNPJ e nota." />
         </div>
       </section>
+
+      {completion !== null ? (
+        <section className="form-card rounded-[8px] p-6 md:p-8">
+          <div className="flex items-center justify-between gap-4">
+            <p className="font-semibold text-slate-950">Perfil {completion}% completo</p>
+            <span className="text-sm font-semibold text-cyan-800">{completion}%</span>
+          </div>
+          <div
+            className="mt-3 h-2 overflow-hidden rounded-full bg-slate-100"
+            role="progressbar"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={completion}
+          >
+            <div className="h-full rounded-full bg-cyan-600" style={{ width: `${completion}%` }} />
+          </div>
+          <p className="mt-3 text-sm text-slate-600">
+            <span className="font-semibold text-slate-800">Próximo passo: </span>
+            {getNextStep(completion, avatarUrl, profile)}
+          </p>
+        </section>
+      ) : null}
 
       <section className="form-card grid gap-4 rounded-[8px] p-6 md:grid-cols-2 md:p-8">
         <label className="grid gap-2 text-sm font-medium text-slate-700 md:col-span-2">
