@@ -28,14 +28,14 @@ export function FavoritesClient() {
     const token = getStoredAccessToken();
 
     if (!token) {
-      setError("Voce precisa entrar para ver favoritos.");
+      setError("Você precisa entrar para ver favoritos.");
       return;
     }
 
     apiFetch<{ savedJobs: SavedJob[] }>("/favorites/jobs", { token })
       .then((response) => setSavedJobs(response.savedJobs))
       .catch((err) =>
-        setError(err instanceof Error ? err.message : "Nao foi possivel carregar favoritos."),
+        setError(err instanceof Error ? err.message : "Não foi possível carregar favoritos."),
       );
   }, []);
 
@@ -120,9 +120,9 @@ function formatContractType(value: string) {
   const labels: Record<string, string> = {
     CLT: "CLT",
     FREELANCE: "Freelance",
-    INTERNSHIP: "Estagio",
+    INTERNSHIP: "Estágio",
     PJ: "PJ",
-    TEMPORARY: "Temporario",
+    TEMPORARY: "Temporário",
   };
 
   return labels[value] ?? value;

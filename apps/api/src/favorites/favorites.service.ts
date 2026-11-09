@@ -38,13 +38,13 @@ export class FavoritesService {
     const job = await this.jobsRepository.findOneBy({ id: jobId, status: "PUBLISHED" });
 
     if (!job) {
-      throw new NotFoundException("Vaga publicada nao encontrada.");
+      throw new NotFoundException("Vaga publicada não encontrada.");
     }
 
     const existing = await this.savedJobsRepository.findOneBy({ jobId, userId });
 
     if (existing) {
-      throw new ConflictException("Vaga ja esta salva.");
+      throw new ConflictException("Vaga já esta salva.");
     }
 
     const savedJob = this.savedJobsRepository.create({ jobId, userId });
@@ -72,7 +72,7 @@ export class FavoritesService {
     const user = await this.usersRepository.findOneByOrFail({ id: userId });
 
     if (!user.roles.includes("BIOLOGIST") && !user.roles.includes("STUDENT")) {
-      throw new ForbiddenException("Apenas biologos e estudantes podem salvar vagas.");
+      throw new ForbiddenException("Apenas biólogos e estudantes podem salvar vagas.");
     }
   }
 }

@@ -12,7 +12,7 @@ export default function CompanyJobsPage() {
         <CompanyWorkspaceHeader
           active="jobs"
           eyebrow="Vagas da empresa"
-          title="Gerencie publicacoes e candidatos."
+          title="Gerencie publicações e candidatos."
         />
         <CompanyJobsClient />
       </div>

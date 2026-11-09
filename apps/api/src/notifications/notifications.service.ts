@@ -53,7 +53,7 @@ export class NotificationsService {
     });
 
     if (!notification) {
-      throw new NotFoundException("Notificacao nao encontrada.");
+      throw new NotFoundException("Notificação não encontrada.");
     }
 
     if (!notification.readAt) {

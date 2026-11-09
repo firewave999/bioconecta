@@ -4,7 +4,7 @@ import Link from "next/link";
 import { AdminBiologistProfileClient } from "./profile-client";
 
 export const metadata = {
-  title: "Perfil do biologo",
+  title: "Perfil do biólogo",
 };
 
 export default function AdminBiologistProfilePage() {

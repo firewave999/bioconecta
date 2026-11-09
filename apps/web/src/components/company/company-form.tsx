@@ -57,7 +57,7 @@ export function CompanyForm() {
         setLogoUrl(response.company?.logoUrl ?? "");
       })
       .catch((err) =>
-        setError(err instanceof Error ? err.message : "Nao foi possivel carregar a empresa."),
+        setError(err instanceof Error ? err.message : "Não foi possível carregar a empresa."),
       )
       .finally(() => setInitialLoading(false));
   }, [router]);
@@ -76,7 +76,7 @@ export function CompanyForm() {
 
     if (!account || !canManageCompany(account.roles)) {
       setLoading(false);
-      setError("Esta conta nao tem permissao para cadastrar empresa.");
+      setError("Esta conta não tem permissao para cadastrar empresa.");
       return;
     }
 
@@ -117,7 +117,7 @@ export function CompanyForm() {
 
       router.push("/empresa/vagas");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Nao foi possivel salvar a empresa.");
+      setError(err instanceof Error ? err.message : "Não foi possível salvar a empresa.");
     } finally {
       setLoading(false);
     }
@@ -147,7 +147,7 @@ export function CompanyForm() {
           Acesso de empresa
         </p>
         <h1 className="mt-2 text-3xl font-semibold text-slate-950">
-          Esta conta nao pode cadastrar empresa
+          Esta conta não pode cadastrar empresa
         </h1>
         <p className="mt-3 text-slate-700">
           A conta {account.email} esta com o papel {account.roles.join(", ")}. Para cadastrar uma
@@ -183,7 +183,7 @@ export function CompanyForm() {
           </div>
         ) : (
           <p className="mt-2 text-slate-600">
-            Preencha os dados juridicos para liberar a gestao de vagas da empresa.
+            Preencha os dados juridicos para liberar a gestão de vagas da empresa.
           </p>
         )}
         <div className="mt-4 grid gap-3 md:grid-cols-4">
@@ -257,12 +257,12 @@ export function CompanyForm() {
       <section className="form-card grid gap-4 rounded-[8px] p-6 md:p-8">
         <h2 className="text-xl font-semibold text-slate-950">Apresentacao institucional</h2>
         <label className="grid gap-2 text-sm font-medium text-slate-700">
-          Descricao
+          Descrição
           <textarea
             className="field-input min-h-28 rounded-[8px] px-3 py-3"
             defaultValue={company?.description ?? ""}
             name="description"
-            placeholder="Descreva a empresa, areas de atuacao e tipos de oportunidades oferecidas."
+            placeholder="Descreva a empresa, áreas de atuação e tipos de oportunidades oferecidas."
           />
         </label>
       </section>
@@ -319,9 +319,9 @@ function formatCnpj(value: string) {
 
 function getCompanyStatusLabel(status: string) {
   const labels: Record<string, string> = {
-    PENDING: "Verificacao pendente",
+    PENDING: "Verificação pendente",
     REJECTED: "Rejeitada",
-    UNVERIFIED: "Nao verificada",
+    UNVERIFIED: "Não verificada",
     VERIFIED: "Verificada",
   };
 

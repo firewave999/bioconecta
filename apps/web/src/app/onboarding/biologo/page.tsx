@@ -2,7 +2,7 @@ import { BiologistProfileForm } from "@/components/biologist/biologist-profile-f
 import { ProfileWorkspaceHeader } from "@/components/biologist/profile-workspace-header";
 
 export const metadata = {
-  title: "Onboarding do biologo",
+  title: "Onboarding do biólogo",
 };
 
 export default function BiologistOnboardingPage() {

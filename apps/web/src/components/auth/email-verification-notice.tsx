@@ -24,9 +24,9 @@ export function EmailVerificationNotice({ email }: EmailVerificationNoticeProps)
         "/auth/resend-verification-email",
         { email },
       );
-      setMessage("Enviamos um novo link de verificacao. Confira a caixa de entrada e o spam.");
+      setMessage("Enviamos um novo link de verificação. Confira a caixa de entrada e o spam.");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Nao foi possivel reenviar o e-mail.");
+      setError(err instanceof Error ? err.message : "Não foi possível reenviar o e-mail.");
     } finally {
       setBusy(false);
     }
@@ -36,16 +36,16 @@ export function EmailVerificationNotice({ email }: EmailVerificationNoticeProps)
     <section className="rounded-[8px] border border-amber-200 bg-amber-50 p-5 text-amber-900">
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div>
-          <p className="font-semibold">Confirme seu e-mail para liberar todas as acoes.</p>
+          <p className="font-semibold">Confirme seu e-mail para liberar todas as ações.</p>
           <p className="mt-1 text-sm text-amber-800">
-            Enquanto o e-mail nao for confirmado, cadastro de empresa, edicao de perfil,
-            candidaturas, uploads e publicacao de vagas ficam bloqueados por seguranca.
+            Enquanto o e-mail não for confirmado, cadastro de empresa, edicao de perfil,
+            candidaturas, uploads e publicação de vagas ficam bloqueados por segurança.
           </p>
           {message ? <p className="mt-3 text-sm font-medium text-emerald-800">{message}</p> : null}
           {error ? <p className="mt-3 text-sm font-medium text-red-700">{error}</p> : null}
         </div>
         <Button disabled={busy} onClick={resendVerificationEmail} type="button" variant="light">
-          {busy ? "Reenviando..." : "Reenviar verificacao"}
+          {busy ? "Reenviando..." : "Reenviar verificação"}
         </Button>
       </div>
     </section>

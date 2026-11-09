@@ -97,11 +97,11 @@ export class ApplicationsService {
     ]);
 
     if (!job || job.status !== "PUBLISHED") {
-      throw new NotFoundException("Vaga publicada nao encontrada.");
+      throw new NotFoundException("Vaga publicada não encontrada.");
     }
 
     if (!profile) {
-      throw new NotFoundException("Complete seu perfil de biologo antes de se candidatar.");
+      throw new NotFoundException("Complete seu perfil de biólogo antes de se candidatar.");
     }
 
     const existing = await this.applicationsRepository.findOneBy({
@@ -110,7 +110,7 @@ export class ApplicationsService {
     });
 
     if (existing) {
-      throw new ConflictException("Voce ja se candidatou a esta vaga.");
+      throw new ConflictException("Você já se candidatou a esta vaga.");
     }
 
     const professional = await this.getProfessionalNames(profile.id);
@@ -225,7 +225,7 @@ export class ApplicationsService {
     });
 
     if (!application) {
-      throw new NotFoundException("Candidatura nao encontrada.");
+      throw new NotFoundException("Candidatura não encontrada.");
     }
 
     if (application.job.companyId !== company.id) {
@@ -279,7 +279,7 @@ export class ApplicationsService {
           .innerJoin(
             "biologist_profile_practice_areas",
             "link",
-            "link.practice_area_id = practiceArea.id",
+            "link.practice_área_id = practiceArea.id",
           )
           .where("link.profile_id = :profileId", { profileId })
           .getMany(),

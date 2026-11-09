@@ -85,7 +85,7 @@ export function BiologistProfileForm({ mode }: Props) {
       })
       .catch(() => {
         if (mode === "edit") {
-          setError("Nao foi possivel carregar seu perfil.");
+          setError("Não foi possível carregar seu perfil.");
         }
       });
   }, [mode, router]);
@@ -143,7 +143,7 @@ export function BiologistProfileForm({ mode }: Props) {
 
       router.push("/dashboard");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Nao foi possivel salvar o perfil.");
+      setError(err instanceof Error ? err.message : "Não foi possível salvar o perfil.");
     } finally {
       setLoading(false);
     }
@@ -157,7 +157,7 @@ export function BiologistProfileForm({ mode }: Props) {
         </p>
         <h1 className="mt-2 text-3xl font-semibold text-slate-950">
           {mode === "onboarding"
-            ? "Complete seu perfil de biologo"
+            ? "Complete seu perfil de biólogo"
             : "Atualize seu perfil profissional"}
         </h1>
         <p className="mt-2 text-slate-600">
@@ -167,7 +167,7 @@ export function BiologistProfileForm({ mode }: Props) {
         <div className="mt-4 grid gap-3 md:grid-cols-3">
           <GuidanceCard title="Identificacao" text="Nome, CPF, CRBio e cidade." />
           <GuidanceCard title="Presenca" text="Foto e headline objetiva." />
-          <GuidanceCard title="Operacao" text="Viagem, CNH, veiculo, CNPJ e nota." />
+          <GuidanceCard title="Operação" text="Viagem, CNH, veiculo, CNPJ e nota." />
         </div>
       </section>
 
@@ -223,14 +223,14 @@ export function BiologistProfileForm({ mode }: Props) {
         />
         <Field
           defaultValue={profile?.graduationYear}
-          label="Ano de formacao"
+          label="Ano de formação"
           name="graduationYear"
           required
           type="number"
         />
         <Field
           defaultValue={profile?.crbioNumber}
-          label="Numero do CRBio"
+          label="Número do CRBio"
           name="crbioNumber"
           required
         />
@@ -247,7 +247,7 @@ export function BiologistProfileForm({ mode }: Props) {
       <section className="form-card grid gap-4 rounded-[8px] p-6 md:p-8">
         <h2 className="text-xl font-semibold text-slate-950">Presenca profissional</h2>
         <label className="grid gap-2 text-sm font-medium text-slate-700">
-          Situacao do registro
+          Situação do registro
           <select
             className="field-input h-11 rounded-[8px] px-3"
             defaultValue={profile?.registrationStatus ?? "UNKNOWN"}
@@ -256,7 +256,7 @@ export function BiologistProfileForm({ mode }: Props) {
             <option value="ACTIVE">Ativo</option>
             <option value="PENDING">Pendente</option>
             <option value="INACTIVE">Inativo</option>
-            <option value="UNKNOWN">Nao informado</option>
+            <option value="UNKNOWN">Não informado</option>
           </select>
         </label>
 
@@ -278,7 +278,7 @@ export function BiologistProfileForm({ mode }: Props) {
 
       <section className="form-card grid gap-4 rounded-[8px] p-6 md:grid-cols-2 md:p-8">
         <h2 className="text-xl font-semibold text-slate-950 md:col-span-2">
-          Disponibilidade e operacao
+          Disponibilidade e operação
         </h2>
         <label className="grid gap-2 text-sm font-medium text-slate-700">
           Disponibilidade
@@ -287,14 +287,14 @@ export function BiologistProfileForm({ mode }: Props) {
             defaultValue={profile?.availabilityStatus ?? "AVAILABLE_NOW"}
             name="availabilityStatus"
           >
-            <option value="AVAILABLE_NOW">Disponivel agora</option>
-            <option value="AVAILABLE_FROM_DATE">Disponivel a partir de uma data</option>
+            <option value="AVAILABLE_NOW">Disponível agora</option>
+            <option value="AVAILABLE_FROM_DATE">Disponível a partir de uma data</option>
             <option value="UNAVAILABLE">Indisponivel</option>
           </select>
         </label>
         <Field
           defaultValue={profile?.availableFrom ?? ""}
-          label="Disponivel a partir de"
+          label="Disponível a partir de"
           name="availableFrom"
           type="date"
         />

@@ -74,7 +74,7 @@ export class BiologistProfileService {
     const user = await this.usersRepository.findOneByOrFail({ id: userId });
 
     if (!user.roles.includes("BIOLOGIST")) {
-      throw new ForbiddenException("Apenas contas de biologo podem preencher este perfil.");
+      throw new ForbiddenException("Apenas contas de biólogo podem preencher este perfil.");
     }
 
     const existing = await this.profilesRepository.findOneBy({ userId });
@@ -111,7 +111,7 @@ export class BiologistProfileService {
     });
 
     if (!profile) {
-      throw new NotFoundException("Biologo nao encontrado.");
+      throw new NotFoundException("Biólogo não encontrado.");
     }
 
     const professional = await this.getProfessionalByProfileId(profile.id);
@@ -145,7 +145,7 @@ export class BiologistProfileService {
       await manager.delete(BiologistDocument, { profileId: profile.id });
 
       await manager.query(
-        `DELETE FROM "biologist_profile_practice_areas" WHERE "profile_id" = $1`,
+        `DELETE FROM "biologist_profile_practice_áreas" WHERE "profile_id" = $1`,
         [profile.id],
       );
       await manager.query(
@@ -158,7 +158,7 @@ export class BiologistProfileService {
 
       for (const item of practiceAreas) {
         await manager.query(
-          `INSERT INTO "biologist_profile_practice_areas" ("profile_id", "practice_area_id") VALUES ($1, $2)`,
+          `INSERT INTO "biologist_profile_practice_áreas" ("profile_id", "practice_área_id") VALUES ($1, $2)`,
           [profile.id, item.id],
         );
       }
@@ -225,7 +225,7 @@ export class BiologistProfileService {
     const user = await this.usersRepository.findOneByOrFail({ id: userId });
 
     if (!user.roles.includes("COMPANY") && !user.roles.includes("RECRUITER")) {
-      throw new ForbiddenException("Apenas contas de empresa podem buscar biologos.");
+      throw new ForbiddenException("Apenas contas de empresa podem buscar biólogos.");
     }
 
     const builder = this.profilesRepository
@@ -264,9 +264,9 @@ export class BiologistProfileService {
       builder.andWhere(
         `EXISTS (
           SELECT 1
-          FROM biologist_profile_practice_areas link
-          INNER JOIN practice_areas area ON area.id = link.practice_area_id
-          WHERE link.profile_id = profile.id AND area.name = :practiceArea
+          FROM biologist_profile_practice_áreas link
+          INNER JOIN practice_áreas área ON área.id = link.practice_área_id
+          WHERE link.profile_id = profile.id AND área.name = :practiceArea
         )`,
         { practiceArea: query.practiceArea.trim() },
       );
@@ -307,11 +307,11 @@ export class BiologistProfileService {
     }
 
     const rows: Array<{ name: string; profile_id: string }> = await this.dataSource.query(
-      `SELECT link.profile_id, area.name
-       FROM biologist_profile_practice_areas link
-       INNER JOIN practice_areas area ON area.id = link.practice_area_id
+      `SELECT link.profile_id, área.name
+       FROM biologist_profile_practice_áreas link
+       INNER JOIN practice_áreas área ON área.id = link.practice_área_id
        WHERE link.profile_id = ANY($1::uuid[])
-       ORDER BY area.name ASC`,
+       ORDER BY área.name ASC`,
       [profileIds],
     );
 
@@ -379,7 +379,7 @@ export class BiologistProfileService {
     const profile = await this.profilesRepository.findOneBy({ userId });
 
     if (!profile) {
-      throw new NotFoundException("Complete o perfil basico antes do perfil profissional.");
+      throw new NotFoundException("Complete o perfil básico antes do perfil profissional.");
     }
 
     return profile;
@@ -393,7 +393,7 @@ export class BiologistProfileService {
           .innerJoin(
             "biologist_profile_practice_areas",
             "link",
-            "link.practice_area_id = practiceArea.id",
+            "link.practice_área_id = practiceArea.id",
           )
           .where("link.profile_id = :profileId", { profileId })
           .orderBy("practiceArea.name", "ASC")

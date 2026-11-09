@@ -28,7 +28,7 @@ export default function DashboardPage() {
               href="/notificacoes"
             >
               <Bell size={16} />
-              Notificacoes
+              Notificações
             </Link>
             <Link
               className="inline-flex items-center gap-2 rounded-full px-3 py-2 hover:bg-cyan-50 hover:text-cyan-800"

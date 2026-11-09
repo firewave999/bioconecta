@@ -164,7 +164,7 @@ export class AdminService {
     const company = await this.companiesRepository.findOne({ where: { id } });
 
     if (!company) {
-      throw new NotFoundException("Empresa nao encontrada.");
+      throw new NotFoundException("Empresa não encontrada.");
     }
 
     const previousStatus = company.verificationStatus;
@@ -199,7 +199,7 @@ export class AdminService {
     const profile = await this.biologistProfilesRepository.findOne({ where: { id } });
 
     if (!profile) {
-      throw new NotFoundException("Biologo nao encontrado.");
+      throw new NotFoundException("Biólogo não encontrado.");
     }
 
     const previousStatus = profile.verificationStatus;
@@ -223,20 +223,20 @@ export class AdminService {
     return saved;
   }
 
-  // Avisa o biologo na propria plataforma. O motivo, quando existe, vai na mensagem.
+  // Avisa o biólogo na própria plataforma. O motivo, quando existe, vai na mensagem.
   private async notifyBiologistAboutVerification(profile: BiologistProfile, notes: string | null) {
     const reason = notes ? ` Motivo: ${notes.replace(/[.!?]+$/, "")}.` : "";
     const messages: Partial<Record<VerificationStatus, { message: string; title: string }>> = {
       REJECTED: {
-        message: `Sua verificacao nao foi aprovada.${reason} Revise seus dados e documentos e envie novamente.`,
-        title: "Verificacao nao aprovada",
+        message: `Sua verificação não foi aprovada.${reason} Revise seus dados e documentos e envie novamente.`,
+        title: "Verificação não aprovada",
       },
       SUSPENDED: {
-        message: `Seu perfil foi suspenso e nao aparece nas buscas.${reason}`,
+        message: `Seu perfil foi suspenso e não aparece nas buscas.${reason}`,
         title: "Perfil suspenso",
       },
       VERIFIED: {
-        message: "Seu CRBio foi verificado. Seu perfil agora exibe o selo de verificacao.",
+        message: "Seu CRBio foi verificado. Seu perfil agora exibe o selo de verificação.",
         title: "CRBio verificado",
       },
     };
@@ -261,7 +261,7 @@ export class AdminService {
     const job = await this.jobsRepository.findOne({ where: { id } });
 
     if (!job) {
-      throw new NotFoundException("Vaga nao encontrada.");
+      throw new NotFoundException("Vaga não encontrada.");
     }
 
     const previousStatus = job.status;

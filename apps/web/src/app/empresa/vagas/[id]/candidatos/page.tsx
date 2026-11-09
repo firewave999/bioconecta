@@ -12,7 +12,7 @@ export default function CandidatesPage() {
         <CompanyWorkspaceHeader
           active="jobs"
           eyebrow="Candidatos"
-          title="Analise matches e avance o funil."
+          title="Análise matches e avance o funil."
         />
         <CandidatesClient />
       </div>

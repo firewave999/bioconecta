@@ -61,7 +61,7 @@ export function CompanyWorkspaceHeader({ active, eyebrow, title }: CompanyWorksp
 
         <div className="relative min-h-[330px] overflow-hidden bg-slate-950">
           <Image
-            alt="Equipe ambiental avaliando candidatos e mapas tecnicos."
+            alt="Equipe ambiental avaliando candidatos e mapas técnicos."
             className="object-cover opacity-84"
             fill
             priority
@@ -71,7 +71,7 @@ export function CompanyWorkspaceHeader({ active, eyebrow, title }: CompanyWorksp
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.04),rgba(2,6,23,0.82))]" />
           <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200">
-              Operacao empresa
+              Operação empresa
             </p>
             <p className="mt-2 max-w-md text-xl font-semibold">
               Requisitos claros, candidatos qualificados e contato direto.

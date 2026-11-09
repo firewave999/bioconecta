@@ -66,7 +66,7 @@ export function JobForm({ jobId }: JobFormProps) {
         }
       })
       .catch((err) =>
-        setError(err instanceof Error ? err.message : "Nao foi possivel carregar a empresa."),
+        setError(err instanceof Error ? err.message : "Não foi possível carregar a empresa."),
       )
       .finally(() => setInitialLoading(false));
   }, [jobId, router]);
@@ -119,7 +119,7 @@ export function JobForm({ jobId }: JobFormProps) {
 
       router.push("/empresa/vagas");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Nao foi possivel criar a vaga.");
+      setError(err instanceof Error ? err.message : "Não foi possível criar a vaga.");
     } finally {
       setLoading(false);
     }
@@ -144,7 +144,7 @@ export function JobForm({ jobId }: JobFormProps) {
       });
       router.push("/empresa/vagas");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Nao foi possivel fechar a vaga.");
+      setError(err instanceof Error ? err.message : "Não foi possível fechar a vaga.");
     } finally {
       setLoading(false);
     }
@@ -163,23 +163,23 @@ export function JobForm({ jobId }: JobFormProps) {
       <section className="form-card rounded-[8px] p-6 md:p-8">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">Vaga</p>
         <h1 className="mt-2 text-3xl font-semibold text-slate-950">
-          {isEditing ? "Editar vaga" : "Criar vaga para biologos"}
+          {isEditing ? "Editar vaga" : "Criar vaga para biólogos"}
         </h1>
         <p className="mt-2 text-slate-600">
           Uma vaga completa precisa explicar atividade, local, modelo, remuneracao e requisitos
-          tecnicos. Isso melhora o match e reduz candidaturas fora do perfil.
+          técnicos. Isso melhora o match e reduz candidaturas fora do perfil.
         </p>
         <div className="mt-4 grid gap-3 md:grid-cols-4">
-          <GuideItem text="Titulo objetivo" />
-          <GuideItem text="Descricao operacional" />
-          <GuideItem text="Requisitos tecnicos" />
+          <GuideItem text="Título objetivo" />
+          <GuideItem text="Descrição operacional" />
+          <GuideItem text="Requisitos técnicos" />
           <GuideItem text={canPublish ? "Pode publicar" : "Salvar como rascunho"} />
         </div>
         {!canPublish ? (
           <div className="mt-4 rounded-[8px] border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
-            Sua empresa ainda nao esta verificada
-            {companyStatus ? ` (${getCompanyStatusLabel(companyStatus)})` : ""}. Voce pode salvar a
-            vaga como rascunho, mas so podera publicar apos aprovacao do administrador.
+            Sua empresa ainda não esta verificada
+            {companyStatus ? ` (${getCompanyStatusLabel(companyStatus)})` : ""}. Você pode salvar a
+            vaga como rascunho, mas so podera publicar apos aprovação do administrador.
             <Button asChild className="mt-3" size="sm" variant="secondary">
               <Link href="/empresa">Ver dados da empresa</Link>
             </Button>
@@ -189,14 +189,14 @@ export function JobForm({ jobId }: JobFormProps) {
 
       <section className="form-card grid gap-4 rounded-[8px] p-6 md:p-8">
         <h2 className="text-xl font-semibold text-slate-950">Resumo da oportunidade</h2>
-        <Field defaultValue={job?.title} label="Titulo" name="title" required />
+        <Field defaultValue={job?.title} label="Título" name="title" required />
         <label className="grid gap-2 text-sm font-medium text-slate-700">
-          Descricao da vaga
+          Descrição da vaga
           <textarea
             className="field-input min-h-32 rounded-[8px] px-3 py-3"
             defaultValue={job?.description}
             name="description"
-            placeholder="Descreva atividades, rotina, entregas esperadas, tipo de ambiente e criterios de selecao."
+            placeholder="Descreva atividades, rotina, entregas esperadas, tipo de ambiente e critérios de seleção."
             required
           />
         </label>
@@ -223,8 +223,8 @@ export function JobForm({ jobId }: JobFormProps) {
             ["CLT", "CLT"],
             ["PJ", "PJ"],
             ["FREELANCE", "Freelance"],
-            ["INTERNSHIP", "Estagio"],
-            ["TEMPORARY", "Temporario"],
+            ["INTERNSHIP", "Estágio"],
+            ["TEMPORARY", "Temporário"],
           ]}
           value={job?.contractType}
         />
@@ -243,13 +243,13 @@ export function JobForm({ jobId }: JobFormProps) {
         <Field defaultValue={job?.city} label="Cidade" name="city" required />
         <Field
           defaultValue={centsToMoney(job?.salaryMinCents)}
-          label="Salario minimo"
+          label="Salário mínimo"
           name="salaryMin"
           type="number"
         />
         <Field
           defaultValue={centsToMoney(job?.salaryMaxCents)}
-          label="Salario maximo"
+          label="Salário máximo"
           name="salaryMax"
           type="number"
         />
@@ -275,7 +275,7 @@ export function JobForm({ jobId }: JobFormProps) {
         </h2>
         <TextArea
           defaultValue={job?.requiredPracticeAreas.join(", ")}
-          label="Areas exigidas"
+          label="Áreas exigidas"
           name="requiredPracticeAreas"
         />
         <TextArea
@@ -319,9 +319,9 @@ function GuideItem({ text }: { text: string }) {
 
 function getCompanyStatusLabel(status: string) {
   const labels: Record<string, string> = {
-    PENDING: "verificacao pendente",
+    PENDING: "verificação pendente",
     REJECTED: "rejeitada",
-    UNVERIFIED: "nao verificada",
+    UNVERIFIED: "não verificada",
     VERIFIED: "verificada",
   };
 

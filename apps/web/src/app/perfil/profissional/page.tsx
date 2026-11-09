@@ -12,7 +12,7 @@ export default function ProfessionalProfilePage() {
         <ProfileWorkspaceHeader
           active="professional"
           eyebrow="Perfil profissional"
-          title="Especialidades, documentos e historico tecnico."
+          title="Especialidades, documentos e histórico técnico."
         />
         <ProfessionalProfileForm />
       </div>

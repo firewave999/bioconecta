@@ -12,7 +12,7 @@ export default function CompanyPage() {
         <CompanyWorkspaceHeader
           active="company"
           eyebrow="Empresa"
-          title="Configure sua operacao de recrutamento."
+          title="Configure sua operação de recrutamento."
         />
         <CompanyForm />
       </div>

@@ -71,7 +71,7 @@ export class AuthService {
     });
 
     if (existing) {
-      throw new ConflictException("E-mail ja cadastrado.");
+      throw new ConflictException("E-mail já cadastrado.");
     }
 
     const companyInput = this.getCompanyRegistrationInput(dto);
@@ -82,7 +82,7 @@ export class AuthService {
       });
 
       if (existingCompany) {
-        throw new ConflictException("CNPJ ja cadastrado.");
+        throw new ConflictException("CNPJ já cadastrado.");
       }
     }
 
@@ -158,7 +158,7 @@ export class AuthService {
           userId: user.id,
         }),
       );
-      throw new ForbiddenException("Usuario bloqueado.");
+      throw new ForbiddenException("Usuário bloqueado.");
     }
 
     this.logger.log(
@@ -186,7 +186,7 @@ export class AuthService {
           userId: user.id,
         }),
       );
-      throw new ForbiddenException("Usuario bloqueado.");
+      throw new ForbiddenException("Usuário bloqueado.");
     }
 
     const newRefreshSecret = this.generateTokenSecret();
@@ -267,7 +267,7 @@ export class AuthService {
     });
 
     if (!verification || verification.usedAt || verification.expiresAt <= new Date()) {
-      throw new BadRequestException("Token de verificacao invalido ou expirado.");
+      throw new BadRequestException("Token de verificação inválido ou expirado.");
     }
 
     verification.usedAt = new Date();
@@ -355,13 +355,13 @@ export class AuthService {
     const reset = await this.passwordResetTokensRepository.findOneBy({ tokenHash });
 
     if (!reset || reset.usedAt || reset.expiresAt <= new Date()) {
-      throw new BadRequestException("Token de redefinicao invalido ou expirado.");
+      throw new BadRequestException("Token de redefinição inválido ou expirado.");
     }
 
     const user = await this.usersRepository.findOneByOrFail({ id: reset.userId });
 
     if (user.blockedAt) {
-      throw new ForbiddenException("Usuario bloqueado.");
+      throw new ForbiddenException("Usuário bloqueado.");
     }
 
     user.passwordHash = await hash(password, 12);
@@ -485,7 +485,7 @@ export class AuthService {
     const [sessionId, secret] = refreshToken.split(".");
 
     if (!sessionId || !secret) {
-      throw new UnauthorizedException("Refresh token invalido.");
+      throw new UnauthorizedException("Refresh token inválido.");
     }
 
     const session = await this.sessionsRepository.findOneBy({ id: sessionId });
@@ -496,7 +496,7 @@ export class AuthService {
       session.expiresAt <= new Date() ||
       !(await compare(secret, session.refreshTokenHash))
     ) {
-      throw new UnauthorizedException("Refresh token invalido ou expirado.");
+      throw new UnauthorizedException("Refresh token inválido ou expirado.");
     }
 
     return session;

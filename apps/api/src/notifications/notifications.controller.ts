@@ -13,19 +13,19 @@ export class NotificationsController {
   constructor(private readonly notificationsService: NotificationsService) {}
 
   @Get("mine")
-  @ApiOkResponse({ description: "Notificacoes do usuario autenticado." })
+  @ApiOkResponse({ description: "Notificações do usuário autenticado." })
   listMine(@Req() request: AuthenticatedRequest) {
     return this.notificationsService.listMine(request.user.sub);
   }
 
   @Put("read-all")
-  @ApiOkResponse({ description: "Marca todas as notificacoes como lidas." })
+  @ApiOkResponse({ description: "Marca todas as notificações como lidas." })
   markAllAsRead(@Req() request: AuthenticatedRequest) {
     return this.notificationsService.markAllAsRead(request.user.sub);
   }
 
   @Put(":id/read")
-  @ApiOkResponse({ description: "Marca uma notificacao como lida." })
+  @ApiOkResponse({ description: "Marca uma notificação como lida." })
   markAsRead(@Req() request: AuthenticatedRequest, @Param("id") id: string) {
     return this.notificationsService.markAsRead(request.user.sub, id);
   }

@@ -47,7 +47,7 @@ export function JobDetailClient() {
     apiFetch<{ job: Job }>(`/jobs/${params.id}`)
       .then((response) => setJob(response.job))
       .catch((err) =>
-        setError(err instanceof Error ? err.message : "Nao foi possivel carregar a vaga."),
+        setError(err instanceof Error ? err.message : "Não foi possível carregar a vaga."),
       );
 
     const token = getStoredAccessToken();
@@ -87,7 +87,7 @@ export function JobDetailClient() {
       );
       setApplication(response.application);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Nao foi possivel enviar candidatura.");
+      setError(err instanceof Error ? err.message : "Não foi possível enviar candidatura.");
     } finally {
       setLoading(false);
     }
@@ -118,7 +118,7 @@ export function JobDetailClient() {
         setSaved(true);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Nao foi possivel atualizar favorito.");
+      setError(err instanceof Error ? err.message : "Não foi possível atualizar favorito.");
     } finally {
       setFavoriteLoading(false);
     }
@@ -197,12 +197,12 @@ export function JobDetailClient() {
       </section>
 
       <section className="soft-card rounded-[8px] p-6">
-        <h2 className="text-xl font-semibold text-slate-950">Descricao</h2>
+        <h2 className="text-xl font-semibold text-slate-950">Descrição</h2>
         <p className="mt-3 whitespace-pre-line text-slate-700">{job.description}</p>
       </section>
 
       <section className="grid gap-4 md:grid-cols-3">
-        <RequirementCard title="Areas" values={job.requiredPracticeAreas} />
+        <RequirementCard title="Áreas" values={job.requiredPracticeAreas} />
         <RequirementCard title="Grupos taxonomicos" values={job.requiredTaxonomicGroups} />
         <RequirementCard title="Competencias" values={job.requiredSkills} />
       </section>
@@ -216,7 +216,7 @@ export function JobDetailClient() {
         </div>
         {application ? (
           <div className="mt-4 rounded-[8px] bg-cyan-50 p-4 text-cyan-900">
-            <p className="font-semibold">Voce ja se candidatou.</p>
+            <p className="font-semibold">Você já se candidatou.</p>
             <p className="mt-1">Status: {getApplicationStatusLabel(application.status)}</p>
             <p className="mt-1">Compatibilidade inicial: {application.matchScore}%</p>
             {application.matchReasons.length ? (
@@ -237,7 +237,7 @@ export function JobDetailClient() {
               <textarea
                 className="field-input min-h-28 rounded-[8px] px-3 py-3"
                 onChange={(event) => setCoverMessage(event.target.value)}
-                placeholder="Explique em poucas linhas sua experiencia relacionada a esta vaga, disponibilidade e forma de contato."
+                placeholder="Explique em poucas linhas sua experiência relacionada a esta vaga, disponibilidade e forma de contato."
                 value={coverMessage}
               />
             </label>
@@ -282,7 +282,7 @@ function RequirementCard({ title, values }: { title: string; values: string[] })
         {values.length ? (
           values.map((value) => <Badge key={value}>{value}</Badge>)
         ) : (
-          <Badge>Nao informado</Badge>
+          <Badge>Não informado</Badge>
         )}
       </div>
     </div>
@@ -299,7 +299,7 @@ function Badge({ children }: { children: ReactNode }) {
 
 function formatSalary(min: number | null, max: number | null) {
   if (!min && !max) {
-    return "Remuneracao nao informada";
+    return "Remuneracao não informada";
   }
 
   const formatter = new Intl.NumberFormat("pt-BR", {
@@ -322,7 +322,7 @@ function getApplicationStatusLabel(status: string) {
     OFFER: "Oferta",
     REJECTED: "Rejeitado",
     SHORTLISTED: "Selecionado",
-    UNDER_REVIEW: "Em analise",
+    UNDER_REVIEW: "Em análise",
     WITHDRAWN: "Retirado",
   };
 
@@ -333,9 +333,9 @@ function formatContractType(value: string) {
   const labels: Record<string, string> = {
     CLT: "CLT",
     FREELANCE: "Freelance",
-    INTERNSHIP: "Estagio",
+    INTERNSHIP: "Estágio",
     PJ: "PJ",
-    TEMPORARY: "Temporario",
+    TEMPORARY: "Temporário",
   };
 
   return labels[value] ?? value;

@@ -42,7 +42,7 @@ export function LoginForm() {
       setSuccess(`Login realizado para ${response.user.email}.`);
       router.push("/dashboard");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Nao foi possivel entrar.");
+      setError(err instanceof Error ? err.message : "Não foi possível entrar.");
     } finally {
       setLoading(false);
     }
@@ -98,7 +98,7 @@ export function LoginForm() {
       </p>
 
       <p className="mt-3 text-sm text-slate-600">
-        Ainda nao tem conta?{" "}
+        Ainda não tem conta?{" "}
         <Link className="font-semibold text-cyan-800" href="/cadastro">
           Criar conta
         </Link>

@@ -30,13 +30,13 @@ export class MailService {
       htmlContent: this.layout({
         body: `
           <p>Ola, ${input.name}.</p>
-          <p>Recebemos seu cadastro no BioConecta. Confirme seu e-mail para liberar cadastro de perfil, candidaturas, vagas e demais acoes da plataforma.</p>
+          <p>Recebemos seu cadastro no BioConecta. Confirme seu e-mail para liberar cadastro de perfil, candidaturas, vagas e demais ações da plataforma.</p>
           <p style="margin: 28px 0;">
             <a href="${verifyUrl}" style="${buttonStyle}">Verificar e-mail</a>
           </p>
-          <p>Se o botao nao funcionar, acesse este link:</p>
+          <p>Se o botão não funcionar, acesse este link:</p>
           <p style="word-break: break-all; color: #0e7490;">${verifyUrl}</p>
-          <p style="margin-top:24px;font-size:13px;color:#64748b;">Por seguranca, ignore este e-mail se voce nao criou uma conta no BioConecta.</p>
+          <p style="margin-top:24px;font-size:13px;color:#64748b;">Por segurança, ignore este e-mail se você não criou uma conta no BioConecta.</p>
         `,
         title: "Confirme seu e-mail",
       }),
@@ -52,16 +52,16 @@ export class MailService {
       htmlContent: this.layout({
         body: `
           <p>Ola, ${input.name}.</p>
-          <p>Recebemos uma solicitacao para redefinir a senha da sua conta no BioConecta.</p>
-          <p>Use o botao abaixo para criar uma nova senha. O link expira em breve por seguranca.</p>
+          <p>Recebemos uma solicitação para redefinir a senha da sua conta no BioConecta.</p>
+          <p>Use o botão abaixo para criar uma nova senha. O link expira em breve por segurança.</p>
           <p style="margin: 28px 0;">
             <a href="${resetUrl}" style="${buttonStyle}">Redefinir senha</a>
           </p>
-          <p>Se o botao nao funcionar, acesse este link:</p>
+          <p>Se o botão não funcionar, acesse este link:</p>
           <p style="word-break: break-all; color: #0e7490;">${resetUrl}</p>
-          <p style="margin-top:24px;font-size:13px;color:#64748b;">Se voce nao pediu isso, nenhuma acao e necessaria.</p>
+          <p style="margin-top:24px;font-size:13px;color:#64748b;">Se você não pediu isso, nenhuma ação e necessária.</p>
         `,
-        title: "Redefinicao de senha",
+        title: "Redefinição de senha",
       }),
       subject: "Redefina sua senha no BioConecta",
       to: [{ email: input.email, name: input.name }],

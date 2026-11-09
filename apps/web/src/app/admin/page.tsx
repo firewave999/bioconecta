@@ -29,14 +29,14 @@ export default function AdminPage() {
                 Painel operacional BioConecta.
               </h1>
               <p className="mt-4 max-w-3xl text-slate-600">
-                Validacao de empresas, biologos, vagas e acompanhamento rapido da plataforma.
+                Validacao de empresas, biólogos, vagas e acompanhamento rapido da plataforma.
               </p>
               <nav className="mt-6 flex flex-wrap gap-2 text-sm font-semibold text-slate-700">
                 {[
                   ["#visao-geral", "Visao geral"],
                   ["#pendencias", "Pendencias"],
                   ["#empresas", "Empresas"],
-                  ["#biologos", "Biologos"],
+                  ["#biologos", "Biólogos"],
                   ["#vagas", "Vagas"],
                   ["#candidaturas", "Candidaturas"],
                   ["#auditoria", "Auditoria"],

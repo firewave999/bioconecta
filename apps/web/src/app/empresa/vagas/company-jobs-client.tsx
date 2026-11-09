@@ -26,7 +26,7 @@ export function CompanyJobsClient() {
     const token = getStoredAccessToken();
 
     if (!token) {
-      setError("Voce precisa entrar para acessar as vagas da empresa.");
+      setError("Você precisa entrar para acessar as vagas da empresa.");
       return;
     }
 
@@ -40,7 +40,7 @@ export function CompanyJobsClient() {
         setJobs(response.jobs);
       })
       .catch((err) =>
-        setError(err instanceof Error ? err.message : "Nao foi possivel carregar as vagas."),
+        setError(err instanceof Error ? err.message : "Não foi possível carregar as vagas."),
       );
   }, []);
 
@@ -127,7 +127,7 @@ export function CompanyJobsClient() {
           <EmptyState
             actionHref="/empresa/vagas/nova"
             actionLabel="Criar primeira vaga"
-            description="Crie uma vaga como rascunho. Se a empresa ja estiver verificada, voce tambem podera publicar."
+            description="Crie uma vaga como rascunho. Se a empresa já estiver verificada, você também podera publicar."
             title="Nenhuma vaga criada ainda"
           />
         )}
@@ -147,9 +147,9 @@ function Metric({ label, value }: { label: string; value: number }) {
 
 function getCompanyStatusLabel(status: string) {
   const labels: Record<string, string> = {
-    PENDING: "Verificacao pendente",
+    PENDING: "Verificação pendente",
     REJECTED: "Rejeitada",
-    UNVERIFIED: "Nao verificada",
+    UNVERIFIED: "Não verificada",
     VERIFIED: "Verificada",
   };
 
@@ -168,9 +168,9 @@ function getJobStatusLabel(status: string) {
 
 function getJobActionText(status: string) {
   const actions: Record<string, string> = {
-    CLOSED: "Vaga encerrada. Mantenha o historico de candidatos para consulta.",
+    CLOSED: "Vaga encerrada. Mantenha o histórico de candidatos para consulta.",
     DRAFT: "Revise os requisitos e publique quando a empresa estiver verificada.",
-    PUBLISHED: "Acompanhe candidatos e mova o status conforme o processo seletivo avancar.",
+    PUBLISHED: "Acompanhe candidatos e mova o status conforme o processo seletivo avançar.",
   };
 
   return actions[status] ?? "Revise a vaga e acompanhe candidatos.";

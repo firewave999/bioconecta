@@ -17,26 +17,26 @@ export class BiologistProfileController {
   constructor(private readonly biologistProfileService: BiologistProfileService) {}
 
   @Get("search")
-  @ApiOkResponse({ description: "Biologos visiveis para empresas, com filtros." })
+  @ApiOkResponse({ description: "Biólogos visíveis para empresas, com filtros." })
   search(@Req() request: AuthenticatedRequest, @Query() query: SearchBiologistsQueryDto) {
     return this.biologistProfileService.searchForCompanies(request.user.sub, query);
   }
 
   @Get("me")
-  @ApiOkResponse({ description: "Perfil do biologo autenticado." })
+  @ApiOkResponse({ description: "Perfil do biólogo autenticado." })
   getMine(@Req() request: AuthenticatedRequest) {
     return this.biologistProfileService.getMine(request.user.sub);
   }
 
   @Put("me")
   @UseGuards(EmailVerifiedGuard)
-  @ApiOkResponse({ description: "Perfil do biologo salvo." })
+  @ApiOkResponse({ description: "Perfil do biólogo salvo." })
   upsertMine(@Req() request: AuthenticatedRequest, @Body() dto: UpsertBiologistProfileDto) {
     return this.biologistProfileService.upsertMine(request.user.sub, dto);
   }
 
   @Get("me/professional")
-  @ApiOkResponse({ description: "Perfil profissional expandido do biologo autenticado." })
+  @ApiOkResponse({ description: "Perfil profissional expandido do biólogo autenticado." })
   getProfessionalMine(@Req() request: AuthenticatedRequest) {
     return this.biologistProfileService.getProfessionalMine(request.user.sub);
   }

@@ -54,7 +54,7 @@ export class JobsService {
     if (query.requirement?.trim()) {
       builder.andWhere(
         `(
-          :requirement = ANY(job.required_practice_areas)
+          :requirement = ANY(job.required_practice_áreas)
           OR :requirement = ANY(job.required_taxonomic_groups)
           OR :requirement = ANY(job.required_skills)
         )`,
@@ -74,7 +74,7 @@ export class JobsService {
     });
 
     if (!job) {
-      throw new NotFoundException("Vaga publicada nao encontrada.");
+      throw new NotFoundException("Vaga publicada não encontrada.");
     }
 
     return { job };
@@ -95,7 +95,7 @@ export class JobsService {
     const job = await this.jobsRepository.findOneBy({ id: jobId });
 
     if (!job) {
-      throw new NotFoundException("Vaga nao encontrada.");
+      throw new NotFoundException("Vaga não encontrada.");
     }
 
     if (job.companyId !== company.id) {
@@ -125,7 +125,7 @@ export class JobsService {
     const existing = await this.jobsRepository.findOneBy({ id: jobId });
 
     if (!existing) {
-      throw new NotFoundException("Vaga nao encontrada.");
+      throw new NotFoundException("Vaga não encontrada.");
     }
 
     if (existing.companyId !== company.id) {

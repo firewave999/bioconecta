@@ -22,7 +22,7 @@ export function VerifyEmailClient() {
     apiRequest<{ verified: boolean }, Record<string, unknown>>("/auth/verify-email", { token })
       .then(() => setVerified(true))
       .catch((err) =>
-        setError(err instanceof Error ? err.message : "Nao foi possivel verificar o e-mail."),
+        setError(err instanceof Error ? err.message : "Não foi possível verificar o e-mail."),
       )
       .finally(() => setLoading(false));
   }, [token]);
@@ -31,14 +31,14 @@ export function VerifyEmailClient() {
     <section className="form-card rounded-[8px] p-6">
       <div className="mb-6">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
-          Verificacao
+          Verificação
         </p>
         <h2 className="mt-2 text-2xl font-semibold text-slate-950">Status do e-mail</h2>
       </div>
 
       {!token ? (
         <div className="rounded-[8px] border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
-          Link sem token de verificacao.
+          Link sem token de verificação.
         </div>
       ) : loading ? (
         <p className="text-sm text-slate-600">Verificando e-mail...</p>
@@ -47,8 +47,8 @@ export function VerifyEmailClient() {
           <div>
             <p className="font-semibold">E-mail verificado com sucesso.</p>
             <p className="mt-1 text-cyan-800">
-              As acoes da conta foram liberadas. Se voce ja estava com o dashboard aberto,
-              recarregue a pagina para atualizar o aviso de verificacao.
+              As ações da conta foram liberadas. Se você já estava com o dashboard aberto,
+              recarregue a página para atualizar o aviso de verificação.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
@@ -63,8 +63,8 @@ export function VerifyEmailClient() {
       ) : (
         <div className="grid gap-4 rounded-[8px] border border-red-200 bg-red-50 p-4 text-sm text-red-700">
           <div>
-            <p className="font-semibold">Nao foi possivel verificar este e-mail.</p>
-            <p className="mt-1">{error ?? "O link pode estar expirado ou ja ter sido usado."}</p>
+            <p className="font-semibold">Não foi possível verificar este e-mail.</p>
+            <p className="mt-1">{error ?? "O link pode estar expirado ou já ter sido usado."}</p>
           </div>
           <div className="flex flex-wrap gap-3">
             <Button asChild>
