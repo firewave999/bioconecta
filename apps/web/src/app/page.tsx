@@ -68,13 +68,16 @@ async function getRecentJobs(): Promise<PublishedJob[]> {
   }
 }
 
+// Mesmos nomes do catálogo de áreas de atuação da API.
 const practiceAreas = [
-  "Monitoramento de fauna",
   "Licenciamento ambiental",
-  "Resgate e afugentamento",
-  "Geoprocessamento",
+  "Inventário de fauna",
+  "Inventário de flora",
+  "Resgate de fauna",
+  "Monitoramento ambiental",
   "Educação ambiental",
-  "Botânica e flora",
+  "Geoprocessamento",
+  "Análise de dados ecológicos",
 ];
 
 const heroHighlights = [

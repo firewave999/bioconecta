@@ -1,10 +1,10 @@
-import { ArrowLeft, Building2, FilePlus2, ListChecks } from "lucide-react";
+import { ArrowLeft, Building2, FilePlus2, ListChecks, UsersRound } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
 type CompanyWorkspaceHeaderProps = {
-  active: "company" | "jobs";
+  active: "biologists" | "company" | "jobs";
   eyebrow: string;
   title: string;
 };
@@ -45,6 +45,13 @@ export function CompanyWorkspaceHeader({ active, eyebrow, title }: CompanyWorksp
               icon={<ListChecks size={17} />}
             >
               Vagas
+            </CompanyTab>
+            <CompanyTab
+              active={active === "biologists"}
+              href="/empresa/biologos"
+              icon={<UsersRound size={17} />}
+            >
+              Biólogos
             </CompanyTab>
             <CompanyTab active={false} href="/empresa/vagas/nova" icon={<FilePlus2 size={17} />}>
               Nova vaga

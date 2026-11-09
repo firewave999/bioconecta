@@ -4,6 +4,7 @@ import { DataSource, Repository } from "typeorm";
 
 import { User } from "../users/user.entity.js";
 import { BiologistProfile } from "./biologist-profile.entity.js";
+import { SearchBiologistsQueryDto } from "./dto/search-biologists-query.dto.js";
 import { UpsertProfessionalProfileDto } from "./dto/upsert-professional-profile.dto.js";
 import { UpsertBiologistProfileDto } from "./dto/upsert-biologist-profile.dto.js";
 import { BiologistCertification } from "./entities/biologist-certification.entity.js";
@@ -23,6 +24,16 @@ type ProfessionalProfile = {
 };
 
 type CatalogItem = PracticeArea | TaxonomicGroup | Skill;
+
+const SEARCH_LIMIT = 50;
+const HIDDEN_FROM_SEARCH = ["REJECTED", "SUSPENDED"];
+const SEARCH_BOOLEAN_FILTERS = [
+  "acceptsTravel",
+  "hasCnpj",
+  "hasDriverLicense",
+  "hasOwnVehicle",
+  "issuesInvoice",
+] as const;
 
 @Injectable()
 export class BiologistProfileService {
@@ -208,6 +219,107 @@ export class BiologistProfileService {
       completion: this.calculateCompletion(profile, professional),
       professional,
     };
+  }
+
+  async searchForCompanies(userId: string, query: SearchBiologistsQueryDto) {
+    const user = await this.usersRepository.findOneByOrFail({ id: userId });
+
+    if (!user.roles.includes("COMPANY") && !user.roles.includes("RECRUITER")) {
+      throw new ForbiddenException("Apenas contas de empresa podem buscar biologos.");
+    }
+
+    const builder = this.profilesRepository
+      .createQueryBuilder("profile")
+      .where("profile.verificationStatus NOT IN (:...hidden)", {
+        hidden: HIDDEN_FROM_SEARCH,
+      })
+      .orderBy("profile.createdAt", "DESC")
+      .take(SEARCH_LIMIT);
+
+    if (query.state?.trim()) {
+      builder.andWhere("profile.state = :state", { state: query.state.trim().toUpperCase() });
+    }
+
+    if (query.city?.trim()) {
+      builder.andWhere("profile.city ILIKE :city", { city: `%${query.city.trim()}%` });
+    }
+
+    if (query.verifiedOnly === "true") {
+      builder.andWhere("profile.verificationStatus = :verified", { verified: "VERIFIED" });
+    }
+
+    if (query.availableNow === "true") {
+      builder.andWhere("profile.availabilityStatus = :availableNow", {
+        availableNow: "AVAILABLE_NOW",
+      });
+    }
+
+    for (const field of SEARCH_BOOLEAN_FILTERS) {
+      if (query[field] === "true") {
+        builder.andWhere(`profile.${field} = true`);
+      }
+    }
+
+    if (query.practiceArea?.trim()) {
+      builder.andWhere(
+        `EXISTS (
+          SELECT 1
+          FROM biologist_profile_practice_areas link
+          INNER JOIN practice_areas area ON area.id = link.practice_area_id
+          WHERE link.profile_id = profile.id AND area.name = :practiceArea
+        )`,
+        { practiceArea: query.practiceArea.trim() },
+      );
+    }
+
+    const profiles = await builder.getMany();
+    const practiceAreasByProfile = await this.getPracticeAreaNamesByProfile(
+      profiles.map((profile) => profile.id),
+    );
+
+    // Dados de contato, CPF e data de nascimento ficam fora da busca.
+    return {
+      biologists: profiles.map((profile) => ({
+        acceptsTravel: profile.acceptsTravel,
+        availabilityStatus: profile.availabilityStatus,
+        availableFrom: profile.availableFrom,
+        avatarUrl: profile.avatarUrl,
+        city: profile.city,
+        fullName: profile.fullName,
+        hasCnpj: profile.hasCnpj,
+        hasDriverLicense: profile.hasDriverLicense,
+        hasOwnVehicle: profile.hasOwnVehicle,
+        headline: profile.headline,
+        id: profile.id,
+        issuesInvoice: profile.issuesInvoice,
+        practiceAreas: practiceAreasByProfile.get(profile.id) ?? [],
+        state: profile.state,
+        verificationStatus: profile.verificationStatus,
+      })),
+    };
+  }
+
+  private async getPracticeAreaNamesByProfile(profileIds: string[]) {
+    const byProfile = new Map<string, string[]>();
+
+    if (!profileIds.length) {
+      return byProfile;
+    }
+
+    const rows: Array<{ name: string; profile_id: string }> = await this.dataSource.query(
+      `SELECT link.profile_id, area.name
+       FROM biologist_profile_practice_areas link
+       INNER JOIN practice_areas area ON area.id = link.practice_area_id
+       WHERE link.profile_id = ANY($1::uuid[])
+       ORDER BY area.name ASC`,
+      [profileIds],
+    );
+
+    for (const row of rows) {
+      byProfile.set(row.profile_id, [...(byProfile.get(row.profile_id) ?? []), row.name]);
+    }
+
+    return byProfile;
   }
 
   private calculateCompletion(profile: BiologistProfile, professional: ProfessionalProfile) {
