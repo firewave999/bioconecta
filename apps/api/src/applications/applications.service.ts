@@ -14,7 +14,18 @@ import { TaxonomicGroup } from "../biologist-profile/entities/taxonomic-group.en
 import { Company } from "../companies/company.entity.js";
 import { Job } from "../jobs/job.entity.js";
 import { NotificationsService } from "../notifications/notifications.service.js";
-import { Application } from "./application.entity.js";
+import { Application, type ApplicationStatus } from "./application.entity.js";
+
+const applicationStatusLabels: Record<ApplicationStatus, string> = {
+  APPLIED: "Inscrito",
+  HIRED: "Contratado",
+  INTERVIEW: "Entrevista",
+  OFFER: "Oferta",
+  REJECTED: "Não selecionado",
+  SHORTLISTED: "Selecionado",
+  UNDER_REVIEW: "Em análise",
+  WITHDRAWN: "Retirado",
+};
 import { CreateApplicationDto } from "./dto/create-application.dto.js";
 import { UpdateApplicationStatusDto } from "./dto/update-application-status.dto.js";
 
@@ -240,7 +251,7 @@ export class ApplicationsService {
     if (previousStatus !== dto.status) {
       await this.notificationsService.createForUser({
         actionUrl: "/candidaturas",
-        message: `Sua candidatura para ${application.job.title} mudou de ${previousStatus} para ${dto.status}.`,
+        message: `Sua candidatura para ${application.job.title} agora está como "${applicationStatusLabels[dto.status]}".`,
         metadata: {
           applicationId: savedApplication.id,
           jobId: application.jobId,
