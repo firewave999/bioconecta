@@ -18,6 +18,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { HomeAuthActions } from "@/components/home/home-auth-actions";
+import { JobsStateMap, countJobsByState } from "@/components/home/jobs-state-map";
 import { Button } from "@/components/ui/button";
 
 export const revalidate = 300;
@@ -53,7 +54,7 @@ const workModeLabels: Record<string, string> = {
 
 // Vagas reais publicadas. Se a API estiver fora ou não houver vagas, a home
 // mostra um estado vazio em vez de dados de exemplo.
-async function getRecentJobs(): Promise<PublishedJob[]> {
+async function getPublishedJobs(): Promise<PublishedJob[]> {
   try {
     const response = await fetch(`${apiUrl}/jobs`, { next: { revalidate: 300 } });
 
@@ -62,7 +63,7 @@ async function getRecentJobs(): Promise<PublishedJob[]> {
     }
 
     const data = (await response.json()) as { jobs?: PublishedJob[] };
-    return (data.jobs ?? []).slice(0, 3);
+    return data.jobs ?? [];
   } catch {
     return [];
   }
@@ -147,7 +148,9 @@ function EmptyJobs() {
 }
 
 export default async function HomePage() {
-  const recentJobs = await getRecentJobs();
+  const publishedJobs = await getPublishedJobs();
+  const recentJobs = publishedJobs.slice(0, 3);
+  const stateCounts = countJobsByState(publishedJobs);
 
   return (
     <main className="bg-[#f5fbf8]">
@@ -391,6 +394,10 @@ export default async function HomePage() {
             <EmptyJobs />
           )}
         </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-6 pb-20">
+        <JobsStateMap counts={stateCounts} />
       </section>
 
       <section

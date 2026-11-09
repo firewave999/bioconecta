@@ -53,10 +53,10 @@ export function HomeAuthActions({ context }: HomeAuthActionsProps) {
   return (
     <div className="mt-8 flex flex-col gap-3 sm:flex-row">
       <Button asChild>
-        <Link href="/cadastro">Sou biologo</Link>
+        <Link href="/cadastro">Criar meu perfil técnico</Link>
       </Button>
       <Button asChild variant="outline">
-        <Link href="/empresa">Cadastrar empresa</Link>
+        <Link href="/empresa">Publicar uma vaga</Link>
       </Button>
     </div>
   );
