@@ -569,7 +569,7 @@ function getWhatsappHref({
     return null;
   }
 
-  const message = `Ola, ${candidateName}. Tudo bem? Somos da empresa responsavel pela vaga "${jobTitle}" no BioConecta e vimos sua candidatura. Podemos conversar sobre sua disponibilidade?`;
+  const message = `Olá, ${candidateName}. Tudo bem? Somos da empresa responsável pela vaga "${jobTitle}" no BioConecta e vimos sua candidatura. Podemos conversar sobre sua disponibilidade?`;
 
   return `https://wa.me/${normalizedPhone}?text=${encodeURIComponent(message)}`;
 }

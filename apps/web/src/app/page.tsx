@@ -504,7 +504,7 @@ export default async function HomePage() {
               Conecte talento técnico a oportunidades ambientais reais.
             </h2>
             <p className="mt-2 text-slate-600">
-              Crie seu perfil, publique vagas ou encontre profissionais preparados para campo,
+              Crie seu perfil, publique vagas ou encontre profissionais prontos para campo,
               licenciamento, monitoramento e consultoria ambiental.
             </p>
           </div>

@@ -53,7 +53,7 @@ export class MailService {
         body: `
           <p>Ola, ${input.name}.</p>
           <p>Recebemos uma solicitação para redefinir a senha da sua conta no BioConecta.</p>
-          <p>Use o botão abaixo para criar uma nova senha. O link expira em breve por segurança.</p>
+          <p>Use o botão abaixo para criar uma nova senha. Por segurança, o link tem prazo de validade limitado.</p>
           <p style="margin: 28px 0;">
             <a href="${resetUrl}" style="${buttonStyle}">Redefinir senha</a>
           </p>

@@ -346,8 +346,8 @@ export function DashboardClient() {
         <section className="soft-card rounded-[8px] p-6">
           <h2 className="text-xl font-semibold text-slate-950">Área do estudante</h2>
           <p className="mt-2 text-slate-600">
-            Acompanhe vagas, favoritos e notificações. O perfil profissional completo será tratado
-            em uma etapa propria.
+            Acompanhe vagas, favoritos e notificações. Para completar seu perfil técnico, use a área
+            de perfil profissional.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
             <Button asChild>
