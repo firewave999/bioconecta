@@ -11,8 +11,8 @@ type ProfileWorkspaceHeaderProps = {
 
 export function ProfileWorkspaceHeader({ active, eyebrow, title }: ProfileWorkspaceHeaderProps) {
   return (
-    <section className="glass-panel overflow-hidden rounded-[8px]">
-      <div className="grid lg:grid-cols-[1fr_0.92fr]">
+    <section className="glass-panel min-w-0 overflow-hidden rounded-[8px]">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_0.92fr]">
         <div className="p-6 md:p-8">
           <Link
             className="inline-flex items-center gap-2 text-sm font-semibold text-cyan-800"
@@ -29,7 +29,7 @@ export function ProfileWorkspaceHeader({ active, eyebrow, title }: ProfileWorksp
             {title}
           </h1>
           <p className="mt-4 max-w-2xl text-slate-600">
-            Mantenha seus dados, documentos e experiencias organizados para facilitar a avaliacao
+            Mantenha seus dados, documentos e experiências organizados para facilitar a avaliação
             das empresas e melhorar a compatibilidade com vagas.
           </p>
 
@@ -39,7 +39,7 @@ export function ProfileWorkspaceHeader({ active, eyebrow, title }: ProfileWorksp
               href="/perfil/editar"
               icon={<UserRound size={17} />}
             >
-              Perfil basico
+              Perfil básico
             </ProfileTab>
             <ProfileTab
               active={active === "professional"}
@@ -54,7 +54,7 @@ export function ProfileWorkspaceHeader({ active, eyebrow, title }: ProfileWorksp
             {[
               ["Identidade", "Dados principais e foto."],
               ["Credenciais", "CRBio, certificados e anexos."],
-              ["Experiencia", "Historico tecnico de campo."],
+              ["Experiência", "Histórico técnico de campo."],
             ].map(([label, body]) => (
               <div key={label} className="rounded-[8px] border border-cyan-100 bg-white/72 p-4">
                 <BadgeCheck size={18} className="text-cyan-700" />
@@ -77,10 +77,10 @@ export function ProfileWorkspaceHeader({ active, eyebrow, title }: ProfileWorksp
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.08),rgba(2,6,23,0.82))]" />
           <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200">
-              Perfil tecnico
+              Perfil técnico
             </p>
             <p className="mt-2 max-w-md text-xl font-semibold">
-              Informacoes claras aumentam a confianca e reduzem atrito na contratacao.
+              Informações claras aumentam a confianca e reduzem atrito na contratacao.
             </p>
           </div>
         </div>

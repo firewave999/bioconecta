@@ -17,7 +17,7 @@ export class EmailVerifiedGuard implements CanActivate {
     const userId = request.user?.sub;
 
     if (!userId) {
-      throw new ForbiddenException("Usuario autenticado nao encontrado.");
+      throw new ForbiddenException("Usuário autenticado não encontrado.");
     }
 
     const user = await this.usersRepository.findOne({
@@ -32,7 +32,7 @@ export class EmailVerifiedGuard implements CanActivate {
     });
 
     if (!user) {
-      throw new ForbiddenException("Usuario autenticado nao encontrado.");
+      throw new ForbiddenException("Usuário autenticado não encontrado.");
     }
 
     if (user.roles.includes("ADMIN") || user.emailVerifiedAt) {
@@ -40,7 +40,7 @@ export class EmailVerifiedGuard implements CanActivate {
     }
 
     throw new ForbiddenException(
-      "Confirme seu e-mail antes de executar esta acao. Use o botao de reenvio no dashboard.",
+      "Confirme seu e-mail antes de executar esta ação. Use o botão de reenvio no dashboard.",
     );
   }
 }

@@ -11,8 +11,8 @@ export default function VerifyEmailPage() {
   return (
     <main className="mx-auto grid min-h-screen max-w-6xl items-center gap-10 px-6 py-12 lg:grid-cols-[0.9fr_1.1fr]">
       <AuthVisualPanel
-        body="A verificacao ajuda a proteger sua conta e melhora a confiabilidade dos perfis."
-        eyebrow="Verificacao"
+        body="A verificação ajuda a proteger sua conta e melhora a confiabilidade dos perfis."
+        eyebrow="Verificação"
         image="company"
         title="Confirme seu e-mail."
       />

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { NotificationsClient } from "./notifications-client";
 
 export const metadata = {
-  title: "Notificacoes",
+  title: "Notificações",
 };
 
 export default function NotificationsPage() {
@@ -20,7 +20,7 @@ export default function NotificationsPage() {
         </div>
         <section className="page-header my-8 rounded-[8px] p-6">
           <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">Central</p>
-          <h1 className="mt-2 text-4xl font-semibold text-slate-950">Notificacoes</h1>
+          <h1 className="mt-2 text-4xl font-semibold text-slate-950">Notificações</h1>
           <p className="mt-2 text-slate-600">
             Avisos de candidatura, retorno de empresas e atualizacoes importantes.
           </p>

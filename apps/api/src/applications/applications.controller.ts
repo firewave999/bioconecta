@@ -16,13 +16,13 @@ export class ApplicationsController {
   constructor(private readonly applicationsService: ApplicationsService) {}
 
   @Get("mine")
-  @ApiOkResponse({ description: "Candidaturas do biologo autenticado." })
+  @ApiOkResponse({ description: "Candidaturas do biólogo autenticado." })
   listMine(@Req() request: AuthenticatedRequest) {
     return this.applicationsService.listMine(request.user.sub);
   }
 
   @Get("jobs/:jobId/me")
-  @ApiOkResponse({ description: "Candidatura do biologo autenticado para a vaga." })
+  @ApiOkResponse({ description: "Candidatura do biólogo autenticado para a vaga." })
   getMyApplicationForJob(@Req() request: AuthenticatedRequest, @Param("jobId") jobId: string) {
     return this.applicationsService.getMyApplicationForJob(request.user.sub, jobId);
   }

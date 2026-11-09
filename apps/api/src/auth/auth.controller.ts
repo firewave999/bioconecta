@@ -72,7 +72,7 @@ export class AuthController {
   @RateLimit({ keyPrefix: "auth:logout", limit: 30, windowMs: 60 * 1000 })
   @UseGuards(RateLimitGuard)
   @HttpCode(HttpStatus.OK)
-  @ApiOkResponse({ description: "Sessao encerrada com sucesso." })
+  @ApiOkResponse({ description: "Sessão encerrada com sucesso." })
   logout(@Body() dto: RefreshTokenDto) {
     return this.authService.logout(dto.refreshToken);
   }
@@ -99,7 +99,7 @@ export class AuthController {
   @RateLimit({ keyPrefix: "auth:resend-verification", limit: 5, windowMs: 60 * 60 * 1000 })
   @UseGuards(RateLimitGuard)
   @HttpCode(HttpStatus.OK)
-  @ApiOkResponse({ description: "Se a conta existir, o e-mail de verificacao sera reenviado." })
+  @ApiOkResponse({ description: "Se a conta existir, o e-mail de verificação será reenviado." })
   resendVerificationEmail(@Body() dto: ResendVerificationEmailDto) {
     return this.authService.resendVerificationEmail(dto.email);
   }
@@ -108,7 +108,7 @@ export class AuthController {
   @RateLimit({ keyPrefix: "auth:forgot-password", limit: 5, windowMs: 60 * 60 * 1000 })
   @UseGuards(RateLimitGuard)
   @HttpCode(HttpStatus.OK)
-  @ApiOkResponse({ description: "Se a conta existir, o e-mail de redefinicao sera enviado." })
+  @ApiOkResponse({ description: "Se a conta existir, o e-mail de redefinição será enviado." })
   forgotPassword(@Body() dto: ForgotPasswordDto) {
     return this.authService.forgotPassword(dto.email);
   }
@@ -125,7 +125,7 @@ export class AuthController {
   @Get("me")
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  @ApiOkResponse({ description: "Usuario autenticado." })
+  @ApiOkResponse({ description: "Usuário autenticado." })
   me(@Req() request: AuthenticatedRequest) {
     return this.authService.me(request.user.sub);
   }

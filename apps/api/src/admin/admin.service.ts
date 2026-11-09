@@ -3,10 +3,14 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
 import { Application } from "../applications/application.entity.js";
-import { BiologistProfile } from "../biologist-profile/biologist-profile.entity.js";
+import {
+  BiologistProfile,
+  type VerificationStatus,
+} from "../biologist-profile/biologist-profile.entity.js";
 import { BiologistProfileService } from "../biologist-profile/biologist-profile.service.js";
 import { Company } from "../companies/company.entity.js";
 import { Job } from "../jobs/job.entity.js";
+import { NotificationsService } from "../notifications/notifications.service.js";
 import { User } from "../users/user.entity.js";
 import { safeJson } from "../common/logging/safe-log.js";
 import { AdminAuditLog, AdminAuditAction, AdminAuditTargetType } from "./admin-audit-log.entity.js";
@@ -32,6 +36,7 @@ export class AdminService {
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
     private readonly biologistProfileService: BiologistProfileService,
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   async getOverview() {
@@ -159,7 +164,7 @@ export class AdminService {
     const company = await this.companiesRepository.findOne({ where: { id } });
 
     if (!company) {
-      throw new NotFoundException("Empresa nao encontrada.");
+      throw new NotFoundException("Empresa não encontrada.");
     }
 
     const previousStatus = company.verificationStatus;
@@ -194,30 +199,69 @@ export class AdminService {
     const profile = await this.biologistProfilesRepository.findOne({ where: { id } });
 
     if (!profile) {
-      throw new NotFoundException("Biologo nao encontrado.");
+      throw new NotFoundException("Biólogo não encontrado.");
     }
 
     const previousStatus = profile.verificationStatus;
+    const notes = dto.verificationNotes?.trim() || null;
     profile.verificationStatus = dto.verificationStatus;
     const saved = await this.biologistProfilesRepository.save(profile);
 
     await this.createAuditLog({
       action: "BIOLOGIST_VERIFICATION_UPDATED",
       actorUserId,
-      afterState: { verificationStatus: saved.verificationStatus },
+      afterState: { verificationNotes: notes, verificationStatus: saved.verificationStatus },
       beforeState: { verificationStatus: previousStatus },
       targetId: saved.id,
       targetType: "BIOLOGIST_PROFILE",
     });
 
+    if (previousStatus !== saved.verificationStatus) {
+      await this.notifyBiologistAboutVerification(saved, notes);
+    }
+
     return saved;
+  }
+
+  // Avisa o biólogo na própria plataforma. O motivo, quando existe, vai na mensagem.
+  private async notifyBiologistAboutVerification(profile: BiologistProfile, notes: string | null) {
+    const reason = notes ? ` Motivo: ${notes.replace(/[.!?]+$/, "")}.` : "";
+    const messages: Partial<Record<VerificationStatus, { message: string; title: string }>> = {
+      REJECTED: {
+        message: `Sua verificação não foi aprovada.${reason} Revise seus dados e documentos e envie novamente.`,
+        title: "Verificação não aprovada",
+      },
+      SUSPENDED: {
+        message: `Seu perfil foi suspenso e não aparece nas buscas.${reason}`,
+        title: "Perfil suspenso",
+      },
+      VERIFIED: {
+        message: "Seu CRBio foi verificado. Seu perfil agora exibe o selo de verificação.",
+        title: "CRBio verificado",
+      },
+    };
+
+    const content = messages[profile.verificationStatus];
+
+    if (!content) {
+      return;
+    }
+
+    await this.notificationsService.createForUser({
+      actionUrl: "/perfil/editar",
+      message: content.message,
+      metadata: { verificationStatus: profile.verificationStatus },
+      title: content.title,
+      type: "BIOLOGIST_VERIFICATION_UPDATED",
+      userId: profile.userId,
+    });
   }
 
   async updateJobStatus(actorUserId: string, id: string, dto: UpdateJobStatusDto) {
     const job = await this.jobsRepository.findOne({ where: { id } });
 
     if (!job) {
-      throw new NotFoundException("Vaga nao encontrada.");
+      throw new NotFoundException("Vaga não encontrada.");
     }
 
     const previousStatus = job.status;

@@ -35,7 +35,7 @@ export class UploadsController {
   )
   uploadImage(@Param("kind") kind: string, @UploadedFile() file: UploadedUploadFile | undefined) {
     if (!uploadKinds.includes(kind)) {
-      throw new BadRequestException("Tipo de upload invalido.");
+      throw new BadRequestException("Tipo de upload inválido.");
     }
 
     return this.uploadsService.saveImage(file, kind as UploadKind);

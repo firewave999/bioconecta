@@ -61,7 +61,7 @@ export async function apiFetch<
     }
 
     clearStoredTokens();
-    throw new ApiError("Sessao expirada. Entre novamente para continuar.", 401);
+    throw new ApiError("Sessão expirada. Entre novamente para continuar.", 401);
   }
 
   const payload = (await response.json().catch(() => ({}))) as unknown;
@@ -141,7 +141,7 @@ async function sendUploadRequest(path: string, formData: FormData, token: string
     }
 
     clearStoredTokens();
-    throw new ApiError("Sessao expirada. Entre novamente para continuar.", 401);
+    throw new ApiError("Sessão expirada. Entre novamente para continuar.", 401);
   }
 
   const payload = (await response.json().catch(() => ({}))) as unknown;
@@ -222,7 +222,7 @@ async function refreshStoredTokensOnce() {
 
 function getErrorMessage(payload: unknown) {
   if (typeof payload !== "object" || payload === null || !("message" in payload)) {
-    return "Nao foi possivel concluir a acao.";
+    return "Não foi possível concluir a ação.";
   }
 
   const message = (payload as ApiErrorBody).message;
@@ -231,5 +231,5 @@ function getErrorMessage(payload: unknown) {
     return message.join(" ");
   }
 
-  return message ?? "Nao foi possivel concluir a acao.";
+  return message ?? "Não foi possível concluir a ação.";
 }

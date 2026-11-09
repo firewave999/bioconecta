@@ -39,7 +39,7 @@ export class UploadsService {
     const extension = allowedImageMimeTypes.get(file.mimetype);
 
     if (!extension) {
-      throw new BadRequestException("Formato invalido. Use JPG, PNG ou WEBP.");
+      throw new BadRequestException("Formato inválido. Use JPG, PNG ou WEBP.");
     }
 
     return this.saveFile(file, kind, allowedImageMimeTypes);
@@ -53,7 +53,7 @@ export class UploadsService {
     const extension = allowedDocumentMimeTypes.get(file.mimetype);
 
     if (!extension) {
-      throw new BadRequestException("Formato invalido. Use PDF, JPG ou PNG.");
+      throw new BadRequestException("Formato inválido. Use PDF, JPG ou PNG.");
     }
 
     return this.saveFile(file, "biologist/documents", allowedDocumentMimeTypes);
@@ -67,7 +67,7 @@ export class UploadsService {
     const extension = allowedMimeTypes.get(file.mimetype);
 
     if (!extension) {
-      throw new BadRequestException("Formato de arquivo invalido.");
+      throw new BadRequestException("Formato de arquivo inválido.");
     }
 
     const uploadDir = this.configService.get("UPLOADS_DIR", { infer: true });

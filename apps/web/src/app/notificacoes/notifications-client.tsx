@@ -35,14 +35,14 @@ export function NotificationsClient() {
     const token = getStoredAccessToken();
 
     if (!token) {
-      setError("Voce precisa entrar para ver suas notificacoes.");
+      setError("Você precisa entrar para ver suas notificações.");
       return;
     }
 
     apiFetch<NotificationsResponse>("/notifications/mine", { token })
       .then(setState)
       .catch((err) =>
-        setError(err instanceof Error ? err.message : "Nao foi possivel carregar notificacoes."),
+        setError(err instanceof Error ? err.message : "Não foi possível carregar notificações."),
       );
   }
 
@@ -61,7 +61,7 @@ export function NotificationsClient() {
       });
       setState(response);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Nao foi possivel atualizar notificacoes.");
+      setError(err instanceof Error ? err.message : "Não foi possível atualizar notificações.");
     } finally {
       setIsUpdating(false);
     }
@@ -82,7 +82,7 @@ export function NotificationsClient() {
       });
       loadNotifications();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Nao foi possivel atualizar a notificacao.");
+      setError(err instanceof Error ? err.message : "Não foi possível atualizar a notificação.");
     } finally {
       setIsUpdating(false);
     }
@@ -113,7 +113,7 @@ export function NotificationsClient() {
     <section className="grid gap-4">
       <div className="soft-card flex flex-col gap-3 rounded-[8px] p-5 md:flex-row md:items-center md:justify-between">
         <div>
-          <p className="text-sm text-slate-500">Nao lidas</p>
+          <p className="text-sm text-slate-500">Não lidas</p>
           <p className="mt-1 text-2xl font-semibold text-slate-950">{state.unreadCount}</p>
         </div>
         <Button disabled={isUpdating || state.unreadCount === 0} onClick={markAllAsRead}>
@@ -159,7 +159,7 @@ export function NotificationsClient() {
       ) : (
         <EmptyState
           description="Avisos de candidatura, retorno de empresa e atualizacoes importantes aparecerao aqui."
-          title="Nenhuma notificacao por enquanto"
+          title="Nenhuma notificação por enquanto"
         />
       )}
     </section>

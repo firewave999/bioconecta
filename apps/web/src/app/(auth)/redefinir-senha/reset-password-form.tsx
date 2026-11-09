@@ -28,7 +28,7 @@ export function ResetPasswordForm() {
       });
       setSuccess(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Nao foi possivel redefinir a senha.");
+      setError(err instanceof Error ? err.message : "Não foi possível redefinir a senha.");
     } finally {
       setLoading(false);
     }
@@ -43,7 +43,7 @@ export function ResetPasswordForm() {
 
       {!token ? (
         <div className="rounded-[8px] border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
-          Link invalido. Solicite uma nova recuperacao de senha.
+          Link inválido. Solicite uma nova recuperação de senha.
         </div>
       ) : success ? (
         <div className="grid gap-4 rounded-[8px] border border-cyan-200 bg-cyan-50 p-4 text-sm text-cyan-900">

@@ -61,7 +61,7 @@ export function DashboardClient() {
     const token = getStoredAccessToken();
 
     if (!token) {
-      setError("Voce precisa entrar para acessar o dashboard.");
+      setError("Você precisa entrar para acessar o dashboard.");
       return;
     }
 
@@ -162,7 +162,7 @@ export function DashboardClient() {
         });
       })
       .catch((err) => {
-        setError(err instanceof Error ? err.message : "Nao foi possivel carregar o dashboard.");
+        setError(err instanceof Error ? err.message : "Não foi possível carregar o dashboard.");
       });
   }, []);
 
@@ -179,7 +179,7 @@ export function DashboardClient() {
 
   if (!state) {
     return (
-      <div className="grid gap-6">
+      <div className="grid grid-cols-1 gap-6">
         <div className="glass-panel h-72 animate-pulse rounded-[8px]" />
         <div className="grid gap-4 md:grid-cols-3">
           <div className="soft-card h-32 animate-pulse rounded-[8px]" />
@@ -191,9 +191,9 @@ export function DashboardClient() {
   }
 
   return (
-    <div className="grid gap-6">
+    <div className="grid grid-cols-1 gap-6">
       <section className="glass-panel overflow-hidden rounded-[8px]">
-        <div className="grid lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr]">
           <div className="p-6 md:p-8">
             <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
               <div>
@@ -219,7 +219,7 @@ export function DashboardClient() {
                 label={state.isCompanyAccount ? "Vagas" : "Perfil"}
                 value={state.completion}
               />
-              <QuickStatus label="Area" value={getAccountArea(state)} />
+              <QuickStatus label="Área" value={getAccountArea(state)} />
             </div>
 
             <div className="mt-8 flex flex-wrap gap-3">
@@ -228,7 +228,7 @@ export function DashboardClient() {
                 <Link href="/vagas">Explorar vagas</Link>
               </Button>
               <Button asChild variant="secondary">
-                <Link href="/notificacoes">Notificacoes</Link>
+                <Link href="/notificacoes">Notificações</Link>
               </Button>
             </div>
           </div>
@@ -249,7 +249,7 @@ export function DashboardClient() {
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.18),rgba(2,6,23,0.82))]" />
             <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200">
-                {state.isCompanyAccount ? "Operacao empresa" : "Perfil profissional"}
+                {state.isCompanyAccount ? "Operação empresa" : "Perfil profissional"}
               </p>
               <p className="mt-2 text-xl font-semibold">{state.title}</p>
             </div>
@@ -268,7 +268,7 @@ export function DashboardClient() {
           />
           <MetricCard
             icon={<BriefcaseBusiness size={21} />}
-            label="Experiencias"
+            label="Experiências"
             value={state.experiencesCount}
           />
           <div className="soft-card rounded-[8px] p-5">
@@ -285,7 +285,7 @@ export function DashboardClient() {
         <section className="grid gap-4 md:grid-cols-3">
           <MetricCard
             icon={<BadgeCheck size={21} />}
-            label="Certificacoes"
+            label="Certificações"
             value={state.certificationsCount}
           />
           <MetricCard
@@ -344,10 +344,10 @@ export function DashboardClient() {
         <CompanyDashboardPanel state={state} />
       ) : !state.isBiologistAccount ? (
         <section className="soft-card rounded-[8px] p-6">
-          <h2 className="text-xl font-semibold text-slate-950">Area do estudante</h2>
+          <h2 className="text-xl font-semibold text-slate-950">Área do estudante</h2>
           <p className="mt-2 text-slate-600">
-            Acompanhe vagas, favoritos e notificacoes. O perfil profissional completo sera tratado
-            em uma etapa propria.
+            Acompanhe vagas, favoritos e notificações. Para completar seu perfil técnico, use a área
+            de perfil profissional.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
             <Button asChild>
@@ -357,15 +357,15 @@ export function DashboardClient() {
               <Link href="/favoritos">Favoritos</Link>
             </Button>
             <Button asChild variant="secondary">
-              <Link href="/notificacoes">Notificacoes</Link>
+              <Link href="/notificacoes">Notificações</Link>
             </Button>
           </div>
         </section>
       ) : (
         <section className="rounded-[8px] border border-slate-200 bg-white p-6">
-          <h2 className="text-xl font-semibold text-slate-950">Area do biologo</h2>
+          <h2 className="text-xl font-semibold text-slate-950">Área do biólogo</h2>
           <p className="mt-2 text-slate-600">
-            Acompanhe vagas, candidaturas, favoritos e notificacoes da sua conta profissional.
+            Acompanhe vagas, candidaturas, favoritos e notificações da sua conta profissional.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
             <Button asChild>
@@ -378,7 +378,7 @@ export function DashboardClient() {
               <Link href="/favoritos">Favoritos</Link>
             </Button>
             <Button asChild variant="secondary">
-              <Link href="/notificacoes">Notificacoes</Link>
+              <Link href="/notificacoes">Notificações</Link>
             </Button>
           </div>
         </section>
@@ -392,7 +392,7 @@ export function DashboardClient() {
           </p>
           <h2 className="mt-2 text-xl font-semibold text-slate-950">Painel admin separado</h2>
           <p className="mt-2 text-slate-600">
-            Acesse a area operacional para validar empresas, biologos, vagas e auditoria.
+            Acesse a área operacional para validar empresas, biólogos, vagas e auditoria.
           </p>
           <Button asChild className="mt-5">
             <Link href="/admin">Ir para painel admin</Link>
@@ -407,7 +407,7 @@ function CompanyDashboardPanel({ state }: { state: DashboardState }) {
   const company = state.company;
 
   return (
-    <div className="grid gap-6">
+    <div className="grid grid-cols-1 gap-6">
       <section className="glass-panel rounded-[8px] p-6">
         <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div className="flex flex-col gap-4 md:flex-row md:items-start">
@@ -476,12 +476,12 @@ function CompanyDashboardPanel({ state }: { state: DashboardState }) {
       </section>
 
       <section className="soft-card rounded-[8px] p-6">
-        <h2 className="text-xl font-semibold text-slate-950">Proximas acoes</h2>
+        <h2 className="text-xl font-semibold text-slate-950">Proximas ações</h2>
         <div className="mt-4 grid gap-3">
           <ChecklistItem done={Boolean(company)} text="Cadastrar dados da empresa" />
           <ChecklistItem
             done={company?.verificationStatus === "VERIFIED"}
-            text="Aguardar verificacao pelo administrador"
+            text="Aguardar verificação pelo administrador"
           />
           <ChecklistItem done={state.completion > 0} text="Criar primeira vaga" />
           <ChecklistItem done={state.certificationsCount > 0} text="Publicar vaga ativa" />
@@ -552,10 +552,10 @@ function StatusBadge({ status }: { status: string }) {
 
 function getCompanyStatusLabel(status: string) {
   const labels: Record<string, string> = {
-    PENDING: "Verificacao pendente",
+    PENDING: "Verificação pendente",
     PENDING_PROFILE: "Cadastro pendente",
     REJECTED: "Empresa rejeitada",
-    UNVERIFIED: "Nao verificada",
+    UNVERIFIED: "Não verificada",
     VERIFIED: "Verificada",
   };
 
@@ -584,14 +584,14 @@ function getBiologistStage(state: DashboardState) {
 
 function getDashboardSummary(state: DashboardState) {
   if (state.isCompanyAccount) {
-    return "Gerencie empresa, vagas publicadas, rascunhos e proximas acoes para receber candidatos com mais contexto.";
+    return "Gerencie empresa, vagas publicadas, rascunhos e proximas ações para receber candidatos com mais contexto.";
   }
 
   if (state.isBiologistAccount) {
-    return "Acompanhe seu perfil, documentos, candidaturas e oportunidades alinhadas com sua experiencia tecnica.";
+    return "Acompanhe seu perfil, documentos, candidaturas e oportunidades alinhadas com sua experiência técnica.";
   }
 
-  return "Acompanhe oportunidades, favoritos e notificacoes da sua conta BioConecta.";
+  return "Acompanhe oportunidades, favoritos e notificações da sua conta BioConecta.";
 }
 
 function getAccountArea(state: DashboardState) {
@@ -600,7 +600,7 @@ function getAccountArea(state: DashboardState) {
   }
 
   if (state.isBiologistAccount) {
-    return "Biologo";
+    return "Biólogo";
   }
 
   return "Estudante";

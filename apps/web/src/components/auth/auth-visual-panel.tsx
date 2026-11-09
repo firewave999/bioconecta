@@ -10,7 +10,7 @@ type AuthVisualPanelProps = {
 
 const imageMap = {
   company: {
-    alt: "Equipe ambiental analisando mapas, candidatos e dados tecnicos.",
+    alt: "Equipe ambiental analisando mapas, candidatos e dados técnicos.",
     src: "/images/company-hiring-premium.png",
   },
   field: {

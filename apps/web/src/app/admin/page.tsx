@@ -20,7 +20,7 @@ export default function AdminPage() {
           </Link>
         </div>
         <section className="page-header mt-8 overflow-hidden rounded-[8px]">
-          <div className="grid lg:grid-cols-[1fr_0.82fr]">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_0.82fr]">
             <div className="p-6 md:p-8">
               <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
                 Admin
@@ -29,14 +29,14 @@ export default function AdminPage() {
                 Painel operacional BioConecta.
               </h1>
               <p className="mt-4 max-w-3xl text-slate-600">
-                Validacao de empresas, biologos, vagas e acompanhamento rapido da plataforma.
+                Validacao de empresas, biólogos, vagas e acompanhamento rapido da plataforma.
               </p>
               <nav className="mt-6 flex flex-wrap gap-2 text-sm font-semibold text-slate-700">
                 {[
                   ["#visao-geral", "Visao geral"],
                   ["#pendencias", "Pendencias"],
                   ["#empresas", "Empresas"],
-                  ["#biologos", "Biologos"],
+                  ["#biologos", "Biólogos"],
                   ["#vagas", "Vagas"],
                   ["#candidaturas", "Candidaturas"],
                   ["#auditoria", "Auditoria"],

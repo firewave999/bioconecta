@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import type { ReactNode } from "react";
 import { useCallback, useEffect, useState } from "react";
 
+import { VerificationBadge } from "@/components/biologist/verification-badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { apiFetch, getStoredAccessToken } from "@/lib/api";
@@ -66,7 +67,7 @@ type Response = {
 
 const statuses: Array<[string, string]> = [
   ["APPLIED", "Inscrito"],
-  ["UNDER_REVIEW", "Em analise"],
+  ["UNDER_REVIEW", "Em análise"],
   ["SHORTLISTED", "Selecionado"],
   ["INTERVIEW", "Entrevista"],
   ["OFFER", "Oferta"],
@@ -97,7 +98,7 @@ export function CandidatesClient() {
     const token = getStoredAccessToken();
 
     if (!token) {
-      setError("Voce precisa entrar para ver candidatos.");
+      setError("Você precisa entrar para ver candidatos.");
       return;
     }
 
@@ -108,7 +109,7 @@ export function CandidatesClient() {
       setApplications(response.applications);
       setJobTitle(response.job.title);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Nao foi possivel carregar candidatos.");
+      setError(err instanceof Error ? err.message : "Não foi possível carregar candidatos.");
     }
   }, [params.id]);
 
@@ -120,7 +121,7 @@ export function CandidatesClient() {
     const token = getStoredAccessToken();
 
     if (!token) {
-      setError("Voce precisa entrar para atualizar candidatos.");
+      setError("Você precisa entrar para atualizar candidatos.");
       return;
     }
 
@@ -137,7 +138,7 @@ export function CandidatesClient() {
       );
       await load();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Nao foi possivel atualizar status.");
+      setError(err instanceof Error ? err.message : "Não foi possível atualizar status.");
     } finally {
       setLoadingId(null);
     }
@@ -172,7 +173,7 @@ export function CandidatesClient() {
   }
 
   return (
-    <div className="grid gap-6">
+    <div className="grid grid-cols-1 gap-6">
       <section className="page-header rounded-[8px] p-6">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
           Candidatos
@@ -213,7 +214,7 @@ export function CandidatesClient() {
             description={
               applications.length
                 ? "Nenhum candidato neste filtro."
-                : "Quando biologos se candidatarem, eles aparecerao aqui com match, status e proximas acoes."
+                : "Quando biólogos se candidatarem, eles aparecerao aqui com match, status e proximas ações."
             }
             title={applications.length ? "Filtro sem candidatos" : "Nenhum candidato ainda"}
           />
@@ -265,9 +266,9 @@ function CandidateCard({
             <p className="mt-2 text-sm font-semibold text-cyan-800">
               Match: {application.matchScore}%
             </p>
-            <p className="mt-1 text-sm text-slate-500">
-              Verificacao: {application.biologistProfile.verificationStatus}
-            </p>
+            <div className="mt-2">
+              <VerificationBadge status={application.biologistProfile.verificationStatus} />
+            </div>
           </div>
         </div>
         <span
@@ -280,7 +281,7 @@ function CandidateCard({
       </div>
 
       <div className="mt-4 rounded-[8px] border border-slate-200 bg-slate-50 p-4">
-        <p className="text-sm font-semibold text-slate-950">Proxima acao sugerida</p>
+        <p className="text-sm font-semibold text-slate-950">Próxima ação sugerida</p>
         <p className="mt-1 text-sm text-slate-600">
           {getNextActionText(application.status, Boolean(application.biologistProfile.user.phone))}
         </p>
@@ -309,7 +310,7 @@ function CandidateCard({
               </a>
             </p>
           ) : (
-            <p className="mt-1 text-sm text-slate-500">Telefone nao informado no cadastro.</p>
+            <p className="mt-1 text-sm text-slate-500">Telefone não informado no cadastro.</p>
           )}
         </div>
         <div className="flex flex-wrap gap-2">
@@ -350,20 +351,20 @@ function CandidateCard({
 
       <div className="mt-4 grid gap-4 border-t border-slate-200 pt-4">
         <div className="grid gap-3 md:grid-cols-3">
-          <TagList items={application.professional.practiceAreas} title="Areas" />
+          <TagList items={application.professional.practiceAreas} title="Áreas" />
           <TagList items={application.professional.taxonomicGroups} title="Grupos taxonomicos" />
           <TagList items={application.professional.skills} title="Competencias" />
         </div>
 
         {application.professional.experiences.length ? (
-          <ProfileBlock title="Experiencias">
+          <ProfileBlock title="Experiências">
             {application.professional.experiences.slice(0, 3).map((experience, index) => (
               <div className="rounded-[8px] border border-cyan-100 bg-white p-3" key={index}>
                 <p className="font-semibold text-slate-950">{experience.title}</p>
                 <p className="mt-1 text-sm text-slate-600">
-                  {experience.organizationName ?? "Organizacao nao informada"} -{" "}
+                  {experience.organizationName ?? "Organizacao não informada"} -{" "}
                   {experience.startYear}-
-                  {experience.isCurrent ? "atual" : (experience.endYear ?? "nao informado")}
+                  {experience.isCurrent ? "atual" : (experience.endYear ?? "não informado")}
                 </p>
                 {experience.description ? (
                   <p className="mt-2 whitespace-pre-line text-sm text-slate-600">
@@ -376,7 +377,7 @@ function CandidateCard({
         ) : null}
 
         {application.professional.certifications.length ? (
-          <ProfileBlock title="Certificacoes">
+          <ProfileBlock title="Certificações">
             {application.professional.certifications.slice(0, 4).map((certification) => (
               <div
                 className="rounded-[8px] border border-cyan-100 bg-white p-3"
@@ -384,7 +385,7 @@ function CandidateCard({
               >
                 <p className="font-semibold text-slate-950">{certification.name}</p>
                 <p className="mt-1 text-sm text-slate-600">
-                  {certification.issuerName ?? "Emissor nao informado"}
+                  {certification.issuerName ?? "Emissor não informado"}
                   {certification.issuedYear ? ` - ${certification.issuedYear}` : ""}
                 </p>
                 {certification.credentialUrl ? (
@@ -416,7 +417,7 @@ function CandidateCard({
               </a>
             ))
           ) : (
-            <p className="text-sm text-slate-500">Documentos nao informados.</p>
+            <p className="text-sm text-slate-500">Documentos não informados.</p>
           )}
         </ProfileBlock>
       </div>
@@ -506,7 +507,7 @@ function TagList({ items, title }: { items: string[]; title: string }) {
             </span>
           ))
         ) : (
-          <span className="text-sm text-slate-500">Nao informado.</span>
+          <span className="text-sm text-slate-500">Não informado.</span>
         )}
       </div>
     </div>
@@ -538,19 +539,19 @@ function getNextActionText(status: string, hasPhone: boolean) {
     ? "envie e-mail, WhatsApp ou ligue para alinhar disponibilidade."
     : "envie e-mail para alinhar disponibilidade.";
   const labels: Record<string, string> = {
-    APPLIED: `Revise match, documentos e mensagem. Se fizer sentido, marque como Em analise e ${contactText}`,
-    HIRED: "Candidato marcado como contratado. Mantenha o registro para historico da vaga.",
+    APPLIED: `Revise match, documentos e mensagem. Se fizer sentido, marque como Em análise e ${contactText}`,
+    HIRED: "Candidato marcado como contratado. Mantenha o registro para histórico da vaga.",
     INTERVIEW:
       "Agende ou confirme a entrevista e avance para Oferta, Contratado ou Rejeitado conforme retorno.",
     OFFER: "Oferta enviada. Acompanhe retorno e finalize como Contratado ou Rejeitado.",
     REJECTED: "Candidato rejeitado. Use este status para manter o funil limpo.",
-    SHORTLISTED: `Candidato selecionado. Proximo passo recomendado: ${contactText}`,
+    SHORTLISTED: `Candidato selecionado. Próximo passo recomendado: ${contactText}`,
     UNDER_REVIEW:
-      "Analise perfil, experiencias e documentos. Depois avance para Selecionado, Entrevista ou Rejeitado.",
-    WITHDRAWN: "Candidatura retirada. Nenhuma acao operacional pendente.",
+      "Análise perfil, experiências e documentos. Depois avance para Selecionado, Entrevista ou Rejeitado.",
+    WITHDRAWN: "Candidatura retirada. Nenhuma ação operacional pendente.",
   };
 
-  return labels[status] ?? "Revise o candidato e atualize o status conforme a proxima etapa.";
+  return labels[status] ?? "Revise o candidato e atualize o status conforme a próxima etapa.";
 }
 
 function getWhatsappHref({
@@ -568,7 +569,7 @@ function getWhatsappHref({
     return null;
   }
 
-  const message = `Ola, ${candidateName}. Tudo bem? Somos da empresa responsavel pela vaga "${jobTitle}" no BioConecta e vimos sua candidatura. Podemos conversar sobre sua disponibilidade?`;
+  const message = `Olá, ${candidateName}. Tudo bem? Somos da empresa responsável pela vaga "${jobTitle}" no BioConecta e vimos sua candidatura. Podemos conversar sobre sua disponibilidade?`;
 
   return `https://wa.me/${normalizedPhone}?text=${encodeURIComponent(message)}`;
 }

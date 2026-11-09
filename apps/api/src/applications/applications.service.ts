@@ -14,7 +14,18 @@ import { TaxonomicGroup } from "../biologist-profile/entities/taxonomic-group.en
 import { Company } from "../companies/company.entity.js";
 import { Job } from "../jobs/job.entity.js";
 import { NotificationsService } from "../notifications/notifications.service.js";
-import { Application } from "./application.entity.js";
+import { Application, type ApplicationStatus } from "./application.entity.js";
+
+const applicationStatusLabels: Record<ApplicationStatus, string> = {
+  APPLIED: "Inscrito",
+  HIRED: "Contratado",
+  INTERVIEW: "Entrevista",
+  OFFER: "Oferta",
+  REJECTED: "Não selecionado",
+  SHORTLISTED: "Selecionado",
+  UNDER_REVIEW: "Em análise",
+  WITHDRAWN: "Retirado",
+};
 import { CreateApplicationDto } from "./dto/create-application.dto.js";
 import { UpdateApplicationStatusDto } from "./dto/update-application-status.dto.js";
 
@@ -97,11 +108,11 @@ export class ApplicationsService {
     ]);
 
     if (!job || job.status !== "PUBLISHED") {
-      throw new NotFoundException("Vaga publicada nao encontrada.");
+      throw new NotFoundException("Vaga publicada não encontrada.");
     }
 
     if (!profile) {
-      throw new NotFoundException("Complete seu perfil de biologo antes de se candidatar.");
+      throw new NotFoundException("Complete seu perfil de biólogo antes de se candidatar.");
     }
 
     const existing = await this.applicationsRepository.findOneBy({
@@ -110,7 +121,7 @@ export class ApplicationsService {
     });
 
     if (existing) {
-      throw new ConflictException("Voce ja se candidatou a esta vaga.");
+      throw new ConflictException("Você já se candidatou a esta vaga.");
     }
 
     const professional = await this.getProfessionalNames(profile.id);
@@ -225,7 +236,7 @@ export class ApplicationsService {
     });
 
     if (!application) {
-      throw new NotFoundException("Candidatura nao encontrada.");
+      throw new NotFoundException("Candidatura não encontrada.");
     }
 
     if (application.job.companyId !== company.id) {
@@ -240,7 +251,7 @@ export class ApplicationsService {
     if (previousStatus !== dto.status) {
       await this.notificationsService.createForUser({
         actionUrl: "/candidaturas",
-        message: `Sua candidatura para ${application.job.title} mudou de ${previousStatus} para ${dto.status}.`,
+        message: `Sua candidatura para ${application.job.title} agora está como "${applicationStatusLabels[dto.status]}".`,
         metadata: {
           applicationId: savedApplication.id,
           jobId: application.jobId,

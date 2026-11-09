@@ -28,14 +28,14 @@ export function ApplicationsClient() {
     const token = getStoredAccessToken();
 
     if (!token) {
-      setError("Voce precisa entrar para ver suas candidaturas.");
+      setError("Você precisa entrar para ver suas candidaturas.");
       return;
     }
 
     apiFetch<{ applications: Application[] }>("/applications/mine", { token })
       .then((response) => setApplications(response.applications))
       .catch((err) =>
-        setError(err instanceof Error ? err.message : "Nao foi possivel carregar candidaturas."),
+        setError(err instanceof Error ? err.message : "Não foi possível carregar candidaturas."),
       );
   }, []);
 
@@ -109,7 +109,7 @@ export function ApplicationsClient() {
         <EmptyState
           actionHref="/vagas"
           actionLabel="Buscar vagas"
-          description="Quando voce se candidatar a uma vaga, ela aparecera aqui com status e match."
+          description="Quando você se candidatar a uma vaga, ela aparecera aqui com status e match."
           title="Nenhuma candidatura enviada ainda"
         />
       )}
@@ -125,7 +125,7 @@ function getStatusLabel(status: string) {
     OFFER: "Oferta",
     REJECTED: "Rejeitado",
     SHORTLISTED: "Selecionado",
-    UNDER_REVIEW: "Em analise",
+    UNDER_REVIEW: "Em análise",
     WITHDRAWN: "Retirado",
   };
 
@@ -151,7 +151,7 @@ function getNextAction(status: string) {
   const actions: Record<string, string> = {
     APPLIED: "Candidatura enviada. Aguarde a empresa mover o status ou entrar em contato.",
     HIRED: "Processo finalizado como contratado.",
-    INTERVIEW: "Prepare disponibilidade, documentos e pontos de experiencia para a conversa.",
+    INTERVIEW: "Prepare disponibilidade, documentos e pontos de experiência para a conversa.",
     OFFER: "Oferta em andamento. Acompanhe o retorno da empresa.",
     REJECTED: "Processo encerrado para esta vaga. Continue buscando oportunidades compativeis.",
     SHORTLISTED: "Seu perfil foi selecionado. Fique atento aos contatos informados no cadastro.",

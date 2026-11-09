@@ -37,12 +37,35 @@ type Props = {
   mode: "edit" | "onboarding";
 };
 
+// Próxima ação concreta, usando só os campos que este formulário edita.
+// Os itens do perfil profissional (áreas, documentos) ficam na tela própria.
+function getNextStep(completion: number, avatarUrl: string, profile: BiologistProfile | null) {
+  if (completion >= 100) {
+    return "perfil completo. Mantenha a disponibilidade atualizada.";
+  }
+
+  if (!avatarUrl) {
+    return "adicione uma foto profissional.";
+  }
+
+  if (!profile?.headline) {
+    return "escreva uma headline objetiva sobre sua especialidade.";
+  }
+
+  if (!profile?.bio) {
+    return "conte sua experiência de campo na bio.";
+  }
+
+  return "anexe documentos e experiências no seu perfil profissional.";
+}
+
 export function BiologistProfileForm({ mode }: Props) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [avatarUrl, setAvatarUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [profile, setProfile] = useState<BiologistProfile | null>(null);
+  const [completion, setCompletion] = useState<number | null>(null);
 
   useEffect(() => {
     const token = getStoredAccessToken();
@@ -58,10 +81,11 @@ export function BiologistProfileForm({ mode }: Props) {
       .then((response) => {
         setProfile(response.profile);
         setAvatarUrl(response.profile?.avatarUrl ?? "");
+        setCompletion(response.completion);
       })
       .catch(() => {
         if (mode === "edit") {
-          setError("Nao foi possivel carregar seu perfil.");
+          setError("Não foi possível carregar seu perfil.");
         }
       });
   }, [mode, router]);
@@ -119,21 +143,21 @@ export function BiologistProfileForm({ mode }: Props) {
 
       router.push("/dashboard");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Nao foi possivel salvar o perfil.");
+      setError(err instanceof Error ? err.message : "Não foi possível salvar o perfil.");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <form className="grid gap-6" onSubmit={handleSubmit}>
-      <section className="form-card rounded-[8px] p-6 md:p-8">
+    <form className="grid min-w-0 grid-cols-1 gap-6" onSubmit={handleSubmit}>
+      <section className="min-w-0 form-card rounded-[8px] p-6 md:p-8">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
           {mode === "onboarding" ? "Onboarding" : "Editar perfil"}
         </p>
         <h1 className="mt-2 text-3xl font-semibold text-slate-950">
           {mode === "onboarding"
-            ? "Complete seu perfil de biologo"
+            ? "Complete seu perfil de biólogo"
             : "Atualize seu perfil profissional"}
         </h1>
         <p className="mt-2 text-slate-600">
@@ -143,11 +167,33 @@ export function BiologistProfileForm({ mode }: Props) {
         <div className="mt-4 grid gap-3 md:grid-cols-3">
           <GuidanceCard title="Identificacao" text="Nome, CPF, CRBio e cidade." />
           <GuidanceCard title="Presenca" text="Foto e headline objetiva." />
-          <GuidanceCard title="Operacao" text="Viagem, CNH, veiculo, CNPJ e nota." />
+          <GuidanceCard title="Operação" text="Viagem, CNH, veiculo, CNPJ e nota." />
         </div>
       </section>
 
-      <section className="form-card grid gap-4 rounded-[8px] p-6 md:grid-cols-2 md:p-8">
+      {completion !== null ? (
+        <section className="min-w-0 form-card rounded-[8px] p-6 md:p-8">
+          <div className="flex items-center justify-between gap-4">
+            <p className="font-semibold text-slate-950">Perfil {completion}% completo</p>
+            <span className="text-sm font-semibold text-cyan-800">{completion}%</span>
+          </div>
+          <div
+            className="mt-3 h-2 overflow-hidden rounded-full bg-slate-100"
+            role="progressbar"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={completion}
+          >
+            <div className="h-full rounded-full bg-cyan-600" style={{ width: `${completion}%` }} />
+          </div>
+          <p className="mt-3 text-sm text-slate-600">
+            <span className="font-semibold text-slate-800">Próximo passo: </span>
+            {getNextStep(completion, avatarUrl, profile)}
+          </p>
+        </section>
+      ) : null}
+
+      <section className="min-w-0 form-card grid gap-4 rounded-[8px] p-6 md:grid-cols-2 md:p-8">
         <label className="grid gap-2 text-sm font-medium text-slate-700 md:col-span-2">
           Foto do perfil
           <div className="flex flex-col gap-3 rounded-[8px] border border-cyan-100 bg-cyan-50/40 p-4 md:flex-row md:items-center">
@@ -160,7 +206,7 @@ export function BiologistProfileForm({ mode }: Props) {
             ) : null}
             <input
               accept="image/jpeg,image/png,image/webp"
-              className="text-sm text-slate-700"
+              className="max-w-full text-sm text-slate-700"
               name="avatar"
               type="file"
             />
@@ -177,14 +223,14 @@ export function BiologistProfileForm({ mode }: Props) {
         />
         <Field
           defaultValue={profile?.graduationYear}
-          label="Ano de formacao"
+          label="Ano de formação"
           name="graduationYear"
           required
           type="number"
         />
         <Field
           defaultValue={profile?.crbioNumber}
-          label="Numero do CRBio"
+          label="Número do CRBio"
           name="crbioNumber"
           required
         />
@@ -198,10 +244,10 @@ export function BiologistProfileForm({ mode }: Props) {
         <Field defaultValue={profile?.city} label="Cidade" name="city" required />
       </section>
 
-      <section className="form-card grid gap-4 rounded-[8px] p-6 md:p-8">
+      <section className="min-w-0 form-card grid gap-4 rounded-[8px] p-6 md:p-8">
         <h2 className="text-xl font-semibold text-slate-950">Presenca profissional</h2>
         <label className="grid gap-2 text-sm font-medium text-slate-700">
-          Situacao do registro
+          Situação do registro
           <select
             className="field-input h-11 rounded-[8px] px-3"
             defaultValue={profile?.registrationStatus ?? "UNKNOWN"}
@@ -210,7 +256,7 @@ export function BiologistProfileForm({ mode }: Props) {
             <option value="ACTIVE">Ativo</option>
             <option value="PENDING">Pendente</option>
             <option value="INACTIVE">Inativo</option>
-            <option value="UNKNOWN">Nao informado</option>
+            <option value="UNKNOWN">Não informado</option>
           </select>
         </label>
 
@@ -230,9 +276,9 @@ export function BiologistProfileForm({ mode }: Props) {
         </label>
       </section>
 
-      <section className="form-card grid gap-4 rounded-[8px] p-6 md:grid-cols-2 md:p-8">
+      <section className="min-w-0 form-card grid gap-4 rounded-[8px] p-6 md:grid-cols-2 md:p-8">
         <h2 className="text-xl font-semibold text-slate-950 md:col-span-2">
-          Disponibilidade e operacao
+          Disponibilidade e operação
         </h2>
         <label className="grid gap-2 text-sm font-medium text-slate-700">
           Disponibilidade
@@ -241,20 +287,20 @@ export function BiologistProfileForm({ mode }: Props) {
             defaultValue={profile?.availabilityStatus ?? "AVAILABLE_NOW"}
             name="availabilityStatus"
           >
-            <option value="AVAILABLE_NOW">Disponivel agora</option>
-            <option value="AVAILABLE_FROM_DATE">Disponivel a partir de uma data</option>
+            <option value="AVAILABLE_NOW">Disponível agora</option>
+            <option value="AVAILABLE_FROM_DATE">Disponível a partir de uma data</option>
             <option value="UNAVAILABLE">Indisponivel</option>
           </select>
         </label>
         <Field
           defaultValue={profile?.availableFrom ?? ""}
-          label="Disponivel a partir de"
+          label="Disponível a partir de"
           name="availableFrom"
           type="date"
         />
       </section>
 
-      <section className="form-card grid gap-3 rounded-[8px] p-6 md:grid-cols-2 md:p-8">
+      <section className="min-w-0 form-card grid gap-3 rounded-[8px] p-6 md:grid-cols-2 md:p-8">
         <Check
           defaultChecked={profile?.acceptsTravel}
           label="Aceita viagens"

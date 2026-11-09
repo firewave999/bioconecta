@@ -8,10 +8,10 @@ export const metadata = {
 export default function EditProfilePage() {
   return (
     <main className="page-shell">
-      <div className="mx-auto grid max-w-7xl gap-8 px-6 py-10">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-6 py-10">
         <ProfileWorkspaceHeader
           active="basic"
-          eyebrow="Perfil basico"
+          eyebrow="Perfil básico"
           title="Atualize sua identidade profissional."
         />
         <BiologistProfileForm mode="edit" />

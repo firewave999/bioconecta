@@ -47,7 +47,7 @@ export function JobsClient() {
     apiFetch<{ jobs: Job[] }>(`/jobs${params.size ? `?${params.toString()}` : ""}`)
       .then((response) => setJobs(response.jobs))
       .catch((err) =>
-        setError(err instanceof Error ? err.message : "Nao foi possivel carregar as vagas."),
+        setError(err instanceof Error ? err.message : "Não foi possível carregar as vagas."),
       )
       .finally(() => setLoading(false));
   }, []);
@@ -73,7 +73,7 @@ export function JobsClient() {
   }
 
   return (
-    <div className="grid gap-6">
+    <div className="grid grid-cols-1 gap-6">
       <form
         className="soft-card grid gap-4 rounded-[8px] p-6 md:grid-cols-3 md:p-8"
         onSubmit={handleSubmit}
@@ -84,13 +84,13 @@ export function JobsClient() {
           </span>
           <div>
             <p className="font-semibold text-slate-950">Filtros de busca</p>
-            <p className="text-sm text-slate-500">Combine criterios para reduzir a lista.</p>
+            <p className="text-sm text-slate-500">Combine critérios para reduzir a lista.</p>
           </div>
         </div>
         <Field
           label="Busca"
           onChange={(value) => setFilters({ ...filters, q: value })}
-          placeholder="Cargo, descricao ou empresa"
+          placeholder="Cargo, descrição ou empresa"
           value={filters.q}
         />
         <Field
@@ -114,8 +114,8 @@ export function JobsClient() {
             ["CLT", "CLT"],
             ["PJ", "PJ"],
             ["FREELANCE", "Freelance"],
-            ["INTERNSHIP", "Estagio"],
-            ["TEMPORARY", "Temporario"],
+            ["INTERNSHIP", "Estágio"],
+            ["TEMPORARY", "Temporário"],
           ]}
           value={filters.contractType}
         />
@@ -211,9 +211,9 @@ function formatContractType(value: string) {
   const labels: Record<string, string> = {
     CLT: "CLT",
     FREELANCE: "Freelance",
-    INTERNSHIP: "Estagio",
+    INTERNSHIP: "Estágio",
     PJ: "PJ",
-    TEMPORARY: "Temporario",
+    TEMPORARY: "Temporário",
   };
 
   return labels[value] ?? value;

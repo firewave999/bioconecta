@@ -18,44 +18,73 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { HomeAuthActions } from "@/components/home/home-auth-actions";
+import { JobsStateMap, countJobsByState } from "@/components/home/jobs-state-map";
 import { Button } from "@/components/ui/button";
 
-const recentJobs = [
-  {
-    company: "Consultoria Ambiental Cerrado Vivo",
-    location: "Goiania, GO",
-    mode: "Campanha de campo",
-    title: "Biologo de Fauna - Mastofauna",
-  },
-  {
-    company: "Instituto BioSul",
-    location: "Curitiba, PR",
-    mode: "PJ",
-    title: "Analista de Licenciamento Ambiental",
-  },
-  {
-    company: "EcoMonitor Brasil",
-    location: "Belo Horizonte, MG",
-    mode: "Diaria",
-    title: "Auxiliar de Campo - Herpetofauna",
-  },
-];
+export const revalidate = 300;
 
+type PublishedJob = {
+  city: string;
+  company?: {
+    name: string;
+  };
+  contractType: string;
+  id: string;
+  state: string;
+  title: string;
+  workMode: string;
+};
+
+const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api/v1";
+
+const contractLabels: Record<string, string> = {
+  CLT: "CLT",
+  FREELANCE: "Freelance",
+  INTERNSHIP: "Estágio",
+  PJ: "PJ",
+  TEMPORARY: "Temporário",
+};
+
+const workModeLabels: Record<string, string> = {
+  FIELD: "Campo",
+  HYBRID: "Híbrido",
+  ON_SITE: "Presencial",
+  REMOTE: "Remoto",
+};
+
+// Vagas reais publicadas. Se a API estiver fora ou não houver vagas, a home
+// mostra um estado vazio em vez de dados de exemplo.
+async function getPublishedJobs(): Promise<PublishedJob[]> {
+  try {
+    const response = await fetch(`${apiUrl}/jobs`, { next: { revalidate: 300 } });
+
+    if (!response.ok) {
+      return [];
+    }
+
+    const data = (await response.json()) as { jobs?: PublishedJob[] };
+    return data.jobs ?? [];
+  } catch {
+    return [];
+  }
+}
+
+// Mesmos nomes do catálogo de áreas de atuação da API.
 const practiceAreas = [
-  "Monitoramento de fauna",
   "Licenciamento ambiental",
-  "Resgate e afugentamento",
+  "Inventário de fauna",
+  "Inventário de flora",
+  "Resgate de fauna",
+  "Monitoramento ambiental",
+  "Educação ambiental",
   "Geoprocessamento",
-  "Educacao ambiental",
-  "Botanica e flora",
+  "Análise de dados ecológicos",
 ];
 
-const availableProfiles = ["Mastozoologia", "Herpetologia", "Ornitologia", "Botanica"];
-
-const heroStats = [
-  ["4", "perfis tecnicos"],
-  ["6", "areas de atuacao"],
-  ["3", "modalidades de vaga"],
+const heroHighlights = [
+  ["CRBio", "registro e documentos"],
+  ["Match", "motivos claros"],
+  ["Campo", "diária, PJ, CLT e consultoria"],
 ];
 
 const workflowSteps: Array<{
@@ -64,28 +93,65 @@ const workflowSteps: Array<{
   title: string;
 }> = [
   {
-    body: "Especialidades, CRBio, documentos e experiencia por grupo.",
+    body: "Especialidades, CRBio, documentos e experiência por grupo.",
     icon: BadgeCheck,
-    title: "Perfil tecnico",
+    title: "Perfil técnico",
   },
   {
-    body: "Viagens, campanhas longas, diaria, PJ, CLT e consultoria.",
+    body: "Viagens, campanhas longas, diária, PJ, CLT e consultoria.",
     icon: CalendarDays,
     title: "Disponibilidade",
   },
   {
-    body: "Arquitetura preparada para validacao manual e futura automacao.",
+    body: "Revisão do CRBio e dos documentos antes do selo de perfil verificado.",
     icon: ShieldCheck,
-    title: "Verificacao",
+    title: "Verificação",
   },
   {
-    body: "Score claro entre requisito da vaga e dados do profissional.",
+    body: "Compatibilidade entre o requisito da vaga e os dados do profissional, com os motivos listados.",
     icon: UsersRound,
     title: "Matching",
   },
 ];
 
-export default function HomePage() {
+function JobCard({ job }: { job: PublishedJob }) {
+  return (
+    <Link
+      href={`/vagas/${job.id}`}
+      className="soft-card block rounded-[8px] p-6 transition hover:-translate-y-0.5 hover:border-cyan-200 hover:shadow-lg"
+    >
+      <div className="flex items-center gap-2 text-sm text-cyan-700">
+        <BriefcaseBusiness size={16} />
+        {contractLabels[job.contractType] ?? job.contractType}
+        <span className="text-slate-300">·</span>
+        {workModeLabels[job.workMode] ?? job.workMode}
+      </div>
+      <h3 className="mt-4 text-xl font-semibold text-slate-950">{job.title}</h3>
+      {job.company ? <p className="mt-3 text-sm text-slate-600">{job.company.name}</p> : null}
+      <p className="mt-5 flex items-center gap-2 text-sm text-slate-500">
+        <MapPin size={16} />
+        {job.city}, {job.state}
+      </p>
+    </Link>
+  );
+}
+
+function EmptyJobs() {
+  return (
+    <div className="soft-card rounded-[8px] p-8 text-center md:col-span-3">
+      <p className="font-semibold text-slate-950">Novas vagas em breve.</p>
+      <p className="mt-2 text-sm text-slate-600">
+        Assim que as empresas publicarem oportunidades, elas aparecem aqui.
+      </p>
+    </div>
+  );
+}
+
+export default async function HomePage() {
+  const publishedJobs = await getPublishedJobs();
+  const recentJobs = publishedJobs.slice(0, 3);
+  const stateCounts = countJobsByState(publishedJobs);
+
   return (
     <main className="bg-[#f5fbf8]">
       <section className="premium-shell min-h-screen text-white">
@@ -98,7 +164,7 @@ export default function HomePage() {
               <span className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-cyan-300 text-slate-950 shadow-lg shadow-cyan-950/30 ring-1 ring-white/30">
                 <Microscope size={20} strokeWidth={2.4} />
               </span>
-              <span className="text-lg font-bold tracking-[0.08em]">BIOCONECTA</span>
+              <span className="text-lg font-bold tracking-[0.04em]">BioConecta</span>
             </a>
 
             <nav className="hidden items-center gap-7 text-sm text-white/78 md:flex">
@@ -132,8 +198,8 @@ export default function HomePage() {
             </h1>
 
             <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-200 md:text-xl">
-              Perfis tecnicos, documentos, CRBio, disponibilidade de campo, matching e contato
-              direto em um fluxo unico para empresas e biologos.
+              Perfis técnicos, documentos, CRBio, disponibilidade de campo, matching e contato
+              direto em um fluxo único para empresas e biólogos.
             </p>
 
             <HomeAuthActions context="hero" />
@@ -171,9 +237,9 @@ export default function HomePage() {
             </form>
 
             <div className="mt-8 grid max-w-2xl grid-cols-3 gap-3">
-              {heroStats.map(([value, label]) => (
+              {heroHighlights.map(([value, label]) => (
                 <div
-                  key={label}
+                  key={value}
                   className="rounded-[8px] border border-white/12 bg-white/[0.09] p-4 shadow-lg shadow-black/10 backdrop-blur"
                 >
                   <p className="text-2xl font-semibold text-cyan-200">{value}</p>
@@ -188,33 +254,44 @@ export default function HomePage() {
               <div className="flex items-center justify-between border-b border-slate-200 pb-4">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.16em] text-cyan-700">
-                    Painel ativo
+                    Vagas publicadas
                   </p>
                   <h2 className="mt-1 text-xl font-semibold">Oportunidades em destaque</h2>
                 </div>
-                <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-                  Online
-                </span>
+                {recentJobs.length ? (
+                  <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+                    Ao vivo
+                  </span>
+                ) : null}
               </div>
 
               <div className="mt-5 space-y-3">
-                {recentJobs.map((job) => (
-                  <div
-                    key={job.title}
-                    className="rounded-[8px] border border-slate-200 bg-gradient-to-br from-white to-cyan-50/35 p-4 shadow-sm"
-                  >
-                    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-cyan-700">
-                      <BriefcaseBusiness size={14} />
-                      {job.mode}
-                    </div>
-                    <p className="mt-2 font-semibold">{job.title}</p>
-                    <p className="mt-1 text-sm text-slate-500">{job.location}</p>
-                  </div>
-                ))}
+                {recentJobs.length ? (
+                  recentJobs.map((job) => (
+                    <Link
+                      key={job.id}
+                      href={`/vagas/${job.id}`}
+                      className="block rounded-[8px] border border-slate-200 bg-gradient-to-br from-white to-cyan-50/35 p-4 shadow-sm"
+                    >
+                      <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-cyan-700">
+                        <BriefcaseBusiness size={14} />
+                        {contractLabels[job.contractType] ?? job.contractType}
+                      </div>
+                      <p className="mt-2 font-semibold">{job.title}</p>
+                      <p className="mt-1 text-sm text-slate-500">
+                        {job.city}, {job.state}
+                      </p>
+                    </Link>
+                  ))
+                ) : (
+                  <p className="rounded-[8px] border border-dashed border-slate-300 p-4 text-sm text-slate-600">
+                    As vagas publicadas por empresas aparecem aqui assim que estiverem no ar.
+                  </p>
+                )}
               </div>
 
               <div className="mt-5 rounded-[8px] bg-[linear-gradient(135deg,#020617,#063b40)] p-4 text-white shadow-xl shadow-slate-950/25">
-                {["Perfil tecnico", "Documentos", "Contato com candidatos"].map((item) => (
+                {["Perfil técnico", "Documentos", "Contato com candidatos"].map((item) => (
                   <p key={item} className="flex items-center gap-2 py-1.5 text-sm text-slate-200">
                     <CheckCircle2 size={16} className="text-cyan-300" />
                     {item}
@@ -229,10 +306,10 @@ export default function HomePage() {
       <section className="border-b border-emerald-100 bg-[#e9f8f3] py-12">
         <div className="mx-auto grid max-w-7xl gap-4 px-6 md:grid-cols-4">
           {[
-            ["Perfis verificaveis", "CRBio, documentos e experiencia tecnica."],
-            ["Matching transparente", "Compatibilidade explicada por criterio."],
-            ["Campo e escritorio", "CLT, PJ, diaria, campanha e consultoria."],
-            ["Banco disponivel", "Profissionais prontos para novos projetos."],
+            ["Perfis verificáveis", "CRBio, documentos e experiência técnica."],
+            ["Matching transparente", "Compatibilidade explicada por critério."],
+            ["Campo e escritório", "CLT, PJ, diária, campanha e consultoria."],
+            ["Disponibilidade declarada", "O profissional informa modalidade e período."],
           ].map(([title, body]) => (
             <div
               key={title}
@@ -251,19 +328,19 @@ export default function HomePage() {
             Perfil validado
           </p>
           <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 md:text-4xl">
-            Seu perfil precisa transmitir experiencia, tecnica e confianca.
+            Seu perfil precisa transmitir experiência, técnica e confiança.
           </h2>
           <p className="mt-5 text-lg leading-8 text-slate-600">
-            O BioConecta organiza areas de atuacao, grupos taxonomicos, documentos, certificados e
-            historico de campo para transformar informacoes soltas em um perfil profissional claro
+            O BioConecta organiza áreas de atuação, grupos taxonômicos, documentos, certificados e
+            histórico de campo para transformar informações soltas em um perfil profissional claro
             para empresas.
           </p>
           <div className="mt-8 grid gap-3 sm:grid-cols-2">
             {[
-              ["CRBio e documentos", "Registro, anexos e validacao."],
-              ["Experiencia de campo", "Campanhas, metodos e entregas tecnicas."],
-              ["Matching tecnico", "Compatibilidade por area e requisito."],
-              ["Contato direto", "Email, telefone e WhatsApp."],
+              ["CRBio e documentos", "Registro, anexos e validação."],
+              ["Experiência de campo", "Campanhas, métodos e entregas técnicas."],
+              ["Matching técnico", "Compatibilidade por área e requisito."],
+              ["Contato direto", "E-mail, telefone e WhatsApp."],
             ].map(([title, body]) => (
               <div key={title} className="rounded-[8px] border border-cyan-100 bg-white/80 p-4">
                 <p className="font-semibold text-slate-950">{title}</p>
@@ -285,10 +362,10 @@ export default function HomePage() {
             <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_44%,rgba(2,6,23,0.78)_100%)]" />
             <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200">
-                Perfil tecnico
+                Perfil técnico
               </p>
               <p className="mt-2 max-w-xl text-lg font-semibold">
-                Informacoes profissionais organizadas para acelerar a avaliacao e a contratacao.
+                Informações profissionais organizadas para acelerar a avaliação e a contratação.
               </p>
             </div>
           </div>
@@ -302,33 +379,25 @@ export default function HomePage() {
               Vagas recentes
             </p>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 md:text-4xl">
-              Oportunidades desenhadas para a rotina real da Biologia.
+              Oportunidades publicadas por empresas da área ambiental.
             </h2>
           </div>
           <Button asChild variant="secondary">
-            <Link href="/vagas">Ver vagas publicadas</Link>
+            <Link href="/vagas">Ver todas as vagas</Link>
           </Button>
         </div>
 
         <div className="mt-10 grid gap-4 md:grid-cols-3">
-          {recentJobs.map((job) => (
-            <article
-              key={job.title}
-              className="soft-card rounded-[8px] p-6 transition hover:-translate-y-0.5 hover:border-cyan-200 hover:shadow-lg"
-            >
-              <div className="flex items-center gap-2 text-sm text-cyan-700">
-                <BriefcaseBusiness size={16} />
-                {job.mode}
-              </div>
-              <h3 className="mt-4 text-xl font-semibold text-slate-950">{job.title}</h3>
-              <p className="mt-3 text-sm text-slate-600">{job.company}</p>
-              <p className="mt-5 flex items-center gap-2 text-sm text-slate-500">
-                <MapPin size={16} />
-                {job.location}
-              </p>
-            </article>
-          ))}
+          {recentJobs.length ? (
+            recentJobs.map((job) => <JobCard key={job.id} job={job} />)
+          ) : (
+            <EmptyJobs />
+          )}
         </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-6 pb-20">
+        <JobsStateMap counts={stateCounts} />
       </section>
 
       <section
@@ -344,8 +413,8 @@ export default function HomePage() {
               Menos rede social, mais infraestrutura profissional.
             </h2>
             <p className="mt-5 text-slate-300">
-              O BioConecta nasce para entender CRBio, campanhas, tecnicas de amostragem,
-              disponibilidade e modalidades de contratacao.
+              O BioConecta foi pensado para o que importa na Biologia: CRBio, campanhas, técnicas de
+              amostragem, disponibilidade e modalidades de contratação.
             </p>
           </div>
 
@@ -370,14 +439,15 @@ export default function HomePage() {
             Para empresas
           </p>
           <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 md:text-4xl">
-            Encontre biologos disponiveis por area, tecnica e localidade.
+            Receba candidatos com o match explicado para cada vaga.
           </h2>
           <p className="mt-5 text-slate-600">
-            A busca profissional sera preparada para filtros como CNH, CNPJ, nota fiscal, grupos
-            taxonomicos, diaria pretendida e disponibilidade imediata.
+            Cada candidato chega com a compatibilidade calculada por área, grupo taxonômico e
+            requisito da vaga, junto com os motivos. Você decide quem avançar sem precisar ler
+            currículo por currículo.
           </p>
           <div className="mt-8 flex flex-wrap gap-2">
-            {availableProfiles.map((item) => (
+            {practiceAreas.map((item) => (
               <span
                 key={item}
                 className="rounded-full bg-cyan-50 px-3 py-1 text-sm font-medium text-cyan-800"
@@ -392,7 +462,7 @@ export default function HomePage() {
           <div className="relative aspect-[16/9]">
             <Image
               src="/images/company-hiring-premium.png"
-              alt="Equipe ambiental analisando candidatos, mapas e dados tecnicos em um painel digital."
+              alt="Equipe ambiental analisando candidatos, mapas e dados técnicos em um painel digital."
               fill
               className="object-cover"
               sizes="(min-width: 1024px) 50vw, 100vw"
@@ -404,8 +474,8 @@ export default function HomePage() {
                 <Building2 size={22} />
               </span>
               <div>
-                <p className="font-semibold text-slate-950">Biologos disponiveis</p>
-                <p className="text-sm text-slate-500">Filtro inicial planejado para empresas</p>
+                <p className="font-semibold text-slate-950">Áreas atendidas</p>
+                <p className="text-sm text-slate-500">Candidatos com match por vaga</p>
               </div>
             </div>
             <div className="mt-5 grid gap-3">
@@ -431,10 +501,10 @@ export default function HomePage() {
               BioConecta
             </p>
             <h2 className="mt-3 text-3xl font-semibold text-slate-950">
-              Conecte talento tecnico a oportunidades ambientais reais.
+              Conecte talento técnico a oportunidades ambientais reais.
             </h2>
             <p className="mt-2 text-slate-600">
-              Crie seu perfil, publique vagas ou encontre profissionais preparados para campo,
+              Crie seu perfil, publique vagas ou encontre profissionais prontos para campo,
               licenciamento, monitoramento e consultoria ambiental.
             </p>
           </div>

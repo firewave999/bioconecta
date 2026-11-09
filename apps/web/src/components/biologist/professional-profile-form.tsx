@@ -137,7 +137,7 @@ export function ProfessionalProfileForm() {
         setError(
           err instanceof Error
             ? err.message
-            : "Complete o perfil basico antes do perfil profissional.",
+            : "Complete o perfil básico antes do perfil profissional.",
         );
       });
   }, [router]);
@@ -215,7 +215,7 @@ export function ProfessionalProfileForm() {
       router.push("/dashboard");
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "Nao foi possivel salvar o perfil profissional.",
+        err instanceof Error ? err.message : "Não foi possível salvar o perfil profissional.",
       );
     } finally {
       setLoading(false);
@@ -223,24 +223,24 @@ export function ProfessionalProfileForm() {
   }
 
   return (
-    <form className="grid gap-6" onSubmit={handleSubmit}>
-      <section className="form-card rounded-[8px] p-6 md:p-8">
+    <form className="grid min-w-0 grid-cols-1 gap-6" onSubmit={handleSubmit}>
+      <section className="min-w-0 form-card rounded-[8px] p-6 md:p-8">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
           Perfil profissional
         </p>
         <h1 className="mt-2 text-3xl font-semibold text-slate-950">
-          Especialidades, documentos e historico
+          Especialidades, documentos e histórico
         </h1>
         <p className="mt-2 max-w-3xl text-slate-600">
-          Use esta area para registrar especialidades, historico de campo, certificacoes e anexos
-          que ajudam a empresa avaliar seu perfil com seguranca.
+          Use esta área para registrar especialidades, histórico de campo, certificações e anexos
+          que ajudam a empresa avaliar seu perfil com segurança.
         </p>
         <div className="mt-5 grid gap-4 lg:grid-cols-[1fr_320px]">
           <div className="grid gap-3 md:grid-cols-3">
-            <Hint title="Match" text="Areas, grupos e competencias alimentam a compatibilidade." />
+            <Hint title="Match" text="Áreas, grupos e competencias alimentam a compatibilidade." />
             <Hint
               title="Credibilidade"
-              text="Experiencias e certificacoes ajudam a empresa decidir."
+              text="Experiências e certificações ajudam a empresa decidir."
             />
             <Hint
               title="Validacao"
@@ -271,18 +271,18 @@ export function ProfessionalProfileForm() {
         </div>
       </section>
 
-      <section className="form-card grid gap-4 rounded-[8px] p-6 md:grid-cols-3 md:p-8">
-        <TextArea label="Areas de atuacao" onChange={setPracticeAreas} value={practiceAreas} />
+      <section className="min-w-0 form-card grid gap-4 rounded-[8px] p-6 md:grid-cols-3 md:p-8">
+        <TextArea label="Áreas de atuação" onChange={setPracticeAreas} value={practiceAreas} />
         <TextArea
           label="Grupos taxonomicos"
           onChange={setTaxonomicGroups}
           value={taxonomicGroups}
         />
-        <TextArea label="Competencias tecnicas" onChange={setSkills} value={skills} />
+        <TextArea label="Competencias técnicas" onChange={setSkills} value={skills} />
       </section>
 
-      <SectionTitle title="Experiencias" />
-      <section className="form-card grid gap-4 rounded-[8px] p-6 md:p-8">
+      <SectionTitle title="Experiências" />
+      <section className="min-w-0 form-card grid gap-4 rounded-[8px] p-6 md:p-8">
         {experiences.map((experience, index) => (
           <div
             className="grid gap-4 rounded-[8px] border border-cyan-100 bg-cyan-50/45 p-4"
@@ -290,7 +290,7 @@ export function ProfessionalProfileForm() {
           >
             <div className="grid gap-4 md:grid-cols-2">
               <Field
-                label="Titulo"
+                label="Título"
                 onChange={(value) =>
                   updateItem(experiences, setExperiences, index, { title: value })
                 }
@@ -330,10 +330,10 @@ export function ProfessionalProfileForm() {
                 }
                 type="checkbox"
               />
-              Experiencia atual
+              Experiência atual
             </label>
             <TextArea
-              label="Descricao"
+              label="Descrição"
               onChange={(value) =>
                 updateItem(experiences, setExperiences, index, { description: value })
               }
@@ -349,12 +349,12 @@ export function ProfessionalProfileForm() {
           type="button"
           variant="secondary"
         >
-          Adicionar experiencia
+          Adicionar experiência
         </Button>
       </section>
 
-      <SectionTitle title="Certificacoes" />
-      <section className="form-card grid gap-4 rounded-[8px] p-6 md:p-8">
+      <SectionTitle title="Certificações" />
+      <section className="min-w-0 form-card grid gap-4 rounded-[8px] p-6 md:p-8">
         {certifications.map((certification, index) => (
           <div
             className="grid gap-4 rounded-[8px] border border-cyan-100 bg-cyan-50/40 p-4 md:grid-cols-2"
@@ -402,12 +402,12 @@ export function ProfessionalProfileForm() {
           type="button"
           variant="secondary"
         >
-          Adicionar certificacao
+          Adicionar certificação
         </Button>
       </section>
 
       <SectionTitle title="Documentos" />
-      <section className="form-card grid gap-4 rounded-[8px] p-6 md:p-8">
+      <section className="min-w-0 form-card grid gap-4 rounded-[8px] p-6 md:p-8">
         {documents.map((document, index) => (
           <div
             className="grid gap-4 rounded-[8px] border border-cyan-100 bg-cyan-50/40 p-4 md:grid-cols-3"
@@ -432,7 +432,7 @@ export function ProfessionalProfileForm() {
               </select>
             </label>
             <Field
-              label="Titulo"
+              label="Título"
               onChange={(value) => updateItem(documents, setDocuments, index, { title: value })}
               value={document.title}
             />
@@ -503,7 +503,7 @@ function DocumentUploadButton({
         type="file"
       />
       <span className="text-xs text-slate-500">
-        PDF, JPG ou PNG ate 5 MB. Ao salvar, o sistema envia o arquivo e gera o link
+        PDF, JPG ou PNG até 5 MB. Ao salvar, o sistema envia o arquivo e gera o link
         automaticamente.
       </span>
       {file ? (
@@ -558,7 +558,7 @@ function TextArea({
         value={value}
       />
       <span className="text-xs text-slate-500">
-        Cada item sera salvo separadamente. Evite frases muito longas em um unico item.
+        Cada item será salvo separadamente. Evite frases muito longas em um único item.
       </span>
     </label>
   );

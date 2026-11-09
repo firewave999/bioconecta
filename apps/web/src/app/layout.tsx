@@ -20,14 +20,14 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   openGraph: {
     description:
-      "A plataforma nacional para conectar biologos, estudantes e empresas as oportunidades certas.",
+      "A plataforma nacional para conectar biólogos, estudantes e empresas as oportunidades certas.",
     images: ["/images/hero-bioconecta.png"],
     siteName: "BioConecta",
     title: "BioConecta",
     type: "website",
   },
   title: {
-    default: "BioConecta | Oportunidades para biologos",
+    default: "BioConecta | Oportunidades para biólogos",
     template: "%s | BioConecta",
   },
 };

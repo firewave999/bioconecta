@@ -1,10 +1,11 @@
-import { Body, Controller, Get, Put, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Put, Query, Req, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from "@nestjs/swagger";
 
 import { AuthGuard } from "../auth/auth.guard.js";
 import { EmailVerifiedGuard } from "../auth/email-verified.guard.js";
 import type { AuthenticatedRequest } from "../auth/types.js";
 import { BiologistProfileService } from "./biologist-profile.service.js";
+import { SearchBiologistsQueryDto } from "./dto/search-biologists-query.dto.js";
 import { UpsertProfessionalProfileDto } from "./dto/upsert-professional-profile.dto.js";
 import { UpsertBiologistProfileDto } from "./dto/upsert-biologist-profile.dto.js";
 
@@ -15,21 +16,27 @@ import { UpsertBiologistProfileDto } from "./dto/upsert-biologist-profile.dto.js
 export class BiologistProfileController {
   constructor(private readonly biologistProfileService: BiologistProfileService) {}
 
+  @Get("search")
+  @ApiOkResponse({ description: "Biólogos visíveis para empresas, com filtros." })
+  search(@Req() request: AuthenticatedRequest, @Query() query: SearchBiologistsQueryDto) {
+    return this.biologistProfileService.searchForCompanies(request.user.sub, query);
+  }
+
   @Get("me")
-  @ApiOkResponse({ description: "Perfil do biologo autenticado." })
+  @ApiOkResponse({ description: "Perfil do biólogo autenticado." })
   getMine(@Req() request: AuthenticatedRequest) {
     return this.biologistProfileService.getMine(request.user.sub);
   }
 
   @Put("me")
   @UseGuards(EmailVerifiedGuard)
-  @ApiOkResponse({ description: "Perfil do biologo salvo." })
+  @ApiOkResponse({ description: "Perfil do biólogo salvo." })
   upsertMine(@Req() request: AuthenticatedRequest, @Body() dto: UpsertBiologistProfileDto) {
     return this.biologistProfileService.upsertMine(request.user.sub, dto);
   }
 
   @Get("me/professional")
-  @ApiOkResponse({ description: "Perfil profissional expandido do biologo autenticado." })
+  @ApiOkResponse({ description: "Perfil profissional expandido do biólogo autenticado." })
   getProfessionalMine(@Req() request: AuthenticatedRequest) {
     return this.biologistProfileService.getProfessionalMine(request.user.sub);
   }

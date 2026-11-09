@@ -1,18 +1,18 @@
-import { ArrowLeft, Building2, FilePlus2, ListChecks } from "lucide-react";
+import { ArrowLeft, Building2, FilePlus2, ListChecks, UsersRound } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
 type CompanyWorkspaceHeaderProps = {
-  active: "company" | "jobs";
+  active: "biologists" | "company" | "jobs";
   eyebrow: string;
   title: string;
 };
 
 export function CompanyWorkspaceHeader({ active, eyebrow, title }: CompanyWorkspaceHeaderProps) {
   return (
-    <section className="glass-panel overflow-hidden rounded-[8px]">
-      <div className="grid lg:grid-cols-[1fr_0.9fr]">
+    <section className="glass-panel min-w-0 overflow-hidden rounded-[8px]">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_0.9fr]">
         <div className="p-6 md:p-8">
           <Link
             className="inline-flex items-center gap-2 text-sm font-semibold text-cyan-800"
@@ -46,6 +46,13 @@ export function CompanyWorkspaceHeader({ active, eyebrow, title }: CompanyWorksp
             >
               Vagas
             </CompanyTab>
+            <CompanyTab
+              active={active === "biologists"}
+              href="/empresa/biologos"
+              icon={<UsersRound size={17} />}
+            >
+              Biólogos
+            </CompanyTab>
             <CompanyTab active={false} href="/empresa/vagas/nova" icon={<FilePlus2 size={17} />}>
               Nova vaga
             </CompanyTab>
@@ -54,7 +61,7 @@ export function CompanyWorkspaceHeader({ active, eyebrow, title }: CompanyWorksp
 
         <div className="relative min-h-[330px] overflow-hidden bg-slate-950">
           <Image
-            alt="Equipe ambiental avaliando candidatos e mapas tecnicos."
+            alt="Equipe ambiental avaliando candidatos e mapas técnicos."
             className="object-cover opacity-84"
             fill
             priority
@@ -64,7 +71,7 @@ export function CompanyWorkspaceHeader({ active, eyebrow, title }: CompanyWorksp
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.04),rgba(2,6,23,0.82))]" />
           <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200">
-              Operacao empresa
+              Operação empresa
             </p>
             <p className="mt-2 max-w-md text-xl font-semibold">
               Requisitos claros, candidatos qualificados e contato direto.

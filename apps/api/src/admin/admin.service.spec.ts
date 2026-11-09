@@ -3,6 +3,68 @@ import { describe, expect, it, vi } from "vitest";
 
 import { AdminService } from "./admin.service.js";
 
+describe("AdminService biologist verification", () => {
+  it("avisa o biologo com o motivo quando a verificacao e rejeitada", async () => {
+    const { notifications, repositories, service } = createService();
+
+    repositories.biologists.findOne.mockResolvedValueOnce({
+      id: "profile-id",
+      userId: "user-id",
+      verificationStatus: "PENDING",
+    });
+    repositories.biologists.save.mockImplementationOnce(async (value) => value);
+
+    await service.updateBiologistVerificationStatus("admin-id", "profile-id", {
+      verificationNotes: "  CRBio ilegivel  ",
+      verificationStatus: "REJECTED",
+    });
+
+    expect(notifications.createForUser).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: expect.stringContaining("Motivo: CRBio ilegivel"),
+        type: "BIOLOGIST_VERIFICATION_UPDATED",
+        userId: "user-id",
+      }),
+    );
+  });
+
+  it("avisa quando o CRBio e verificado, sem motivo", async () => {
+    const { notifications, repositories, service } = createService();
+
+    repositories.biologists.findOne.mockResolvedValueOnce({
+      id: "profile-id",
+      userId: "user-id",
+      verificationStatus: "PENDING",
+    });
+    repositories.biologists.save.mockImplementationOnce(async (value) => value);
+
+    await service.updateBiologistVerificationStatus("admin-id", "profile-id", {
+      verificationStatus: "VERIFIED",
+    });
+
+    expect(notifications.createForUser).toHaveBeenCalledWith(
+      expect.objectContaining({ title: "CRBio verificado", userId: "user-id" }),
+    );
+  });
+
+  it("nao avisa quando o status nao muda", async () => {
+    const { notifications, repositories, service } = createService();
+
+    repositories.biologists.findOne.mockResolvedValueOnce({
+      id: "profile-id",
+      userId: "user-id",
+      verificationStatus: "VERIFIED",
+    });
+    repositories.biologists.save.mockImplementationOnce(async (value) => value);
+
+    await service.updateBiologistVerificationStatus("admin-id", "profile-id", {
+      verificationStatus: "VERIFIED",
+    });
+
+    expect(notifications.createForUser).not.toHaveBeenCalled();
+  });
+});
+
 describe("AdminService", () => {
   it("returns operational counters", async () => {
     const { repositories, service } = createService();
@@ -182,8 +244,12 @@ function createService() {
     jobs: createRepository(),
     users: createRepository(),
   };
+  const notifications = {
+    createForUser: vi.fn(async (value) => value),
+  };
 
   return {
+    notifications,
     repositories,
     service: new AdminService(
       repositories.auditLogs,
@@ -192,6 +258,8 @@ function createService() {
       repositories.companies,
       repositories.jobs,
       repositories.users,
+      {} as never,
+      notifications as never,
     ),
   };
 }

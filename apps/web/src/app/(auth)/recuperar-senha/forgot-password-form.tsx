@@ -24,7 +24,7 @@ export function ForgotPasswordForm() {
       });
       setSuccess(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Nao foi possivel solicitar recuperacao.");
+      setError(err instanceof Error ? err.message : "Não foi possível solicitar recuperação.");
     } finally {
       setLoading(false);
     }
@@ -40,7 +40,7 @@ export function ForgotPasswordForm() {
       {success ? (
         <div className="grid gap-4 rounded-[8px] border border-cyan-200 bg-cyan-50 p-4 text-sm text-cyan-900">
           <p>
-            Se o e-mail existir na plataforma, enviamos um link de redefinicao. Confira sua caixa de
+            Se o e-mail existir na plataforma, enviamos um link de redefinição. Confira sua caixa de
             entrada e spam.
           </p>
           <Button asChild variant="secondary">
@@ -62,7 +62,7 @@ export function ForgotPasswordForm() {
             <p className="rounded-[8px] bg-red-50 p-3 text-sm text-red-700">{error}</p>
           ) : null}
           <Button disabled={loading} type="submit">
-            {loading ? "Enviando..." : "Enviar link de recuperacao"}
+            {loading ? "Enviando..." : "Enviar link de recuperação"}
           </Button>
         </form>
       )}

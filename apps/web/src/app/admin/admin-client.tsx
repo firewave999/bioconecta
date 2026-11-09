@@ -102,6 +102,7 @@ export function AdminClient() {
   const [busyAction, setBusyAction] = useState<string | null>(null);
   const [biologistFilter, setBiologistFilter] = useState<BiologistStatusFilter>("ALL");
   const [companyNotes, setCompanyNotes] = useState<Record<string, string>>({});
+  const [biologistNotes, setBiologistNotes] = useState<Record<string, string>>({});
   const [companyFilter, setCompanyFilter] = useState<CompanyStatusFilter>("ALL");
   const [jobFilter, setJobFilter] = useState<JobStatusFilter>("ALL");
   const [search, setSearch] = useState("");
@@ -110,7 +111,7 @@ export function AdminClient() {
     const token = getStoredAccessToken();
 
     if (!token) {
-      setError("Voce precisa entrar com uma conta admin.");
+      setError("Você precisa entrar com uma conta admin.");
       return;
     }
 
@@ -118,7 +119,7 @@ export function AdminClient() {
 
     if (!me.user.roles.includes("ADMIN")) {
       setAuthState("denied");
-      setError("Esta area e exclusiva para administradores.");
+      setError("Esta área e exclusiva para administradores.");
       return;
     }
 
@@ -141,7 +142,7 @@ export function AdminClient() {
 
   useEffect(() => {
     loadAdminData().catch((err) => {
-      setError(err instanceof Error ? err.message : "Nao foi possivel carregar o admin.");
+      setError(err instanceof Error ? err.message : "Não foi possível carregar o admin.");
     });
   }, []);
 
@@ -164,7 +165,7 @@ export function AdminClient() {
   ) {
     await runAction(`biologist-${id}-${verificationStatus}`, async (token) => {
       await apiFetch(`/admin/biologists/${id}/verification`, {
-        body: { verificationStatus },
+        body: { verificationNotes: biologistNotes[id] ?? "", verificationStatus },
         method: "PUT",
         token,
       });
@@ -185,7 +186,7 @@ export function AdminClient() {
     const token = getStoredAccessToken();
 
     if (!token) {
-      setError("Sessao expirada. Entre novamente.");
+      setError("Sessão expirada. Entre novamente.");
       return;
     }
 
@@ -195,7 +196,7 @@ export function AdminClient() {
       await fn(token);
       await loadAdminData();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Nao foi possivel concluir a acao.");
+      setError(err instanceof Error ? err.message : "Não foi possível concluir a ação.");
     } finally {
       setBusyAction(null);
     }
@@ -302,7 +303,7 @@ export function AdminClient() {
       href: "#biologos",
       label: biologist.fullName,
       meta: `${biologist.city}/${biologist.state} - ${getBiologistStatusLabel(biologist.verificationStatus)}`,
-      type: "Biologo",
+      type: "Biólogo",
     })),
     ...draftJobs.slice(0, 4).map((job) => ({
       href: "#vagas",
@@ -313,7 +314,7 @@ export function AdminClient() {
   ].slice(0, 8);
 
   return (
-    <div className="grid gap-6">
+    <div className="grid grid-cols-1 gap-6">
       <section className="soft-card rounded-[8px] p-5">
         <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-center">
           <label className="grid gap-2 text-sm font-medium text-slate-700">
@@ -321,7 +322,7 @@ export function AdminClient() {
             <input
               className="h-11 rounded-[8px] border border-slate-300 px-3 text-slate-950 outline-none focus:border-cyan-500"
               onChange={(event) => setSearch(event.target.value)}
-              placeholder="Empresa, biologo, e-mail, CNPJ, vaga, cidade..."
+              placeholder="Empresa, biólogo, e-mail, CNPJ, vaga, cidade..."
               value={search}
             />
           </label>
@@ -342,7 +343,7 @@ export function AdminClient() {
               className="rounded-full border border-slate-200 px-3 py-2 text-slate-700"
               href="#biologos"
             >
-              Biologos
+              Biólogos
             </a>
             <a
               className="rounded-full border border-slate-200 px-3 py-2 text-slate-700"
@@ -355,9 +356,9 @@ export function AdminClient() {
       </section>
 
       <section className="grid gap-4 md:grid-cols-4" id="visao-geral">
-        <Metric label="Usuarios" value={state.overview.usersCount} />
+        <Metric label="Usuários" value={state.overview.usersCount} />
         <Metric label="Empresas verificadas" value={state.overview.verifiedCompaniesCount} />
-        <Metric label="Biologos verificados" value={state.overview.verifiedBiologistsCount} />
+        <Metric label="Biólogos verificados" value={state.overview.verifiedBiologistsCount} />
         <Metric label="Vagas publicadas" value={state.overview.publishedJobsCount} />
       </section>
 
@@ -370,15 +371,15 @@ export function AdminClient() {
           <PendingCard
             actionHref="#empresas"
             actionLabel="Revisar empresas"
-            description="Empresas novas ou ainda nao verificadas."
+            description="Empresas novas ou ainda não verificadas."
             title="Empresas"
             value={pendingCompanies.length}
           />
           <PendingCard
             actionHref="#biologos"
-            actionLabel="Revisar biologos"
-            description="Perfis profissionais aguardando verificacao."
-            title="Biologos"
+            actionLabel="Revisar biólogos"
+            description="Perfis profissionais aguardando verificação."
+            title="Biólogos"
             value={pendingBiologists.length}
           />
           <PendingCard
@@ -456,7 +457,7 @@ export function AdminClient() {
                 </div>
                 <div className="grid gap-3 md:min-w-80">
                   <label className="grid gap-2 text-sm font-medium text-slate-700">
-                    Observacao da verificacao
+                    Observacao da verificação
                     <textarea
                       className="min-h-20 rounded-[8px] border border-slate-300 px-3 py-2 text-slate-950 outline-none focus:border-cyan-500"
                       onChange={(event) =>
@@ -465,7 +466,7 @@ export function AdminClient() {
                           [company.id]: event.target.value,
                         }))
                       }
-                      placeholder="Ex.: Documentacao conferida ou motivo da rejeicao."
+                      placeholder="Ex.: Documentacao conferida ou motivo da rejeição."
                       value={companyNotes[company.id] ?? company.verificationNotes ?? ""}
                     />
                   </label>
@@ -503,7 +504,7 @@ export function AdminClient() {
 
       <section className="soft-card rounded-[8px] p-6" id="biologos">
         <SectionTitle
-          title="Biologos"
+          title="Biólogos"
           subtitle={`${state.overview.biologistProfilesCount} perfis cadastrados`}
         />
         <FilterBar>
@@ -544,9 +545,24 @@ export function AdminClient() {
                   </p>
                   {!biologist.user.emailVerifiedAt ? (
                     <p className="mt-2 w-fit rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-800">
-                      E-mail ainda nao verificado
+                      E-mail ainda não verificado
                     </p>
                   ) : null}
+                  <label className="mt-4 grid max-w-md gap-2 text-sm font-medium text-slate-700">
+                    Motivo (opcional, enviado ao biólogo)
+                    <textarea
+                      className="min-h-20 rounded-[8px] border border-slate-200 bg-white px-3 py-2 text-sm font-normal text-slate-950"
+                      maxLength={1000}
+                      onChange={(event) =>
+                        setBiologistNotes((current) => ({
+                          ...current,
+                          [biologist.id]: event.target.value,
+                        }))
+                      }
+                      placeholder="Ex.: CRBio ilegivel no documento anexado."
+                      value={biologistNotes[biologist.id] ?? ""}
+                    />
+                  </label>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <Button asChild size="sm" variant="light">
@@ -577,7 +593,7 @@ export function AdminClient() {
             </article>
           ))}
           {filteredBiologists.length === 0 ? (
-            <p className="text-sm text-slate-500">Nenhum biologo neste filtro.</p>
+            <p className="text-sm text-slate-500">Nenhum biólogo neste filtro.</p>
           ) : null}
         </div>
       </section>
@@ -670,7 +686,7 @@ export function AdminClient() {
         </div>
 
         <div className="soft-card rounded-[8px] p-6">
-          <SectionTitle title="Usuarios recentes" subtitle="Ultimos 100 usuarios" />
+          <SectionTitle title="Usuários recentes" subtitle="Ultimos 100 usuários" />
           <div className="mt-5 grid gap-3">
             {visibleUsers.slice(0, 10).map((user) => (
               <article
@@ -684,20 +700,20 @@ export function AdminClient() {
                 <p className="mt-1 text-sm text-slate-500">Roles: {user.roles.join(", ")}</p>
                 {!user.emailVerifiedAt ? (
                   <p className="mt-2 w-fit rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-800">
-                    E-mail nao verificado
+                    E-mail não verificado
                   </p>
                 ) : null}
               </article>
             ))}
             {visibleUsers.length === 0 ? (
-              <p className="text-sm text-slate-500">Nenhum usuario encontrado.</p>
+              <p className="text-sm text-slate-500">Nenhum usuário encontrado.</p>
             ) : null}
           </div>
         </div>
       </section>
 
       <section className="soft-card rounded-[8px] p-6" id="auditoria">
-        <SectionTitle title="Auditoria admin" subtitle="Ultimas 100 acoes sensiveis" />
+        <SectionTitle title="Auditoria admin" subtitle="Ultimas 100 ações sensiveis" />
         <div className="mt-5 grid gap-3">
           {state.auditLogs.slice(0, 20).map((log) => (
             <article className="rounded-[8px] border border-slate-200 bg-white/82 p-4" key={log.id}>
@@ -712,7 +728,7 @@ export function AdminClient() {
             </article>
           ))}
           {state.auditLogs.length === 0 ? (
-            <p className="text-sm text-slate-500">Nenhuma acao auditada ainda.</p>
+            <p className="text-sm text-slate-500">Nenhuma ação auditada ainda.</p>
           ) : null}
         </div>
       </section>
@@ -811,8 +827,8 @@ function ActionButton({
 
 function formatAuditAction(action: string) {
   const labels: Record<string, string> = {
-    BIOLOGIST_VERIFICATION_UPDATED: "Verificacao de biologo alterada",
-    COMPANY_VERIFICATION_UPDATED: "Verificacao de empresa alterada",
+    BIOLOGIST_VERIFICATION_UPDATED: "Verificação de biólogo alterada",
+    COMPANY_VERIFICATION_UPDATED: "Verificação de empresa alterada",
     JOB_STATUS_UPDATED: "Status de vaga alterado",
   };
 
@@ -849,7 +865,7 @@ function getCompanyStatusLabel(status: Company["verificationStatus"]) {
   const labels: Record<Company["verificationStatus"], string> = {
     PENDING: "Pendente",
     REJECTED: "Rejeitada",
-    UNVERIFIED: "Nao verificada",
+    UNVERIFIED: "Não verificada",
     VERIFIED: "Verificada",
   };
 
@@ -861,7 +877,7 @@ function getBiologistStatusLabel(status: Biologist["verificationStatus"]) {
     PENDING: "Pendente",
     REJECTED: "Rejeitado",
     SUSPENDED: "Suspenso",
-    UNVERIFIED: "Nao verificado",
+    UNVERIFIED: "Não verificado",
     VERIFIED: "Verificado",
   };
 

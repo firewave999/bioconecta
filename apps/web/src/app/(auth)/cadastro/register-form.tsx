@@ -72,7 +72,7 @@ export function RegisterForm() {
       setResult(response);
       setVerificationToken(response.devVerificationToken ?? "");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Nao foi possivel criar a conta.");
+      setError(err instanceof Error ? err.message : "Não foi possível criar a conta.");
     } finally {
       setLoading(false);
     }
@@ -88,7 +88,7 @@ export function RegisterForm() {
       });
       setVerified(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Nao foi possivel verificar o e-mail.");
+      setError(err instanceof Error ? err.message : "Não foi possível verificar o e-mail.");
     } finally {
       setLoading(false);
     }
@@ -126,7 +126,7 @@ export function RegisterForm() {
             <RoleOption
               checked={selectedRole === "BIOLOGIST"}
               description="Para criar perfil profissional, buscar vagas e se candidatar."
-              label="Biologo"
+              label="Biólogo"
               onSelect={() => setSelectedRole("BIOLOGIST")}
             />
             <RoleOption
@@ -177,8 +177,8 @@ export function RegisterForm() {
               </select>
             </label>
             <p className="text-xs text-slate-600">
-              Esses dados ja criam o cadastro da empresa. Depois voce pode completar logo, site,
-              descricao e solicitar validacao.
+              Esses dados já criam o cadastro da empresa. Depois você pode completar logo, site,
+              descrição e solicitar validacao.
             </p>
           </fieldset>
         ) : null}
@@ -204,7 +204,7 @@ export function RegisterForm() {
           <p className="font-semibold text-slate-950">Conta criada para {result.user.email}</p>
           {result.devVerificationToken ? (
             <div className="mt-4 grid gap-3">
-              <p>Token de verificacao em desenvolvimento:</p>
+              <p>Token de verificação em desenvolvimento:</p>
               <code className="break-all rounded-[6px] bg-white p-3 text-xs text-slate-800">
                 {result.devVerificationToken}
               </code>
@@ -226,7 +226,7 @@ export function RegisterForm() {
           {!result.devVerificationToken ? (
             <div className="mt-4 grid gap-3">
               <p>
-                Enviamos um link de verificacao para seu e-mail. Confira sua caixa de entrada antes
+                Enviamos um link de verificação para seu e-mail. Confira sua caixa de entrada antes
                 de continuar.
               </p>
               <EmailVerificationNotice email={result.user.email} />
@@ -239,7 +239,7 @@ export function RegisterForm() {
       ) : null}
 
       <p className="mt-5 text-sm text-slate-600">
-        Ja tem conta?{" "}
+        Já tem conta?{" "}
         <Link className="font-semibold text-cyan-800" href="/login">
           Entrar
         </Link>
@@ -303,7 +303,7 @@ function getNextLabel(role: string | null) {
     return "Ir para o dashboard";
   }
 
-  return "Continuar onboarding de biologo";
+  return "Continuar onboarding de biólogo";
 }
 
 function Field({

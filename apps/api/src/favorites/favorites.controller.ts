@@ -13,7 +13,7 @@ export class FavoritesController {
   constructor(private readonly favoritesService: FavoritesService) {}
 
   @Get("jobs")
-  @ApiOkResponse({ description: "Vagas salvas do usuario autenticado." })
+  @ApiOkResponse({ description: "Vagas salvas do usuário autenticado." })
   listSavedJobs(@Req() request: AuthenticatedRequest) {
     return this.favoritesService.listSavedJobs(request.user.sub);
   }

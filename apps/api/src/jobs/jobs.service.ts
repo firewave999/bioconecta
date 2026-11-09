@@ -74,7 +74,7 @@ export class JobsService {
     });
 
     if (!job) {
-      throw new NotFoundException("Vaga publicada nao encontrada.");
+      throw new NotFoundException("Vaga publicada não encontrada.");
     }
 
     return { job };
@@ -95,7 +95,7 @@ export class JobsService {
     const job = await this.jobsRepository.findOneBy({ id: jobId });
 
     if (!job) {
-      throw new NotFoundException("Vaga nao encontrada.");
+      throw new NotFoundException("Vaga não encontrada.");
     }
 
     if (job.companyId !== company.id) {
@@ -125,7 +125,7 @@ export class JobsService {
     const existing = await this.jobsRepository.findOneBy({ id: jobId });
 
     if (!existing) {
-      throw new NotFoundException("Vaga nao encontrada.");
+      throw new NotFoundException("Vaga não encontrada.");
     }
 
     if (existing.companyId !== company.id) {

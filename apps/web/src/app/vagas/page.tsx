@@ -20,7 +20,7 @@ export default function JobsPage() {
           </Link>
         </div>
         <section className="page-header my-8 overflow-hidden rounded-[8px]">
-          <div className="grid lg:grid-cols-[1fr_0.82fr]">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_0.82fr]">
             <div className="p-7 md:p-9">
               <div className="premium-divider mb-6" />
               <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
@@ -30,13 +30,13 @@ export default function JobsPage() {
                 Radar de oportunidades ambientais.
               </h1>
               <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-600">
-                Filtre vagas por local, contrato, modalidade e requisito tecnico para encontrar
+                Filtre vagas por local, contrato, modalidade e requisito técnico para encontrar
                 oportunidades alinhadas ao seu perfil profissional.
               </p>
             </div>
             <div className="relative min-h-[280px] bg-slate-950">
               <Image
-                alt="Equipe ambiental analisando vagas, mapas e dados tecnicos."
+                alt="Equipe ambiental analisando vagas, mapas e dados técnicos."
                 className="object-cover opacity-86"
                 fill
                 priority
@@ -46,10 +46,10 @@ export default function JobsPage() {
               <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.08),rgba(2,6,23,0.72))]" />
               <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200">
-                  Matching tecnico
+                  Matching técnico
                 </p>
                 <p className="mt-2 text-lg font-semibold">
-                  Vagas com requisitos claros e contexto de atuacao.
+                  Vagas com requisitos claros e contexto de atuação.
                 </p>
               </div>
             </div>
