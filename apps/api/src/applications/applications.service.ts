@@ -279,7 +279,7 @@ export class ApplicationsService {
           .innerJoin(
             "biologist_profile_practice_areas",
             "link",
-            "link.practice_área_id = practiceArea.id",
+            "link.practice_area_id = practiceArea.id",
           )
           .where("link.profile_id = :profileId", { profileId })
           .getMany(),

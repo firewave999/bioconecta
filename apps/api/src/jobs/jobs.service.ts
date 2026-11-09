@@ -54,7 +54,7 @@ export class JobsService {
     if (query.requirement?.trim()) {
       builder.andWhere(
         `(
-          :requirement = ANY(job.required_practice_áreas)
+          :requirement = ANY(job.required_practice_areas)
           OR :requirement = ANY(job.required_taxonomic_groups)
           OR :requirement = ANY(job.required_skills)
         )`,
