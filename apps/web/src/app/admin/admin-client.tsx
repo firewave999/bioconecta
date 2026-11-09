@@ -102,6 +102,7 @@ export function AdminClient() {
   const [busyAction, setBusyAction] = useState<string | null>(null);
   const [biologistFilter, setBiologistFilter] = useState<BiologistStatusFilter>("ALL");
   const [companyNotes, setCompanyNotes] = useState<Record<string, string>>({});
+  const [biologistNotes, setBiologistNotes] = useState<Record<string, string>>({});
   const [companyFilter, setCompanyFilter] = useState<CompanyStatusFilter>("ALL");
   const [jobFilter, setJobFilter] = useState<JobStatusFilter>("ALL");
   const [search, setSearch] = useState("");
@@ -164,7 +165,7 @@ export function AdminClient() {
   ) {
     await runAction(`biologist-${id}-${verificationStatus}`, async (token) => {
       await apiFetch(`/admin/biologists/${id}/verification`, {
-        body: { verificationStatus },
+        body: { verificationNotes: biologistNotes[id] ?? "", verificationStatus },
         method: "PUT",
         token,
       });
@@ -547,6 +548,21 @@ export function AdminClient() {
                       E-mail ainda nao verificado
                     </p>
                   ) : null}
+                  <label className="mt-4 grid max-w-md gap-2 text-sm font-medium text-slate-700">
+                    Motivo (opcional, enviado ao biologo)
+                    <textarea
+                      className="min-h-20 rounded-[8px] border border-slate-200 bg-white px-3 py-2 text-sm font-normal text-slate-950"
+                      maxLength={1000}
+                      onChange={(event) =>
+                        setBiologistNotes((current) => ({
+                          ...current,
+                          [biologist.id]: event.target.value,
+                        }))
+                      }
+                      placeholder="Ex.: CRBio ilegivel no documento anexado."
+                      value={biologistNotes[biologist.id] ?? ""}
+                    />
+                  </label>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <Button asChild size="sm" variant="light">

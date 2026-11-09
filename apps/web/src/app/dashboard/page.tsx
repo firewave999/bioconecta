@@ -12,8 +12,8 @@ export default function DashboardPage() {
     <main className="app-shell min-h-screen">
       <div className="mx-auto max-w-7xl px-6 py-8">
         <div className="glass-panel flex flex-wrap items-center justify-between gap-4 rounded-[8px] px-4 py-3">
-          <Link className="text-sm font-bold tracking-[0.12em] text-cyan-800" href="/">
-            BIOCONECTA
+          <Link className="text-sm font-bold tracking-[0.04em] text-cyan-800" href="/">
+            BioConecta
           </Link>
           <nav className="flex flex-wrap items-center gap-2 text-sm font-semibold text-slate-600">
             <Link

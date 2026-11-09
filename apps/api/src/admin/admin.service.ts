@@ -3,10 +3,14 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
 import { Application } from "../applications/application.entity.js";
-import { BiologistProfile } from "../biologist-profile/biologist-profile.entity.js";
+import {
+  BiologistProfile,
+  type VerificationStatus,
+} from "../biologist-profile/biologist-profile.entity.js";
 import { BiologistProfileService } from "../biologist-profile/biologist-profile.service.js";
 import { Company } from "../companies/company.entity.js";
 import { Job } from "../jobs/job.entity.js";
+import { NotificationsService } from "../notifications/notifications.service.js";
 import { User } from "../users/user.entity.js";
 import { safeJson } from "../common/logging/safe-log.js";
 import { AdminAuditLog, AdminAuditAction, AdminAuditTargetType } from "./admin-audit-log.entity.js";
@@ -32,6 +36,7 @@ export class AdminService {
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
     private readonly biologistProfileService: BiologistProfileService,
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   async getOverview() {
@@ -198,19 +203,58 @@ export class AdminService {
     }
 
     const previousStatus = profile.verificationStatus;
+    const notes = dto.verificationNotes?.trim() || null;
     profile.verificationStatus = dto.verificationStatus;
     const saved = await this.biologistProfilesRepository.save(profile);
 
     await this.createAuditLog({
       action: "BIOLOGIST_VERIFICATION_UPDATED",
       actorUserId,
-      afterState: { verificationStatus: saved.verificationStatus },
+      afterState: { verificationNotes: notes, verificationStatus: saved.verificationStatus },
       beforeState: { verificationStatus: previousStatus },
       targetId: saved.id,
       targetType: "BIOLOGIST_PROFILE",
     });
 
+    if (previousStatus !== saved.verificationStatus) {
+      await this.notifyBiologistAboutVerification(saved, notes);
+    }
+
     return saved;
+  }
+
+  // Avisa o biologo na propria plataforma. O motivo, quando existe, vai na mensagem.
+  private async notifyBiologistAboutVerification(profile: BiologistProfile, notes: string | null) {
+    const reason = notes ? ` Motivo: ${notes.replace(/[.!?]+$/, "")}.` : "";
+    const messages: Partial<Record<VerificationStatus, { message: string; title: string }>> = {
+      REJECTED: {
+        message: `Sua verificacao nao foi aprovada.${reason} Revise seus dados e documentos e envie novamente.`,
+        title: "Verificacao nao aprovada",
+      },
+      SUSPENDED: {
+        message: `Seu perfil foi suspenso e nao aparece nas buscas.${reason}`,
+        title: "Perfil suspenso",
+      },
+      VERIFIED: {
+        message: "Seu CRBio foi verificado. Seu perfil agora exibe o selo de verificacao.",
+        title: "CRBio verificado",
+      },
+    };
+
+    const content = messages[profile.verificationStatus];
+
+    if (!content) {
+      return;
+    }
+
+    await this.notificationsService.createForUser({
+      actionUrl: "/perfil/editar",
+      message: content.message,
+      metadata: { verificationStatus: profile.verificationStatus },
+      title: content.title,
+      type: "BIOLOGIST_VERIFICATION_UPDATED",
+      userId: profile.userId,
+    });
   }
 
   async updateJobStatus(actorUserId: string, id: string, dto: UpdateJobStatusDto) {

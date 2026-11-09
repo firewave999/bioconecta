@@ -7,6 +7,7 @@ import { BiologistProfileModule } from "../biologist-profile/biologist-profile.m
 import { BiologistProfile } from "../biologist-profile/biologist-profile.entity.js";
 import { Company } from "../companies/company.entity.js";
 import { Job } from "../jobs/job.entity.js";
+import { NotificationsModule } from "../notifications/notifications.module.js";
 import { User } from "../users/user.entity.js";
 import { AdminAuditLog } from "./admin-audit-log.entity.js";
 import { AdminController } from "./admin.controller.js";
@@ -18,6 +19,7 @@ import { AdminService } from "./admin.service.js";
   imports: [
     AuthModule,
     BiologistProfileModule,
+    NotificationsModule,
     TypeOrmModule.forFeature([AdminAuditLog, Application, BiologistProfile, Company, Job, User]),
   ],
   providers: [AdminGuard, AdminService],

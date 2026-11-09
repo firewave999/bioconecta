@@ -147,6 +147,11 @@ describe("AuthService", () => {
 
 function createService() {
   const repositories = {
+    companies: {
+      create: vi.fn((value) => ({ id: "company-id", ...value })),
+      findOneBy: vi.fn(),
+      save: vi.fn(async (value) => value),
+    },
     emailTokens: {
       create: vi.fn((value) => ({ id: "email-token-id", ...value })),
       findOne: vi.fn(),
@@ -209,6 +214,7 @@ function createService() {
     repositories,
     service: new AuthService(
       repositories.users,
+      repositories.companies,
       repositories.sessions,
       repositories.emailTokens,
       repositories.passwordResetTokens,

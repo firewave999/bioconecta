@@ -10,7 +10,10 @@ import {
 
 import { User } from "../users/user.entity.js";
 
-export type NotificationType = "APPLICATION_CREATED" | "APPLICATION_STATUS_UPDATED";
+export type NotificationType =
+  | "APPLICATION_CREATED"
+  | "APPLICATION_STATUS_UPDATED"
+  | "BIOLOGIST_VERIFICATION_UPDATED";
 
 @Entity({ name: "notifications" })
 export class Notification {
