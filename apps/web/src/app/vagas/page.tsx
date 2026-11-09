@@ -20,7 +20,7 @@ export default function JobsPage() {
           </Link>
         </div>
         <section className="page-header my-8 overflow-hidden rounded-[8px]">
-          <div className="grid lg:grid-cols-[1fr_0.82fr]">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_0.82fr]">
             <div className="p-7 md:p-9">
               <div className="premium-divider mb-6" />
               <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">

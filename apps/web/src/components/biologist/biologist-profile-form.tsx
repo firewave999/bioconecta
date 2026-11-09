@@ -150,8 +150,8 @@ export function BiologistProfileForm({ mode }: Props) {
   }
 
   return (
-    <form className="grid gap-6" onSubmit={handleSubmit}>
-      <section className="form-card rounded-[8px] p-6 md:p-8">
+    <form className="grid min-w-0 grid-cols-1 gap-6" onSubmit={handleSubmit}>
+      <section className="min-w-0 form-card rounded-[8px] p-6 md:p-8">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
           {mode === "onboarding" ? "Onboarding" : "Editar perfil"}
         </p>
@@ -172,7 +172,7 @@ export function BiologistProfileForm({ mode }: Props) {
       </section>
 
       {completion !== null ? (
-        <section className="form-card rounded-[8px] p-6 md:p-8">
+        <section className="min-w-0 form-card rounded-[8px] p-6 md:p-8">
           <div className="flex items-center justify-between gap-4">
             <p className="font-semibold text-slate-950">Perfil {completion}% completo</p>
             <span className="text-sm font-semibold text-cyan-800">{completion}%</span>
@@ -193,7 +193,7 @@ export function BiologistProfileForm({ mode }: Props) {
         </section>
       ) : null}
 
-      <section className="form-card grid gap-4 rounded-[8px] p-6 md:grid-cols-2 md:p-8">
+      <section className="min-w-0 form-card grid gap-4 rounded-[8px] p-6 md:grid-cols-2 md:p-8">
         <label className="grid gap-2 text-sm font-medium text-slate-700 md:col-span-2">
           Foto do perfil
           <div className="flex flex-col gap-3 rounded-[8px] border border-cyan-100 bg-cyan-50/40 p-4 md:flex-row md:items-center">
@@ -206,7 +206,7 @@ export function BiologistProfileForm({ mode }: Props) {
             ) : null}
             <input
               accept="image/jpeg,image/png,image/webp"
-              className="text-sm text-slate-700"
+              className="max-w-full text-sm text-slate-700"
               name="avatar"
               type="file"
             />
@@ -244,7 +244,7 @@ export function BiologistProfileForm({ mode }: Props) {
         <Field defaultValue={profile?.city} label="Cidade" name="city" required />
       </section>
 
-      <section className="form-card grid gap-4 rounded-[8px] p-6 md:p-8">
+      <section className="min-w-0 form-card grid gap-4 rounded-[8px] p-6 md:p-8">
         <h2 className="text-xl font-semibold text-slate-950">Presenca profissional</h2>
         <label className="grid gap-2 text-sm font-medium text-slate-700">
           Situação do registro
@@ -276,7 +276,7 @@ export function BiologistProfileForm({ mode }: Props) {
         </label>
       </section>
 
-      <section className="form-card grid gap-4 rounded-[8px] p-6 md:grid-cols-2 md:p-8">
+      <section className="min-w-0 form-card grid gap-4 rounded-[8px] p-6 md:grid-cols-2 md:p-8">
         <h2 className="text-xl font-semibold text-slate-950 md:col-span-2">
           Disponibilidade e operação
         </h2>
@@ -300,7 +300,7 @@ export function BiologistProfileForm({ mode }: Props) {
         />
       </section>
 
-      <section className="form-card grid gap-3 rounded-[8px] p-6 md:grid-cols-2 md:p-8">
+      <section className="min-w-0 form-card grid gap-3 rounded-[8px] p-6 md:grid-cols-2 md:p-8">
         <Check
           defaultChecked={profile?.acceptsTravel}
           label="Aceita viagens"

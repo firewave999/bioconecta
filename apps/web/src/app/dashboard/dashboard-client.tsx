@@ -179,7 +179,7 @@ export function DashboardClient() {
 
   if (!state) {
     return (
-      <div className="grid gap-6">
+      <div className="grid grid-cols-1 gap-6">
         <div className="glass-panel h-72 animate-pulse rounded-[8px]" />
         <div className="grid gap-4 md:grid-cols-3">
           <div className="soft-card h-32 animate-pulse rounded-[8px]" />
@@ -191,9 +191,9 @@ export function DashboardClient() {
   }
 
   return (
-    <div className="grid gap-6">
+    <div className="grid grid-cols-1 gap-6">
       <section className="glass-panel overflow-hidden rounded-[8px]">
-        <div className="grid lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr]">
           <div className="p-6 md:p-8">
             <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
               <div>
@@ -407,7 +407,7 @@ function CompanyDashboardPanel({ state }: { state: DashboardState }) {
   const company = state.company;
 
   return (
-    <div className="grid gap-6">
+    <div className="grid grid-cols-1 gap-6">
       <section className="glass-panel rounded-[8px] p-6">
         <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div className="flex flex-col gap-4 md:flex-row md:items-start">

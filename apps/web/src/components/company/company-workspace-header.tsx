@@ -11,8 +11,8 @@ type CompanyWorkspaceHeaderProps = {
 
 export function CompanyWorkspaceHeader({ active, eyebrow, title }: CompanyWorkspaceHeaderProps) {
   return (
-    <section className="glass-panel overflow-hidden rounded-[8px]">
-      <div className="grid lg:grid-cols-[1fr_0.9fr]">
+    <section className="glass-panel min-w-0 overflow-hidden rounded-[8px]">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_0.9fr]">
         <div className="p-6 md:p-8">
           <Link
             className="inline-flex items-center gap-2 text-sm font-semibold text-cyan-800"

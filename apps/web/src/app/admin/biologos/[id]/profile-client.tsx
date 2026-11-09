@@ -121,7 +121,7 @@ export function AdminBiologistProfileClient() {
 
   if (!data) {
     return (
-      <div className="grid gap-6">
+      <div className="grid grid-cols-1 gap-6">
         <div className="page-header h-72 animate-pulse rounded-[8px]" />
         <div className="grid gap-4 md:grid-cols-3">
           <div className="soft-card h-32 animate-pulse rounded-[8px]" />
@@ -135,7 +135,7 @@ export function AdminBiologistProfileClient() {
   const { professional, profile } = data;
 
   return (
-    <div className="grid gap-6">
+    <div className="grid grid-cols-1 gap-6">
       <section className="page-header overflow-hidden rounded-[8px]">
         <div className="grid gap-6 p-6 md:grid-cols-[auto_1fr_auto] md:items-center md:p-8">
           {profile.avatarUrl ? (

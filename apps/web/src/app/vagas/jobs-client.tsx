@@ -73,7 +73,7 @@ export function JobsClient() {
   }
 
   return (
-    <div className="grid gap-6">
+    <div className="grid grid-cols-1 gap-6">
       <form
         className="soft-card grid gap-4 rounded-[8px] p-6 md:grid-cols-3 md:p-8"
         onSubmit={handleSubmit}

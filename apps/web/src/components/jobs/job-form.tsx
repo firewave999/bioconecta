@@ -159,8 +159,8 @@ export function JobForm({ jobId }: JobFormProps) {
   }
 
   return (
-    <form className="grid gap-6" onSubmit={handleSubmit}>
-      <section className="form-card rounded-[8px] p-6 md:p-8">
+    <form className="grid min-w-0 grid-cols-1 gap-6" onSubmit={handleSubmit}>
+      <section className="min-w-0 form-card rounded-[8px] p-6 md:p-8">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">Vaga</p>
         <h1 className="mt-2 text-3xl font-semibold text-slate-950">
           {isEditing ? "Editar vaga" : "Criar vaga para biólogos"}
@@ -187,7 +187,7 @@ export function JobForm({ jobId }: JobFormProps) {
         ) : null}
       </section>
 
-      <section className="form-card grid gap-4 rounded-[8px] p-6 md:p-8">
+      <section className="min-w-0 form-card grid gap-4 rounded-[8px] p-6 md:p-8">
         <h2 className="text-xl font-semibold text-slate-950">Resumo da oportunidade</h2>
         <Field defaultValue={job?.title} label="Título" name="title" required />
         <label className="grid gap-2 text-sm font-medium text-slate-700">
@@ -202,7 +202,7 @@ export function JobForm({ jobId }: JobFormProps) {
         </label>
       </section>
 
-      <section className="form-card grid gap-4 rounded-[8px] p-6 md:grid-cols-3 md:p-8">
+      <section className="min-w-0 form-card grid gap-4 rounded-[8px] p-6 md:grid-cols-3 md:p-8">
         <h2 className="text-xl font-semibold text-slate-950 md:col-span-3">
           Contrato, local e remuneracao
         </h2>
@@ -255,7 +255,7 @@ export function JobForm({ jobId }: JobFormProps) {
         />
       </section>
 
-      <section className="form-card grid gap-3 rounded-[8px] p-6 md:grid-cols-3 md:p-8">
+      <section className="min-w-0 form-card grid gap-3 rounded-[8px] p-6 md:grid-cols-3 md:p-8">
         <Check
           defaultChecked={job?.requiresCrbio ?? true}
           label="Exige CRBio"
@@ -269,7 +269,7 @@ export function JobForm({ jobId }: JobFormProps) {
         <Check defaultChecked={job?.requiresTravel} label="Exige viagem" name="requiresTravel" />
       </section>
 
-      <section className="form-card grid gap-4 rounded-[8px] p-6 md:grid-cols-3 md:p-8">
+      <section className="min-w-0 form-card grid gap-4 rounded-[8px] p-6 md:grid-cols-3 md:p-8">
         <h2 className="text-xl font-semibold text-slate-950 md:col-span-3">
           Requisitos para matching
         </h2>

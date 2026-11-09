@@ -132,7 +132,7 @@ export function JobDetailClient() {
 
   if (!job) {
     return (
-      <div className="grid gap-6">
+      <div className="grid grid-cols-1 gap-6">
         <div className="page-header h-72 animate-pulse rounded-[8px]" />
         <div className="grid gap-4 md:grid-cols-3">
           <div className="soft-card h-32 animate-pulse rounded-[8px]" />
@@ -144,9 +144,9 @@ export function JobDetailClient() {
   }
 
   return (
-    <div className="grid gap-6">
+    <div className="grid grid-cols-1 gap-6">
       <section className="page-header overflow-hidden rounded-[8px]">
-        <div className="grid lg:grid-cols-[1fr_320px]">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px]">
           <div className="p-6 md:p-8">
             <p className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
               <BriefcaseBusiness size={16} />

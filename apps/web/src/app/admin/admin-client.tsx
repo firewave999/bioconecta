@@ -314,7 +314,7 @@ export function AdminClient() {
   ].slice(0, 8);
 
   return (
-    <div className="grid gap-6">
+    <div className="grid grid-cols-1 gap-6">
       <section className="soft-card rounded-[8px] p-5">
         <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-center">
           <label className="grid gap-2 text-sm font-medium text-slate-700">

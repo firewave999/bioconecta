@@ -60,7 +60,7 @@ export function CompanyJobsClient() {
   const closedCount = jobs.filter((job) => job.status === "CLOSED").length;
 
   return (
-    <div className="grid gap-6">
+    <div className="grid grid-cols-1 gap-6">
       <section className="page-header flex flex-col gap-4 rounded-[8px] p-6 md:flex-row md:items-center md:justify-between">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">Vagas</p>

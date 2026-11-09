@@ -173,7 +173,7 @@ export function CandidatesClient() {
   }
 
   return (
-    <div className="grid gap-6">
+    <div className="grid grid-cols-1 gap-6">
       <section className="page-header rounded-[8px] p-6">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
           Candidatos

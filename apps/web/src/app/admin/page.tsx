@@ -20,7 +20,7 @@ export default function AdminPage() {
           </Link>
         </div>
         <section className="page-header mt-8 overflow-hidden rounded-[8px]">
-          <div className="grid lg:grid-cols-[1fr_0.82fr]">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_0.82fr]">
             <div className="p-6 md:p-8">
               <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
                 Admin

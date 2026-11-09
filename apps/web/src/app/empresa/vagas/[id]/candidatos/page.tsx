@@ -8,7 +8,7 @@ export const metadata = {
 export default function CandidatesPage() {
   return (
     <main className="page-shell">
-      <div className="mx-auto grid max-w-7xl gap-8 px-6 py-10">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-6 py-10">
         <CompanyWorkspaceHeader
           active="jobs"
           eyebrow="Candidatos"

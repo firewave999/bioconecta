@@ -223,8 +223,8 @@ export function ProfessionalProfileForm() {
   }
 
   return (
-    <form className="grid gap-6" onSubmit={handleSubmit}>
-      <section className="form-card rounded-[8px] p-6 md:p-8">
+    <form className="grid min-w-0 grid-cols-1 gap-6" onSubmit={handleSubmit}>
+      <section className="min-w-0 form-card rounded-[8px] p-6 md:p-8">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">
           Perfil profissional
         </p>
@@ -271,7 +271,7 @@ export function ProfessionalProfileForm() {
         </div>
       </section>
 
-      <section className="form-card grid gap-4 rounded-[8px] p-6 md:grid-cols-3 md:p-8">
+      <section className="min-w-0 form-card grid gap-4 rounded-[8px] p-6 md:grid-cols-3 md:p-8">
         <TextArea label="Áreas de atuação" onChange={setPracticeAreas} value={practiceAreas} />
         <TextArea
           label="Grupos taxonomicos"
@@ -282,7 +282,7 @@ export function ProfessionalProfileForm() {
       </section>
 
       <SectionTitle title="Experiências" />
-      <section className="form-card grid gap-4 rounded-[8px] p-6 md:p-8">
+      <section className="min-w-0 form-card grid gap-4 rounded-[8px] p-6 md:p-8">
         {experiences.map((experience, index) => (
           <div
             className="grid gap-4 rounded-[8px] border border-cyan-100 bg-cyan-50/45 p-4"
@@ -354,7 +354,7 @@ export function ProfessionalProfileForm() {
       </section>
 
       <SectionTitle title="Certificações" />
-      <section className="form-card grid gap-4 rounded-[8px] p-6 md:p-8">
+      <section className="min-w-0 form-card grid gap-4 rounded-[8px] p-6 md:p-8">
         {certifications.map((certification, index) => (
           <div
             className="grid gap-4 rounded-[8px] border border-cyan-100 bg-cyan-50/40 p-4 md:grid-cols-2"
@@ -407,7 +407,7 @@ export function ProfessionalProfileForm() {
       </section>
 
       <SectionTitle title="Documentos" />
-      <section className="form-card grid gap-4 rounded-[8px] p-6 md:p-8">
+      <section className="min-w-0 form-card grid gap-4 rounded-[8px] p-6 md:p-8">
         {documents.map((document, index) => (
           <div
             className="grid gap-4 rounded-[8px] border border-cyan-100 bg-cyan-50/40 p-4 md:grid-cols-3"
